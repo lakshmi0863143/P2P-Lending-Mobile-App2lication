@@ -1,3 +1,6 @@
+
+from anvil.tables import app_tables
+from kivy.factory import Factory
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -8,7 +11,7 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 from kivy.utils import platform
 from kivy.clock import mainthread
 from kivymd.uix.filemanager import MDFileManager
-
+from lender_lost_opportunities import LostOpportunitiesScreen
 from lender_view_loans import ViewLoansScreen
 from lender_view_loans_request import ViewLoansRequest
 from lender_view_extension_request import NewExtension
@@ -20,7 +23,6 @@ from kivy.clock import Clock
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
 
-
 if platform == 'android':
     from kivy.uix.button import Button
     from kivy.uix.modalview import ModalView
@@ -29,7 +31,7 @@ if platform == 'android':
     from android.permissions import (
         request_permissions, check_permission, Permission)
 
-anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 
 user_helpers1 = """
 <WindowManager>:
@@ -70,6 +72,7 @@ user_helpers1 = """
 
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1 
+                on_release: root.newloan_extension()
 
                 size_hint_y: None
                 height: dp(60)
@@ -80,7 +83,7 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Opening Balance"
+                        text: "View Loan Extensions"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -94,6 +97,7 @@ user_helpers1 = """
 
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color:0.043, 0.145, 0.278, 1 
+                on_release: root.view_loan_foreclose()
                 size_hint_y: None
                 height: dp(60)
                 size_hint_x: None
@@ -103,14 +107,14 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Available Balance"
+                        text: "View Loan Foreclosure"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
                         halign: "center"
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                        
+
             MDFlatButton:
                 size_hint: None, None
 
@@ -127,28 +131,6 @@ user_helpers1 = """
                     spacing:dp(10)
                     MDLabel:
                         text: "Today's Dues"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-
-            MDFlatButton:
-                size_hint: None, None
-
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color:0.043, 0.145, 0.278, 1
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "Request Top-up Amount"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -204,9 +186,8 @@ user_helpers1 = """
 
             MDFlatButton:
                 size_hint: None, None
-
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                on_release: root.newloan_extension()
+                on_release: root.view_lost_opportunities()
                 md_bg_color: 0.043, 0.145, 0.278, 1 
                 size_hint_y: None
                 height: dp(60)
@@ -217,7 +198,7 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Loan Extensions"
+                        text: "View Lost Opportunities"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -225,11 +206,13 @@ user_helpers1 = """
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
+            MDLabel:
+                text:""
             MDFlatButton:
                 size_hint: None, None
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1
-                on_release: root.view_loan_foreclose()
+
                 size_hint_y: None
                 height: dp(60)
                 size_hint_x: None
@@ -239,42 +222,21 @@ user_helpers1 = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "View Loan Foreclosure"
+                        text: "View Transaction History"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
                         halign: "center"
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            MDFlatButton:
-                size_hint: None, None
 
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color:0.043, 0.145, 0.278, 1 
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "Loan Disbursement"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            MDLabel:
-                text:""
 
         MDIconButton:
             icon:'help-circle'
             theme_text_color: 'Custom'
             text_color: 1,1,1,1
             pos_hint: {'center_x': 0.92, 'center_y': 0.1}
+            on_release: root.help_module()
             md_bg_color: 0.043, 0.145, 0.278, 1              
 <ViewProfileScreen>
     canvas.before:
@@ -293,6 +255,7 @@ user_helpers1 = """
             title: "View Profile"
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
+            md_bg_color: 0.043, 0.145, 0.278, 1
         ScrollView:  # Add ScrollView here
             do_scroll_x: False
             BoxLayout:
@@ -1428,12 +1391,12 @@ class LenderDashboard(Screen):
         self.manager.current = 'MainScreen'
 
     def profile(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -1448,41 +1411,72 @@ class LenderDashboard(Screen):
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.permformance_profile(modal_view), 2)
 
-
     def permformance_profile(self, modal_view):
         # self.manager.current = 'ViewProfileScreen'
         modal_view.dismiss()
-        sm = self.manager
+        self.manager.add_widget(Factory.ViewProfileScreen(name='ViewProfileScreen'))
+        self.manager.current = 'ViewProfileScreen'
 
-        # Create a new instance of the LoginScreen
-        profile_screen = ViewProfileScreen(name='ViewProfileScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(profile_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'ViewProfileScreen'
     def lender_today_due(self):
-        sm = self.manager
-
-        # Create a new instance of the LoginScreen
-        profile_screen = TodayDuesTD(name='TodayDuesTD')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(profile_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'TodayDuesTD'
-
-
-
-    def view_loan_request(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.performance_lender_today_due(modal_view), 2)
+
+    def view_lost_opportunities(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.perform_view_lost_opportunities(modal_view), 2)
+
+    def perform_view_lost_opportunities(self, modal_view):
+        # Close the modal view after performing the action
+        modal_view.dismiss()
+        self.manager.add_widget(Factory.LostOpportunitiesScreen(name='LostOpportunitiesScreen'))
+        self.manager.current = 'LostOpportunitiesScreen'
+
+    def performance_lender_today_due(self, modal_view):
+        modal_view.dismiss()
+        self.manager.add_widget(Factory.TodayDuesTD(name='TodayDuesTD'))
+        self.manager.current = 'TodayDuesTD'
+
+    def view_loan_request(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -1508,27 +1502,16 @@ class LenderDashboard(Screen):
     def perform_loan_request_action(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-
-        sm = self.manager
-        profile_screen = ViewLoansRequest(name='ViewLoansRequest')
-        sm.add_widget(profile_screen)
-        sm.current = 'ViewLoansRequest'
-    def perform_loan_request_action(self, modal_view):
-        # Close the modal view after performing the action
-        modal_view.dismiss()
-
-        sm = self.manager
-        profile_screen = ViewLoansRequest(name='ViewLoansRequest')
-        sm.add_widget(profile_screen)
-        sm.current = 'ViewLoansRequest'
+        self.manager.add_widget(Factory.ViewLoansRequest(name='ViewLoansRequest'))
+        self.manager.current = 'ViewLoansRequest'
 
     def view_loanscreen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -1546,19 +1529,16 @@ class LenderDashboard(Screen):
     def perform_view_loanscreen(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-
-        sm = self.manager
-        profile_screen = ViewLoansScreen(name='ViewLoansScreen')
-        sm.add_widget(profile_screen)
-        sm.current = 'ViewLoansScreen'
+        self.manager.add_widget(Factory.ViewLoansScreen(name='ViewLoansScreen'))
+        self.manager.current = 'ViewLoansScreen'
 
     def newloan_extension(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -1576,24 +1556,17 @@ class LenderDashboard(Screen):
     def perform_newloan_extension(self, modal_view):
         # self.manager.current = 'ViewProfileScreen'
         modal_view.dismiss()
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        profile_screen = NewExtension(name='NewExtension')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(profile_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'NewExtension'
+        self.manager.add_widget(Factory.NewExtension(name='NewExtension'))
+        self.manager.current = 'NewExtension'
 
     def view_loan_foreclose(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -1608,27 +1581,18 @@ class LenderDashboard(Screen):
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.performance_view_loan_foreclose(modal_view), 2)
 
-
-    def performance_view_loan_foreclose(self,modal_view):
+    def performance_view_loan_foreclose(self, modal_view):
         modal_view.dismiss()
-        sm = self.manager
-
-        # Create a new instance of the LoginScreen
-        profile_screen = DashboardScreenLF(name='DashboardScreenLF')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(profile_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'DashboardScreenLF'
+        self.manager.add_widget(Factory.DashboardScreenLF(name='DashboardScreenLF'))
+        self.manager.current = 'DashboardScreenLF'
 
     def go_to_wallet(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -1644,27 +1608,24 @@ class LenderDashboard(Screen):
         Clock.schedule_once(lambda dt: self.perform_wallet(modal_view), 2)
 
     def perform_wallet(self, modal_view):
-        from lender_wallet import WalletScreen
+        from lender_wallet import LenderWalletScreen
 
         modal_view.dismiss()
+        self.manager.add_widget(Factory.LenderWalletScreen(name='LenderWalletScreen'))
+        self.manager.current = 'LenderWalletScreen'
         # Get the existing ScreenManager
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = WalletScreen(name='WalletScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'WalletScreen'
+    def help_module(self):
+        from help_module import HelpScreen
+        self.manager.add_widget(Factory.HelpScreen(name='HelpScreen'))
+        self.manager.current = 'HelpScreen'
 
 
 class ViewProfileScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         email = self.get_email()
-        data = self.get_table()
+        data = app_tables.fin_user_profile.search()
         customer = []
         email1 = []
         name = []
@@ -1679,7 +1640,7 @@ class ViewProfileScreen(Screen):
         city = []
         zipcode = []
         state = []
-        country =[]
+        country = []
         loan_type1 = []
         investment = []
         lending_period = []
@@ -1717,7 +1678,6 @@ class ViewProfileScreen(Screen):
             bank_id.append(row['bank_id'])
             branch_name.append(row['account_bank_branch'])
 
-
         if email in email1:
             index = email1.index(email)
             self.ids.customer_id.text = str(customer[index])
@@ -1752,10 +1712,12 @@ class ViewProfileScreen(Screen):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('another_method')
+
     def get_table(self):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('profile')
+
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1")
 

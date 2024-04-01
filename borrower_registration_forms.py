@@ -1,5 +1,6 @@
 import os
 import anvil.server
+from anvil.tables import app_tables
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.lang import Builder
@@ -40,7 +41,7 @@ if platform == 'android':
     )
 import anvil.server
 
-anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 Borrower = '''
 <WindowManager>:
     BorrowerScreen:
@@ -77,6 +78,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: root.go_to_dashboard()]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -157,7 +159,7 @@ Borrower = '''
 
             MDRectangleFlatButton:
                 text: 'Next'
-                md_bg_color: 0.031, 0.463, 0.91, 1
+                md_bg_color: 0.043, 0.145, 0.278, 1
                 theme_text_color: 'Custom'
                 text_color: 1, 1, 1, 1
                 size_hint: 1, None
@@ -173,6 +175,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -251,7 +254,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(mobile_number.text, alternate_email.text, spinner_id.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -266,6 +269,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen1')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -412,7 +416,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(aadhar_number.text, pan_number.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -427,6 +431,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen2')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -483,7 +488,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_press: root.next_pressed(spinner_id.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -498,6 +503,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -584,7 +590,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_borrower_screen()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -599,6 +605,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -724,7 +731,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_borrower_screen()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -739,6 +746,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title"
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -908,7 +916,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_borrower_screen()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -923,6 +931,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1142,7 +1151,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_borrower_screen()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1157,6 +1166,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1423,7 +1433,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_borrower_screen()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1438,6 +1448,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1515,7 +1526,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(street_address.text, city.text, zip_code.text, state.text, country.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1530,6 +1541,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen4')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1613,7 +1625,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(father_name.text, father_age.text, father_occupation.text, father_ph_no.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1628,6 +1640,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen5')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1723,7 +1736,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(mother_name.text, mother_age.text, mother_occupation.text, mother_ph_no.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1738,6 +1751,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen6')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1794,7 +1808,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_press: root.add_data(spinner_id.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1809,6 +1823,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen7')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1915,7 +1930,7 @@ Borrower = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(collage_name.text, college_address.text, collage_id.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1930,6 +1945,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen7')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1996,7 +2012,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(business_name.text, business_location.text, business_address.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2011,6 +2027,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen9')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2101,7 +2118,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(landmark.text,spin.text,no_of_employees_working.text,reg_office_address.text,year_of_estd.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     size_hint: 1, None
                     height: "50dp"
@@ -2114,6 +2131,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen10')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2224,7 +2242,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(industry_type.text,last_six_months_turnover.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2239,6 +2257,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen7')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2314,7 +2333,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(spinner1.text, company_name.text, spinner2.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2329,6 +2348,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen12')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2484,7 +2504,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(annual_salary.text, designation.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2498,6 +2518,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen13')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2573,7 +2594,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(company_address.text, company_pincode.text, company_country.text, landmark.text, business_number.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2588,6 +2609,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen7')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2638,7 +2660,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(marital_status_id.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2653,6 +2675,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen15')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2727,7 +2750,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(spouse_name.text, spouse_date_textfield.text, spouse_mobile.text, spouse_profession.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2742,6 +2765,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen16')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2814,7 +2838,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(spouse_company_name.text, spouse_company_address.text, spouse_annual_salary.text, spouse_office_no.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2829,6 +2853,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen15')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2908,7 +2933,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(account_holder_name.text, account_type_id.text, account_number.text, bank_name.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2923,6 +2948,7 @@ Borrower = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'BorrowerScreen18')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2981,7 +3007,7 @@ Borrower = '''
                 MDRaisedButton:
                     text: "Submit"
                     on_release: root.go_to_borrower_dashboard(ifsc_code.text, branch_name.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2995,13 +3021,6 @@ cursor = conn.cursor()
 
 class BorrowerScreen(Screen):
     Builder.load_string(Borrower)
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def validate_input(self, name, gender, date_of_birth):
         errors = []
@@ -3064,13 +3083,13 @@ class BorrowerScreen(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
 
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['full_name'] = name
@@ -3111,12 +3130,6 @@ class BorrowerScreen(Screen):
 
 
 class BorrowerScreen1(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def on_mobile_number_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -3152,12 +3165,12 @@ class BorrowerScreen1(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['mobile'] = mobile_number
@@ -3192,12 +3205,6 @@ class BorrowerScreen1(Screen):
 
 
 class BorrowerScreen2(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3308,12 +3315,12 @@ class BorrowerScreen2(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['aadhaar_no'] = aadhar_number
@@ -3348,12 +3355,6 @@ class BorrowerScreen2(Screen):
 
 
 class BorrowerScreen3(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def next_pressed(self, id):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -3420,10 +3421,10 @@ class BorrowerScreen3(Screen):
             conn.commit()
         else:
             print('User is not logged in.')
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['qualification'] = id
@@ -3451,12 +3452,6 @@ class BorrowerScreen3(Screen):
 
 
 class BorrowerScreen_Edu_10th(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3579,12 +3574,6 @@ class BorrowerScreen_Edu_10th(Screen):
 
 
 class BorrowerScreen_Edu_Intermediate(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3734,12 +3723,6 @@ class BorrowerScreen_Edu_Intermediate(Screen):
 
 
 class BorrowerScreen_Edu_Bachelors(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3921,12 +3904,6 @@ class BorrowerScreen_Edu_Bachelors(Screen):
 
 
 class BorrowerScreen_Edu_Masters(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -4134,13 +4111,6 @@ class BorrowerScreen_Edu_Masters(Screen):
 
 
 class BorrowerScreen_Edu_PHD(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4372,13 +4342,6 @@ class BorrowerScreen_Edu_PHD(Screen):
 
 
 class BorrowerScreen4(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, street, city, zip_code, state, country):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4410,12 +4373,12 @@ class BorrowerScreen4(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['city'] = city
@@ -4457,12 +4420,6 @@ class BorrowerScreen4(Screen):
 
 
 class BorrowerScreen5(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def on_father_age_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -4503,12 +4460,12 @@ class BorrowerScreen5(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['father_name'] = father_name
@@ -4545,12 +4502,6 @@ class BorrowerScreen5(Screen):
 
 
 class BorrowerScreen6(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def on_mother_age_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -4591,12 +4542,12 @@ class BorrowerScreen6(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['mother_name'] = mother_name
@@ -4633,12 +4584,6 @@ class BorrowerScreen6(Screen):
 
 
 class BorrowerScreen7(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def add_data(self, spinner_id):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -4690,12 +4635,12 @@ class BorrowerScreen7(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['profficen'] = spinner_id
@@ -4723,12 +4668,6 @@ class BorrowerScreen7(Screen):
 
 
 class BorrowerScreen8(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -4836,12 +4775,12 @@ class BorrowerScreen8(Screen):
             print("User is not logged in.")
             print("Moving to BorrowerScreen15...")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['college_name'] = collage_name
@@ -4876,13 +4815,6 @@ class BorrowerScreen8(Screen):
 
 
 class BorrowerScreen9(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, business_name, business_location, business_address):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4914,11 +4846,11 @@ class BorrowerScreen9(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['business_name'] = business_name
@@ -4954,13 +4886,6 @@ class BorrowerScreen9(Screen):
 
 
 class BorrowerScreen10(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, landmark, business_type, no_of_employees_working, registered_office_address, year_of_estd):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4994,12 +4919,12 @@ class BorrowerScreen10(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['registered_off_add'] = registered_office_address
@@ -5036,12 +4961,6 @@ class BorrowerScreen10(Screen):
 
 
 class BorrowerScreen11(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def on_last_six_months_turnover_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -5150,9 +5069,9 @@ class BorrowerScreen11(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['industry_type'] = industry_type
@@ -5187,12 +5106,6 @@ class BorrowerScreen11(Screen):
 
 
 class BorrowerScreen12(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def add_data(self, employment_type, company_name, organization):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -5225,9 +5138,9 @@ class BorrowerScreen12(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['employment_type'] = employment_type
@@ -5263,12 +5176,6 @@ class BorrowerScreen12(Screen):
 
 
 class BorrowerScreen14(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def add_data(self, company_address, company_pincode, company_country, landmark, business_number):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -5302,9 +5209,9 @@ class BorrowerScreen14(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['company_address'] = company_address
@@ -5350,12 +5257,6 @@ class BorrowerScreen14(Screen):
 
 
 class BorrowerScreen13(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def on_annual_salary_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -5486,9 +5387,9 @@ class BorrowerScreen13(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['annual_salary'] = annual_salary
@@ -5523,12 +5424,6 @@ class BorrowerScreen13(Screen):
 
 
 class BorrowerScreen15(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def add_data(self, marital_status_id):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -5580,9 +5475,9 @@ class BorrowerScreen15(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['marital_status'] = marital_status_id
@@ -5610,12 +5505,6 @@ class BorrowerScreen15(Screen):
 
 
 class BorrowerScreen16(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def on_spouse_mobile_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -5653,11 +5542,11 @@ class BorrowerScreen16(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
 
         id_list = [i['email_user'] for i in data]
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['spouse_name'] = spouse_name
@@ -5694,12 +5583,6 @@ class BorrowerScreen16(Screen):
 
 
 class BorrowerScreen17(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def on_spouse_annual_salary_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -5741,9 +5624,9 @@ class BorrowerScreen17(Screen):
         else:
             print('User is not logged in.')
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['spouse_company_name'] = spouse_company_name
@@ -5780,13 +5663,6 @@ class BorrowerScreen17(Screen):
 
 
 class BorrowerScreen18(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, account_holder_name, account_type, account_number, bank_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5817,9 +5693,9 @@ class BorrowerScreen18(Screen):
         else:
             print('User is not logged in.')
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['account_name'] = account_holder_name
@@ -5856,12 +5732,6 @@ class BorrowerScreen18(Screen):
 
 
 class BorrowerScreen19(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def go_to_borrower_dashboard(self, bank_id, branch_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -5891,9 +5761,9 @@ class BorrowerScreen19(Screen):
             conn.commit()
         else:
             print('User is not logged in.')
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = [i['email_user'] for i in data]
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['bank_id'] = bank_id

@@ -1,3 +1,4 @@
+from anvil.tables import app_tables
 from kivy.core.window import Window
 from kivy.lang import Builder
 from kivy.modules import cursor
@@ -7,10 +8,11 @@ from kivy.metrics import dp
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRectangleFlatButton
 import sqlite3
-
+from kivy.factory import Factory
 from borrowerlanding import BorrowerLanding
 from lender_landing import LenderLanding
 import anvil
+import server
 KV = """
 
 
@@ -66,7 +68,7 @@ KV = """
         pos_hint: {'center_x': 0.5, 'center_y': 0.25}
         theme_text_color: "Custom"
         text_color:1,1,1,1
-        md_bg_color:0.302, 0.604, 0.929 ,1   
+        md_bg_color:0.043, 0.145, 0.278, 1   
         font_name: "Roboto-Bold"
         font_size:dp(15)
 
@@ -80,7 +82,7 @@ KV = """
         pos_hint: {'center_x': 0.5, 'center_y': 0.15}
         theme_text_color: "Custom"
         text_color: 1,1,1,1
-        md_bg_color:0.031, 0.463, 0.91, 1       
+        md_bg_color:0.043, 0.145, 0.278, 1      
 
         font_size:dp(15)
 """
@@ -93,19 +95,14 @@ class DashScreen(Screen):
         data = anvil.server.call('another_method')
         return data
 
-    def profile(self):
-        return anvil.server.call('profile')
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.on_pre_enter()
-
     def load_user_data(self):
         pass
 
-    def on_pre_enter(self):
-        # Connect to the SQLite database
-        profile = self.profile()
-        log_email = self.get_email()
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        profile = app_tables.fin_user_profile.search()
+        log_email = anvil.server.call('another_method')
+        print(log_email)
 
         email_user = []
         name_list = []
@@ -148,6 +145,9 @@ class DashScreen(Screen):
     def go_to_lender_landing(self):
         # Get the screen manager
         # Get the existing ScreenManager
+        self.manager.add_widget(Factory.LenderLanding(name='LenderLanding'))
+        self.manager.current = 'LenderLanding'
+        '''
         sm = self.manager
 
         # Create a new instance of the LoginScreen
@@ -158,8 +158,12 @@ class DashScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'LenderLanding'
+        '''
 
     def go_to_borrower_landing(self):
+        self.manager.add_widget(Factory.BorrowerLanding(name='BorrowerLanding'))
+        self.manager.current = 'BorrowerLanding'
+        '''
         # Get the screen manager
         sm = self.manager
 
@@ -171,3 +175,4 @@ class DashScreen(Screen):
 
         # Switch to the LoginScreen
         sm.current = 'BorrowerLanding'
+        '''

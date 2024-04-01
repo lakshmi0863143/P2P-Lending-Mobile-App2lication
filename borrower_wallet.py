@@ -1,11 +1,12 @@
+from anvil.tables import app_tables
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRaisedButton, MDFlatButton, MDRoundFlatButton
 from kivy.uix.screenmanager import Screen, SlideTransition, ScreenManager
 from kivymd.uix.snackbar import Snackbar
+from kivy.factory import Factory
 
-from borrower_dashboard import DashboardScreen
 import anvil
 
 Builder.load_string(
@@ -22,6 +23,7 @@ Builder.load_string(
         left_action_items: [['arrow-left',lambda x: root.go_back()]]
         right_action_items: [['refresh', lambda x: root.refresh()]]
         title_align: 'center'
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -177,7 +179,7 @@ class WalletScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.type = None
-        data = self.wallet()
+        data = app_tables.fin_wallet.search()
         email = self.email()
         w_email = []
         w_id = []
@@ -192,11 +194,12 @@ class WalletScreen(Screen):
             self.ids.total_amount.text = str(w_amount[index])
         else:
             print("no email found")
+
     def highlight_button(self, button_type):
         if button_type == 'deposit':
             self.ids.deposit_button_grid.md_bg_color = 0.043, 0.145, 0.278, 1
             self.ids.withdraw_button_grid.md_bg_color = 253 / 255, 254 / 255, 254 / 255, 1
-            self.ids.deposit_button_grid.text_color= 1, 1, 1, 1
+            self.ids.deposit_button_grid.text_color = 1, 1, 1, 1
             self.ids.withdraw_button_grid.text_color = 0, 0, 0, 1
             self.type = 'deposit'
         elif button_type == 'withdraw':
@@ -207,21 +210,17 @@ class WalletScreen(Screen):
             self.type = 'withdraw'
 
     def go_back(self):
-        sm = self.manager
+        from borrower_dashboard import DashboardScreen  # Import the correct screen class
+        dashboard_screen = DashboardScreen(name='DashboardScreen')  # Create an instance of the screen
+        self.manager.add_widget(dashboard_screen)  # Add the screen to the ScreenManager
+        self.manager.current = 'DashboardScreen'  # Switch to the added screen
 
-        # Create a new instance of the LoginScreen
-        login_screen = DashboardScreen(name='DashboardScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'DashboardScreen'
     def show_snackbar(self, text):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
+
     def submit(self):
         if self.type == 'deposit':
-            data = self.wallet()
+            data = app_tables.fin_wallet.search()
             email = self.email()
             w_email = []
             w_id = []
@@ -240,7 +239,7 @@ class WalletScreen(Screen):
                 print("no email found")
 
         elif self.type == 'withdraw':
-            data = self.wallet()
+            data = app_tables.fin_wallet.search()
             email = self.email()
             w_email = []
             w_id = []
@@ -254,7 +253,8 @@ class WalletScreen(Screen):
                 index = w_email.index(email)
                 if w_amount[index] > int(self.ids.enter_amount.text):
                     data[index]['wallet_amount'] = w_amount[index] - int(self.ids.enter_amount.text)
-                    self.show_snackbar(f'Amount {self.ids.enter_amount.text} Withdraw from this wallet ID {w_id[index]}')
+                    self.show_snackbar(
+                        f'Amount {self.ids.enter_amount.text} Withdraw from this wallet ID {w_id[index]}')
                     self.ids.enter_amount.text = ''
                 else:
                     self.show_snackbar(
@@ -263,14 +263,15 @@ class WalletScreen(Screen):
             else:
                 print("no email found")
 
-
     def refresh(self):
         self.__init__()
+
     def email(self):
         return anvil.server.call('another_method')
 
     def wallet(self):
         return anvil.server.call('wallet_data')
+
 
 class MyScreenManager(ScreenManager):
     pass
