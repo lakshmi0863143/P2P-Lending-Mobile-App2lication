@@ -167,7 +167,7 @@ BorrLanding = '''
                 font_name: "Roboto-Bold"
                 font_size:dp(17)
                 padding:dp(15)
-                md_bg_color: 6/255, 143/255, 236/255, 1
+                md_bg_color: 0.043, 0.145, 0.278, 1
                 pos_hint: {'center_x': 0.5, 'center_y': 0.2}
                 border_radius: [1, 1, 1, 1]
                 on_release: root.go_to_borrower_screen()

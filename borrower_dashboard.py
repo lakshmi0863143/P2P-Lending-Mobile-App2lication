@@ -1,6 +1,8 @@
+import configparser
 import sqlite3
 
 import anvil
+from anvil.tables import app_tables
 from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.core.window import Window
@@ -11,6 +13,7 @@ from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.spinner import MDSpinner
 from borrower_extend_loan import ExtensionLoansRequest
 from borrower_application_tracker import ALLLoansAPT
+from borrower_dues import BorrowerDuesScreen
 from new_loan_request import NewloanScreen
 from borrower_viewloan import DashboardScreenVLB
 from borrower_foreclosure import LoansDetailsB
@@ -19,6 +22,7 @@ from kivymd.uix.spinner import MDSpinner
 from kivy.clock import Clock
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
+from kivy.factory import Factory
 
 if platform == 'android':
     from kivy.uix.button import Button
@@ -32,9 +36,7 @@ user_helpers = """
 <WindowManager>:
     DashboardScreen:
     ProfileScreen:
-    LoansDetails:
-    Foreclosure:
-    ForecloseDetails:
+
 
 <DashboardScreen>:
     MDFloatLayout:
@@ -117,8 +119,10 @@ user_helpers = """
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                 md_bg_color: 0.043, 0.145, 0.278, 1 
 
+
                 size_hint_y: None
                 height: dp(60)
+
                 size_hint_x: None
                 width: dp(110)
 
@@ -133,6 +137,7 @@ user_helpers = """
                         halign: "center"
                         text_color:1,1,1,1
                         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
 
             MDFlatButton:
                 size_hint: None, None
@@ -174,7 +179,7 @@ user_helpers = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "Discount Coupons"
+                        text: "View Transaction History"
                         font_size:dp(14)
                         bold:True
                         theme_text_color: 'Custom'
@@ -235,6 +240,7 @@ user_helpers = """
             theme_text_color: 'Custom'
             text_color: 1,1,1,1
             pos_hint: {'center_x': 0.92, 'center_y': 0.1}
+            on_release: root.help_module()
             md_bg_color: 0.043, 0.145, 0.278, 1     
 
 <ProfileScreen>
@@ -254,6 +260,7 @@ user_helpers = """
             title: "View Profile"
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
+            md_bg_color: 0.043, 0.145, 0.278, 1
         ScrollView:  # Add ScrollView here
             do_scroll_x: False
             BoxLayout:
@@ -1891,598 +1898,8 @@ user_helpers = """
                         font_name: "Roboto-Bold"
 
 
-<LoansDetails>:
-    BoxLayout:
-        orientation: 'vertical'
-        size_hint: 1, 1
-        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-        MDTopAppBar:
-            title: "All Loans"
-            elevation: 3
-            left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
-
-        BoxLayout:
-            orientation: 'vertical'
-            size_hint: 1, 1 
-            padding: dp(10)  
-
-            GridLayout:
-                cols: 4
-                spacing: dp(7)
-                padding: dp(5)  
-                size_hint: 1, None
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}  
-
-                MDLabel:
-                    text: "Loan Amount" 
-                MDLabel:
-                    text: "Loan Status" 
-                MDLabel:
-                    text: "Tenure" 
-                MDLabel:
-                    text: "View   Status"
-
-
-            Widget:
-                size_hint_y: None
-                height: dp(2)  
-                canvas:
-                    Color:
-                        rgba: 0, 0, 0, 1 
-                    Line:
-                        points: self.x, self.y, self.x + self.width, self.y
-
-            GridLayout:
-                cols: 4
-                spacing: dp(5)
-                padding: dp(5)  
-                size_hint: 1, None
-                height: dp(40) 
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-
-                MDLabel:
-                    text: "50000"  
-                MDLabel:
-                    text: "Approved"
-                MDLabel:
-                    text: "  12"
-                Button:
-                    text: "View Profile "
-                    text_color: 0, 0, 0, 1
-                    background_color: 0.529, 0.807, 0.922, 0
-                    on_release: root.go_to_foreclose()
-                    color: 0, 0, 0, 1
-                    bold: True
-                    canvas.before:
-                        Color:
-                            rgba:0.529, 0.807, 0.922, 1 
-
-        MDLabel:
-            text: ""
-        MDLabel:
-            text: ""
-        MDLabel:
-            text:""
-        MDLabel:
-        	text:""
-        MDLabel:
-        	text:""
-<Foreclosure>:
-    name:'Foreclosure'
-    MDRectangleFlatButton:
-        text: 'HOME'
-        text_color: 0, 0, 0, 1 
-        pos_hint: {'center_x': 0.5, 'center_y': 0.3}
-        md_bg_color: 0.031, 0.463, 0.91, 1
-        pos_hint: {'right': 1, 'top': 1}
-        on_release: app.root.current()
-        size_hint: (0.1, 0.03)
-        font_size: "13sp"
-        on_press: root.manager.current = 'main'
-
-    BoxLayout:
-        pos_hint: {'center_x':0.5, 'center_y':0.5}
-        elevation: 2
-        padding: [40, 0]
-        spacing: 25
-        orientation: 'vertical'
-        radius: [10,]
-
-        MDLabel:
-            text: "Loan Foreclosure for Loan A/C: EX-ATL9820"
-            bold: True
-        Widget:
-            size_hint_y: None
-            height: 5
-
-            canvas:
-                Color:
-                    rgba: 0, 0, 0, 1  
-                Line:
-                    points: self.x, self.y, self.x + self.width, self.y
-
-        MDGridLayout:
-            cols: 2
-            spacing: 60
-
-            MDLabel:
-                text: "Loan Amount"
-
-            MDFloatLayout:
-                size_hint: None, None
-                size: dp(200), dp(40)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint_x: 1
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 1, 1 
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10, 10, 10, 10]
-
-                    Color:
-                        rgba: 0, 0, 0, 1  
-
-                    Line:
-                        rounded_rectangle: [self.x + 5, self.y + 0.9, self.width - 2, self.height - 0.5, 10, 10, 10, 10]
-                        width: 1  # Border line width
-
-                MDTextField:
-                    id: text_input1
-                    size_hint: None, None
-                    size_hint_x: 0.91
-                    multiline: False
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    line_color_normal: [1, 1, 1, 1]  
-                    line_color_focus: [1, 1, 1, 1]
-                    font_name: "Roboto-Bold"
-        MDGridLayout:
-            cols: 2
-            spacing: 60
-
-            MDLabel:
-                text: "Loan Available Date"
-
-            MDFloatLayout:
-                size_hint: None, None
-                size: dp(200), dp(40)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint_x: 1
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 1, 1 
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10, 10, 10, 10]
-
-                    Color:
-                        rgba: 0, 0, 0, 1  
-
-                    Line:
-                        rounded_rectangle: [self.x + 5, self.y + 0.9, self.width - 2, self.height - 0.5, 10, 10, 10, 10]
-                        width: 1  # Border line width
-
-                MDTextField:
-                    id: text_input1
-                    size_hint: None, None
-                    size_hint_x: 0.91
-                    multiline: False
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    line_color_normal: [1, 1, 1, 1]  
-                    line_color_focus: [1, 1, 1, 1]
-                    font_name: "Roboto-Bold"
-        MDGridLayout:
-            cols: 2
-            spacing: 60
-
-            MDLabel:
-                text: "Tenure"
-
-            MDFloatLayout:
-                size_hint: None, None
-                size: dp(200), dp(40)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint_x: 1
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 1, 1  
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10, 10, 10, 10]
-
-                    Color:
-                        rgba: 0, 0, 0, 1  
-
-                    Line:
-                        rounded_rectangle: [self.x + 5, self.y + 0.9, self.width - 2, self.height - 0.5, 10, 10, 10, 10]
-                        width: 1  
-
-                MDTextField:
-                    id: text_input1
-                    size_hint: None, None
-                    size_hint_x: 0.91
-                    multiline: False
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    line_color_normal: [1, 1, 1, 1]  
-                    line_color_focus: [1, 1, 1, 1]
-                    font_name: "Roboto-Bold"
-        MDGridLayout:
-            cols: 2
-            spacing: 60
-
-            MDLabel:
-                text: "Interest"
-
-            MDFloatLayout:
-                size_hint: None, None
-                size: dp(200), dp(40)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint_x: 1
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 1, 1  
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10, 10, 10, 10]
-
-                    Color:
-                        rgba: 0, 0, 0, 1  
-
-                    Line:
-                        rounded_rectangle: [self.x + 5, self.y + 0.9, self.width - 2, self.height - 0.5, 10, 10, 10, 10]
-                        width: 1  # Border line width
-
-                MDTextField:
-                    id: text_input1
-                    size_hint: None, None
-                    size_hint_x: 0.81
-                    multiline: False
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    line_color_normal: [1, 1, 1, 1]  
-                    line_color_focus: [1, 1, 1, 1]
-                    font_name: "Roboto-Bold"
-        MDGridLayout:
-            cols: 2
-            spacing: 60
-
-            MDLabel:
-                text: "Precessing Fee"
-
-            MDFloatLayout:
-                size_hint: None, None
-                size: dp(200), dp(40)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint_x: 1
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 1, 1 
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10, 10, 10, 10]
-
-                    Color:
-                        rgba: 0, 0, 0, 1  
-
-                    Line:
-                        rounded_rectangle: [self.x + 5, self.y + 0.9, self.width - 2, self.height - 0.5, 10, 10, 10, 10]
-                        width: 1  
-
-                MDTextField:
-                    id: text_input
-                    size_hint: None, None
-                    size_hint_x: 0.91
-                    multiline: False
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    line_color_normal: [1, 1, 1, 1]  
-                    line_color_focus: [1, 1, 1, 1]
-                    font_name: "Roboto-Bold"
-        MDGridLayout:
-            cols: 2
-            spacing: 60
-
-            MDLabel:
-                text: "Loan Repayment Amount"
-
-            MDFloatLayout:
-                size_hint: None, None
-                size: dp(200), dp(40)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint_x: 1
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 1, 1  
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10, 10, 10, 10]
-
-                    Color:
-                        rgba: 0, 0, 0, 1  
-
-                    Line:
-                        rounded_rectangle: [self.x + 5, self.y + 0.9, self.width - 2, self.height - 0.5, 10, 10, 10, 10]
-                        width: 1  
-
-                MDTextField:
-                    id: text_input1
-                    size_hint: None, None
-                    size_hint_x: 0.81
-                    multiline: False
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    line_color_normal: [1, 1, 1, 1]  
-                    line_color_focus: [1, 1, 1, 1]
-                    font_name: "Roboto-Bold"
-        MDGridLayout:
-            cols: 2
-            spacing: 60
-
-            MDLabel:
-                text: "Loan Due Date"
-
-            MDFloatLayout:
-                size_hint: None, None
-                size: dp(200), dp(40)
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                size_hint_x: 1
-                canvas.before:
-                    Color:
-                        rgba: 1, 1, 1, 1  
-                    RoundedRectangle:
-                        pos: self.pos
-                        size: self.size
-                        radius: [10, 10, 10, 10]
-
-                    Color:
-                        rgba: 0, 0, 0, 1  
-
-                    Line:
-                        rounded_rectangle: [self.x + 5, self.y + 0.9, self.width - 2, self.height - 0.5, 10, 10, 10, 10]
-                        width: 1  
-
-                MDTextField:
-                    id: text_input1
-                    size_hint: None, None
-                    size_hint_x: 0.91
-                    multiline: False
-                    pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                    line_color_normal: [1, 1, 1, 1]  
-                    line_color_focus: [1, 1, 1, 1]
-                    font_name: "Roboto-Bold"
-        MDGridLayout:
-            cols: 2
-            spacing: 10
-
-            CheckBox:
-                size_hint: ( None, 1)
-                width: 50
-                bold: True
-                color: (195/255,110/255,108/255,1)
-
-            MDLabel:
-                text: "I Agree Terms and Conditions"
-                multiline: False
-
-
-
-        MDGridLayout:
-            cols: 2
-            spacing: 30
-            padding: [20, 0]
-            size_hint: 1, None
-            pos_hint: {'center_x': 0.48, 'center_y': 0.5}
-
-            MDRaisedButton:
-                text: "BACK"
-                md_bg_color: 0.031, 0.463, 0.91, 1
-                theme_text_color: 'Custom'
-                on_release: app.root.current = 'LoansDetails'
-                text_color: 1, 1, 1, 1
-                size_hint: 1, 1
-
-            MDRaisedButton:
-                text: "FORECLOSE"
-                md_bg_color: 0.031, 0.463, 0.91, 1
-                on_release: root.go_to_foreclose_details()
-                size_hint: 1, 1
-
-<ForecloseDetails>:
-    BoxLayout:
-        orientation: 'vertical'
-        padding: dp(10)  
-        spacing: dp(20) 
-        ScrollView:
-            do_scroll_x: False
-            BoxLayout:
-                orientation: "vertical"
-                padding: dp(10) 
-                spacing: dp(25)   
-                size_hint_y: None
-                height: self.minimum_height
-
-                MDLabel:
-                    text: "Loan Foreclosure For LoanA/C: EX-ATL9820"
-                    bold: True
-
-                MDLabel:
-                    text: "Loan Foreclosure Payment Details :"
-
-                Widget:
-                    size_hint: 1, None
-                    height: dp(5)  
-                    canvas:
-                        Color:
-                            rgba: 0, 0, 0, 1 
-                        Line:
-                            points: self.x, self.y, self.x + self.width, self.y
-                MDLabel:
-                    text: "Amount Paid"
-                    bold: True
-                GridLayout:
-                    cols: 2
-                    size_hint_y: None
-                    height: self.minimum_height
-                    padding: dp(10)
-                    spacing: dp(35)
-
-                    MDLabel:
-                        text: "Total Amount paid"
-                        bold: True
-
-                    MDLabel:
-                        id: totallamount
-                        text: "Total amount"
-                    MDLabel:
-                        text: "Monthly Installments  "
-
-                    MDLabel:
-                        id: monthlyinterest
-                        text: "Monthly Installments"
-
-                    MDLabel:
-                        text: "Interest Amount"
-
-                    MDLabel:
-                        id: interestamount
-                        text: "interest amount"
-                    MDLabel:
-                        text: "Monthly EMI"
-
-                    MDLabel:
-                        id: monthlyamount
-                        text: "Monthly amount"
-
-                Widget:
-                    size_hint: 1, None
-                    canvas:
-                        Color:
-                            rgba: 0, 0, 0, 1 
-                        Line:
-                            points: self.x, self.y, self.x + self.width, self.y
-                MDLabel:
-                    text: "Loan Closure Amount"
-                    bold: True
-                GridLayout:
-                    cols: 2
-                    size_hint_y: None
-                    height: self.minimum_height
-                    padding: dp(10)
-                    spacing: dp(50)
-
-                    MDLabel:
-                        text: " Overall Outstanding Amount"
-                        bold: True
-
-                    MDLabel:
-                        id: overallamount
-                        text: "Outstanding amount"
-                    MDLabel:
-                        text: "Overall Interest Amount "
-
-                    MDLabel:
-                        id: overallinterest
-                        text: "overall interest amount"
-
-                    MDLabel:
-                        text: "Total Amount"
-
-                    MDLabel:
-                        id: totalamount
-                        text: "total amount"
-
-                Widget:
-                    size_hint: 1, None
-                    canvas:
-                        Color:
-                            rgba: 0, 0, 0, 1 
-                        Line:
-                            points: self.x, self.y, self.x + self.width, self.y
-
-                MDLabel:
-                    text: "Amount Due"
-                    bold: True
-                GridLayout:
-                    cols: 2
-                    size_hint_y: None
-                    height: self.minimum_height
-                    padding: dp(10)
-                    spacing: dp(35)
-
-                    MDLabel:
-                        text: "Outstanding Amount"
-                        bold: True
-
-                    MDLabel:
-                        id: outstandingamount
-                        text: "Outstanding amount"
-                    MDLabel:
-                        text: "Foreclosure fee"
-
-                    MDLabel:
-                        id: foreclouser
-                        text: "Foreclosure fee"
-
-                    MDLabel:
-                        text: "Foreclosure Amount"
-
-                    MDLabel:
-                        id: foreclosureamount
-                        text: "Foreclosure Amount"
-
-                BoxLayout:
-                    orientation: "vertical"
-                    size_hint_y: None
-                    height: self.minimum_height
-
-                    MDLabel:
-                        text: 'Reason for Foreclosure '
-                        valign: 'top'
-                        bold: True
-
-                    MDTextField:
-                        hint_text: 'Enter text here'
-
-                BoxLayout:
-                    orientation: "horizontal"
-                    size_hint_y: None
-                    height: self.minimum_height
-
-
-                    CheckBox:
-                        size_hint: None, None
-                        width: dp(30) 
-                        color: (195/255, 110/255, 108/255, 1)
-
-                    MDLabel:
-                        text: "I Agree Terms and Conditions"
-                        multiline: False  
-
-                MDGridLayout:
-                    cols: 2
-                    spacing: dp(10)
-                    padding: dp(5)
-                    size_hint: 1, None
-
-                    MDRaisedButton:
-                        text: "CANCEL"
-                        md_bg_color: 0.031, 0.463, 0.91, 1
-                        theme_text_color: 'Custom'
-                        on_release: app.root.current = 'LoansDetails'
-                        text_color: 1, 1, 1, 1
-                        size_hint: 1, None
-
-                    MDRaisedButton:
-                        text: "SUBMIT"
-                        md_bg_color: 0.031, 0.463, 0.91, 1
-                        size_hint: 1, None
 """
-conn = sqlite3.connect('fin_user_profile.db')
-cursor = conn.cursor()
 
 
 class DashboardScreen(Screen):
@@ -2508,17 +1925,20 @@ class DashboardScreen(Screen):
         # Define the animation to move the label vertically
         anim = Animation(y=modal_height - loading_label.height, duration=1) + \
                Animation(y=0, duration=1)
-        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label,
-                                                                      modal_height))  # Bind to the completion event to repeat the animation
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
         anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def go_to_newloan_screen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2534,27 +1954,22 @@ class DashboardScreen(Screen):
         Clock.schedule_once(lambda dt: self.perform_loan_request_action(modal_view), 2)
 
     def perform_loan_request_action(self, modal_view):
+        # Cancel the animation
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = NewloanScreen(name='NewloanScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'NewloanScreen'
+        self.manager.add_widget(Factory.NewloanScreen(name='NewloanScreen'))
+        self.manager.current = 'NewloanScreen'
 
     def go_to_view_loan_screen(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2572,24 +1987,17 @@ class DashboardScreen(Screen):
     def perform_view_loan_screen_action(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = DashboardScreenVLB(name='DashboardScreenVLB')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'DashboardScreenVLB'
+        self.manager.add_widget(Factory.DashboardScreenVLB(name='DashboardScreenVLB'))
+        self.manager.current = 'DashboardScreenVLB'
 
     def go_to_app_tracker(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2608,24 +2016,17 @@ class DashboardScreen(Screen):
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = ALLLoansAPT(name='ALLLoansAPT')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'ALLLoansAPT'
+        self.manager.add_widget(Factory.ALLLoansAPT(name='ALLLoansAPT'))
+        self.manager.current = 'ALLLoansAPT'
 
     def go_to_extend(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2643,21 +2044,17 @@ class DashboardScreen(Screen):
     def perform_extend_action(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-        sm = self.manager
-        # Create a new instance of the LoginScreen
-        login_screen = ExtensionLoansRequest(name='ExtensionLoansRequest')
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-        # Switch to the LoginScreen
-        sm.current = 'ExtensionLoansRequest'
+
+        self.manager.add_widget(Factory.ExtensionLoansRequest(name='ExtensionLoansRequest'))
+        self.manager.current = 'ExtensionLoansRequest'
 
     def go_to_fore_closer_details(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2675,24 +2072,17 @@ class DashboardScreen(Screen):
     def perform_fore_closer_details_action(self, modal_view):
         # Close the modal view after performing the action
         modal_view.dismiss()
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = LoansDetailsB(name='LoansDetailsB')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'LoansDetailsB'
+        self.manager.add_widget(Factory.LoansDetailsB(name='LoansDetailsB'))
+        self.manager.current = 'LoansDetailsB'
 
     def go_to_loan_details(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2711,27 +2101,21 @@ class DashboardScreen(Screen):
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = LoansDetails(name='LoansDetails')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'LoansDetails'
+        self.manager.add_widget(Factory.LoansDetails(name='LoansDetails'))
+        self.manager.current = 'LoansDetails'
 
     def logout(self):
+        self.manager.add_widget(Factory.MainScreen(name='MainScreen'))
         self.manager.current = 'MainScreen'
 
     def go_to_profile(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2750,24 +2134,17 @@ class DashboardScreen(Screen):
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
-        sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = ProfileScreen(name='ProfileScreen')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'ProfileScreen'
+        self.manager.add_widget(Factory.ProfileScreen(name='ProfileScreen'))
+        self.manager.current = 'ProfileScreen'
 
     def go_to_wallet(self):
-        modal_view = ModalView(size_hint=(None, None), size=(150, 100), background_color=[0, 0, 0, 0])
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
         loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
                                 theme_text_color="Custom", text_color=[1, 1, 1, 1],
-                                font_size="25sp", bold=True)
+                                font_size="50sp", bold=True)
 
         # Set initial y-position off-screen
         loading_label.y = -loading_label.height
@@ -2786,23 +2163,57 @@ class DashboardScreen(Screen):
         from borrower_wallet import WalletScreen
         modal_view.dismiss()
         # Get the existing ScreenManager
+
+        self.manager.add_widget(Factory.WalletScreen(name='WalletScreen'))
+        self.manager.current = 'WalletScreen'
+
+    def go_to_borrowerdues_screen(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="25sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.perform_request_action(modal_view), 2)
+
+    def perform_request_action(self, modal_view):
+        # Close the modal view after performing the action
+        modal_view.dismiss()
+        # Get the existing ScreenManager
         sm = self.manager
 
         # Create a new instance of the LoginScreen
-        login_screen = WalletScreen(name='WalletScreen')
+        login_screen = BorrowerDuesScreen(name='BorrowerDuesScreen')
 
         # Add the LoginScreen to the existing ScreenManager
         sm.add_widget(login_screen)
 
         # Switch to the LoginScreen
-        sm.current = 'WalletScreen'
+        sm.current = 'BorrowerDuesScreen'
+
+    def help_module(self):
+        from help_module import HelpScreen
+        self.manager.add_widget(Factory.HelpScreen(name='HelpScreen'))
+        self.manager.current = 'HelpScreen'
 
 
 class ProfileScreen(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         email = self.get_email()
-        data = self.get_table()
+        data = app_tables.fin_user_profile.search()
         customer = []
         name_list = []
         email1 = []
@@ -2938,7 +2349,6 @@ class ProfileScreen(Screen):
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('profile')
 
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1")
 
@@ -3011,110 +2421,6 @@ class ProfileScreen(Screen):
 
     def on_back_button_press(self):
         self.manager.current = 'DashboardScreen'
-
-
-class LoansDetails(Screen):
-    def on_pre_enter(self):
-        Window.bind(on_keyboard=self.on_back_button)
-
-    def on_pre_leave(self):
-        Window.unbind(on_keyboard=self.on_back_button)
-
-    def on_back_button(self, instance, key, scancode, codepoint, modifier):
-        if key == 27:
-            self.go_back()
-            return True
-        return False
-
-    def go_back(self):
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'DashboardScreen'
-
-    def go_to_foreclose(self):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
-        modal_view.open()
-
-        # Perform the actual action (e.g., fetching loan requests)
-        # You can replace the sleep with your actual logic
-        Clock.schedule_once(lambda dt: self.perform_foreclose_action(modal_view), 2)
-
-    def perform_foreclose_action(self, modal_view):
-        # Close the modal view after performing the action
-        modal_view.dismiss()
-        # Get the existing ScreenManager
-        sm = self.manager
-
-        # Create a new instance of the LoginScreen
-        login_screen = Foreclosure(name='Foreclosure')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'Foreclosure'
-
-
-class Foreclosure(Screen):
-    def on_pre_enter(self):
-        Window.bind(on_keyboard=self.on_back_button)
-
-    def on_pre_leave(self):
-        Window.unbind(on_keyboard=self.on_back_button)
-
-    def on_back_button(self, instance, key, scancode, codepoint, modifier):
-        if key == 27:
-            self.go_back()
-            return True
-        return False
-
-    def go_back(self):
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'LoansDetails'
-
-    def go_to_foreclose_details(self):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
-        modal_view.open()
-
-        # Perform the actual action (e.g., fetching loan requests)
-        # You can replace the sleep with your actual logic
-        Clock.schedule_once(lambda dt: self.perform_foreclose_details_action(modal_view), 2)
-
-    def perform_foreclose_details_action(self, modal_view):
-        # Close the modal view after performing the action
-        modal_view.dismiss()
-        # Get the existing ScreenManager
-        sm = self.manager
-
-        # Create a new instance of the LoginScreen
-        login_screen = ForecloseDetails(name='ForecloseDetails')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'ForecloseDetails'
-
-
-class ForecloseDetails(Screen):
-    def on_pre_enter(self):
-        Window.bind(on_keyboard=self.on_back_button)
-
-    def on_pre_leave(self):
-        Window.unbind(on_keyboard=self.on_back_button)
-
-    def on_back_button(self, instance, key, scancode, codepoint, modifier):
-        if key == 27:
-            self.go_back()
-            return True
-        return False
-
-    def go_back(self):
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'Foreclosure'
 
 
 class MyScreenManager(ScreenManager):

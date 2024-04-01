@@ -1,4 +1,4 @@
-import anvil
+from anvil.tables import app_tables
 from kivy import platform
 from kivy.core.window import Window
 from kivy.lang import Builder
@@ -10,11 +10,9 @@ from kivymd.uix.button import MDRaisedButton, MDIconButton, MDRectangleFlatButto
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.filemanager import MDFileManager
 import sqlite3
-
+from kivy.factory import Factory
 from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget
 import anvil.server
-
-anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 
 application_tracker = """
 
@@ -29,6 +27,7 @@ application_tracker = """
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.go_back()]]
             right_action_items: [['refresh', lambda x: root.refresh()]]
+            md_bg_color: 0.043, 0.145, 0.278, 1
         MDScrollView:
 
             MDList:
@@ -39,11 +38,13 @@ application_tracker = """
         orientation: 'vertical'
         size_hint: 1, 1 
         pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+        
 
         MDTopAppBar:
             title: "Application status"
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.borrower_dashboard()]]
+            md_bg_color: 0.043, 0.145, 0.278, 1
 
         BoxLayout:
             id: box
@@ -63,7 +64,6 @@ application_tracker = """
                 size_hint_y: None
                 height: 50
 
-
             MDGridLayout:
                 cols: 2
                 spacing: dp(20)  # Adjust spacing between icon and label
@@ -82,7 +82,6 @@ application_tracker = """
                         Line:
                             width: 2
                             points: self.x + dp(24), self.y + dp(12) , self.x + dp(24), self.y - dp(34)
-
 
                 MDLabel:
                     id: label1
@@ -107,7 +106,6 @@ application_tracker = """
                             width: 2
                             points: self.x + dp(24), self.y + dp(12) , self.x + dp(24), self.y - dp(34)
 
-
                 MDLabel:
                     id: label2
                     text: "Waiting for approval"
@@ -129,7 +127,6 @@ application_tracker = """
                         Line:
                             width: 2
                             points: self.x + dp(24), self.y + dp(12) , self.x + dp(24), self.y - dp(34)
-
 
                 MDLabel:
                     id: label3
@@ -153,7 +150,6 @@ application_tracker = """
                             width: 2
                             points: self.x + dp(24), self.y + dp(12) , self.x + dp(24), self.y - dp(34)
 
-
                 MDLabel:
                     id: label4
                     text: "Loan is under disbursal process"
@@ -162,7 +158,6 @@ application_tracker = """
                     size_hint_y: None
                     height: 50
 
-
                 MDIconButton:
                     id: icon5
                     icon: "checkbox-blank-circle-outline"
@@ -170,7 +165,6 @@ application_tracker = """
                     text_color: 0.043, 0.145, 0.278, 1
                     size_hint_y: None
                     height: 50
-
 
                 MDLabel:
                     id: label5
@@ -188,7 +182,7 @@ Builder.load_string(application_tracker)
 class ApplicationTrackerScreen(Screen):
     def initialize_with_value(self, value, data):
         email = self.get_table()
-        profile = self.profile()
+        profile = app_tables.fin_user_profile.search()
         print(value)
         loan_id = []
         loan_amount = []
@@ -210,7 +204,6 @@ class ApplicationTrackerScreen(Screen):
 
         if email in profile_email_id:
             index1 = profile_email_id.index(email)
-
 
         if value in loan_id:
             index = loan_id.index(value)
@@ -322,11 +315,6 @@ class ApplicationTrackerScreen(Screen):
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('another_method')
 
-    def profile(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('profile')
-
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
 
@@ -351,9 +339,9 @@ class ALLLoansAPT(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = self.get_table_data()
+        data = app_tables.fin_loan_details.search()
         email = self.get_table()
-        profile = self.profile()
+        profile = app_tables.fin_user_profile.search()
         customer_id = []
         loan_id = []
         email1 = []
@@ -390,7 +378,7 @@ class ALLLoansAPT(Screen):
             cos_id = customer_id[index]
 
         if cos_id is not None:
-            print(cos_id,type(cos_id))
+            print(cos_id, type(cos_id))
             print(customer_id[-1], type(customer_id[-1]))
             c = -1
             index_list = []
@@ -424,10 +412,10 @@ class ALLLoansAPT(Screen):
                 self.ids.container.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
-        print(loan_id)
+        # Highlight the selected item
+        self.highlight_item(instance)
 
-
-        data = self.get_table_data()  # Fetch data here
+        data = app_tables.fin_loan_details.search()  # Fetch data here
         loan_status = None
         for loan in data:
             if loan['loan_id'] == loan_id:
@@ -436,30 +424,34 @@ class ALLLoansAPT(Screen):
 
         sm = self.manager
 
-        # Create a new instance of the LoginScreen
+        # Create a new instance of the ApplicationTrackerScreen
         approved = ApplicationTrackerScreen(name='ApplicationTrackerScreen')
 
-        # Add the LoginScreen to the existing ScreenManager
+        # Add the ApplicationTrackerScreen to the existing ScreenManager
         sm.add_widget(approved)
 
-        # Switch to the LoginScreen
+        # Switch to the ApplicationTrackerScreen
         sm.current = 'ApplicationTrackerScreen'
         self.manager.get_screen('ApplicationTrackerScreen').initialize_with_value(loan_id, data)
 
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_table_data')
+    def highlight_item(self, item):
+        # Deselect all other items
+        self.deselect_items()
+
+        # Change the background color of the clicked item to indicate selection
+        item.bg_color = (0.5, 0.5, 0.5, 1)  # Change color as desired
+        self.selected_item = item
+
+    def deselect_items(self):
+        # Deselect all items in the list
+        for item in self.ids.container.children:
+            if isinstance(item, ThreeLineAvatarIconListItem):
+                item.bg_color = (1, 1, 1, 1)  # Reset background color for all items
 
     def get_table(self):
         # Make a call to the Anvil server function
         # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
         return anvil.server.call('another_method')
-
-    def profile(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('profile')
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method

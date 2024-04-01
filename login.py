@@ -1,25 +1,31 @@
 import sqlite3
 import threading
-
+from anvil.tables import app_tables
 from kivy.clock import Clock
 from kivy.core.window import Window
+from kivy.factory import Factory
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen, SlideTransition, ScreenManager
 from kivymd.uix.label import MDLabel
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
-
+from kivy.properties import ListProperty
+from kivymd.uix.textfield import MDTextField
 import anvil.server
 from dashboard import DashScreen
 from lender_dashboard import LenderDashboard
 from borrower_dashboard import DashboardScreen
+from kivy.factory import Factory
 import bcrypt
-anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+import server
 
 KV = """
 <WindowManager>:
     LoginScreen:
+
+
 
 <LoginScreen>:
     MDFloatLayout:
@@ -62,13 +68,20 @@ KV = """
             MDTextField:
                 id: email      
                 hint_text: "Email"
+                hint_text_color: 0.043, 0.145, 0.278, 1  # Indigo color for hint text
                 helper_text_mode: "on_focus"
                 icon_right: "account"
                 font_name: "Roboto-Bold"
                 pos_hint: {'center_x': 0.5, 'center_y': 0.57}
+                theme_text_color: "Custom"
+                text_color: 0, 0, 0, 1  # Change the text color here (black in this example)
+
             MDTextField:
                 id: password
                 hint_text: "Password"
+                hint_text_color: 0.043, 0.145, 0.278, 1  # Indigo color for hint text
+                color_mode: 'custom'
+                line_color_normal: 0.043, 0.145, 0.278, 1
                 helper_text: "Enter your password"
                 helper_text_mode: "on_focus"
                 icon_right: "lock"
@@ -78,6 +91,9 @@ KV = """
                 width: dp(200)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.46}
                 on_text_validate: app.validate_password()
+                theme_text_color: "Custom"
+                text_color: 0, 0, 0, 1  # Change the text color here (black in this example)
+
         BoxLayout:
             orientation: 'horizontal'
             size_hint_y: None
@@ -155,15 +171,15 @@ KV = """
             font_size:dp(18)
 
             theme_text_color: 'Custom'
-            text_color: 6/255, 143/255, 236/255, 1
+            text_color: 0.043, 0.145, 0.278, 1
             on_release: root.go_to_signup()
 
 
 """
+Builder.load_string(KV)
 
 
 class LoginScreen(Screen):
-    Builder.load_string(KV)
 
     def on_checkbox_active(self, checkbox, value):
         # Handle checkbox state change
@@ -232,7 +248,7 @@ class LoginScreen(Screen):
         if not entered_password:
             self.show_error_dialog("Please enter password")
             self.hide_loading_spinner()
-             # Hide spinner in case of error
+            # Hide spinner in case of error
             return
 
         # Start another thread for SQLite operations
@@ -248,8 +264,8 @@ class LoginScreen(Screen):
         ''', (entered_email,))
 
         user_data = cursor.fetchone()
-        data = self.login_data()
-        profile = self.profile()
+        data = app_tables.users.search()
+        profile = app_tables.fin_user_profile.search()
         email_list = []
         password_list = []
         registartion_approve = []
@@ -286,25 +302,26 @@ class LoginScreen(Screen):
                     # Schedule the creation of borrower DashboardScreen on the main thread
                     Clock.schedule_once(lambda dt: self.show_dashboard('DashboardScreen'), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after successful login as borrower
+                    # Added to exit the method after successful login as borrower
                 elif (email_list[i] == entered_email) and (password_value) and (
                         registartion_approve[index] == True) and (user_type[index] == 'lender'):
                     self.share_email_with_anvil(email_list[i])
                     # Schedule the creation of lender DashboardScreen on the main thread
                     Clock.schedule_once(lambda dt: self.show_dashboard('LenderDashboard'), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after successful login as lender
+                    # Added to exit the method after successful login as lender
                 elif (email_list[i] == entered_email) and (password_value):
                     self.share_email_with_anvil(email_list[i])
                     # Schedule the creation of default DashboardScreen on the main thread
                     Clock.schedule_once(lambda dt: self.show_dashboard('DashScreen'), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after successful login with no specific user type
+                    # Added to exit the method after successful login with no specific user type
                 else:
                     # Schedule the error dialog on the main thread
                     Clock.schedule_once(lambda dt: self.show_error_dialog("Incorrect email/password"), 0)
                     self.hide_loading_spinner()
-                    return  # Added to exit the method after showing error dialog
+                    # Added to exit the method after showing error dialog
+                    return
 
         if user_data:
             password_value2 = bcrypt.checkpw(entered_password.encode('utf-8'), user_data[4].encode('utf-8'))
@@ -331,9 +348,6 @@ class LoginScreen(Screen):
                                     ''', (i,))
                         conn.commit()
 
-                # Schedule UI update on the main thread
-                Clock.schedule_once(lambda dt: self.show_dashboard('DashScreen'), 0)
-
                 conn.close()
 
                 # Clock.schedule_once(lambda dt: self.show_dashboard(), 0)
@@ -342,29 +356,25 @@ class LoginScreen(Screen):
 
                 Clock.schedule_once(lambda dt: self.show_error_dialog("Incorrect password"), 0)
                 # Clock.schedule_once(lambda dt: self.hide_loading_spinner(), 0)
-        else:
+        elif entered_email not in email_list and not user_data:
 
             Clock.schedule_once(lambda dt: self.show_error_dialog("Enter valid Email and password"), 0)
             # Clock.schedule_once(lambda dt: self.hide_loading_spinner(), 0)
 
     def show_dashboard(self, screen_name):
         def switch_screen(dt):
-            sm = self.manager
+
             if screen_name == 'DashboardScreen':
-                borrower_screen = DashboardScreen(name='DashboardScreen')
-                sm.add_widget(borrower_screen)
-                sm.transition.direction = 'left'
-                sm.current = 'DashboardScreen'
+                self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
+                self.manager.current = 'DashboardScreen'
+
             elif screen_name == 'LenderDashboard':
-                lender_screen = LenderDashboard(name='LenderDashboard')
-                sm.add_widget(lender_screen)
-                sm.transition.direction = 'left'
-                sm.current = 'LenderDashboard'
+                self.manager.add_widget(Factory.LenderDashboard(name='LenderDashboard'))
+                self.manager.current = 'LenderDashboard'
+
             elif screen_name == 'DashScreen':
-                lender_screen = DashScreen(name='DashScreen')
-                sm.add_widget(lender_screen)
-                sm.transition.direction = 'left'
-                sm.current = 'DashScreen'
+                self.manager.add_widget(Factory.DashScreen(name='DashScreen'))
+                self.manager.current = 'DashScreen'
 
         Clock.schedule_once(switch_screen, 0)
 
@@ -387,21 +397,17 @@ class LoginScreen(Screen):
         dialog.open()
         self.hide_loading_spinner()
 
-
-
     def go_to_signup(self):
         from signup import SignupScreen
-        sm = self.manager
-        lender_screen = SignupScreen(name='SignupScreen')
-        sm.add_widget(lender_screen)
-        sm.transition.direction = 'left'  # Set the transition direction explicitly
-        sm.current = 'SignupScreen'
+        self.manager.add_widget(Factory.SignupScreen(name='SignupScreen'))
+        self.manager.current = 'SignupScreen'
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)
         # Clear input fields when navigating back to the login page
         self.ids.email.text = ""
         self.ids.password.text = ""
+
     def on_pre_leave(self):
         Window.unbind(on_keyboard=self.on_back_button)
 
@@ -419,12 +425,6 @@ class LoginScreen(Screen):
 
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'MainScreen'
-
-    def login_data(self):
-        return anvil.server.call('login_data')
-
-    def profile(self):
-        return anvil.server.call('profile')
 
 
 class MyScreenManager(ScreenManager):

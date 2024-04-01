@@ -1,5 +1,6 @@
 import os
 
+from anvil.tables import app_tables
 from kivy.app import App
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
@@ -29,7 +30,7 @@ from kivy.uix.modalview import ModalView
 from kivymd.uix.spinner import MDSpinner
 from kivy.clock import Clock
 
-anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
+# anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 
 from lender_dashboard import LenderDashboard
 
@@ -78,6 +79,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: root.go_to_dashboard()]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
 
 
@@ -165,7 +167,7 @@ KV = '''
 
             MDRectangleFlatButton:
                 text: 'Next'
-                md_bg_color: 0.031, 0.463, 0.91, 1
+                md_bg_color: 0.043, 0.145, 0.278, 1
                 theme_text_color: 'Custom'
                 text_color: 1, 1, 1, 1
                 size_hint: 1, None
@@ -183,6 +185,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -263,7 +266,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(mobile_number.text, altername_email.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -278,6 +281,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen1')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -424,7 +428,7 @@ KV = '''
             MDRectangleFlatButton:
                 text: "Next"
                 on_release: root.add_data(aadhar_number.text, pan_number.text)
-                md_bg_color: 0.031, 0.463, 0.91, 1
+                md_bg_color: 0.043, 0.145, 0.278, 1
                 pos_hint: {'right': 1, 'y': 0.5}
                 text_color: 1, 1, 1, 1
                 size_hint: 1, None
@@ -439,6 +443,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen2')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -499,7 +504,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_press: root.next_pressed(spinner_id.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -517,6 +522,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -606,7 +612,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_lender_screen4()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -621,6 +627,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -746,7 +753,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_lender_screen4()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -761,6 +768,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title"
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -933,7 +941,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_lender_screen4()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -948,6 +956,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1174,7 +1183,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_lender_screen4()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1189,6 +1198,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1455,7 +1465,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.go_to_lender_screen4()
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1469,6 +1479,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
     MDBoxLayout:
         orientation: 'vertical'
         spacing: dp(30)
@@ -1543,7 +1554,7 @@ KV = '''
                 MDRectangleFlatButton:
                     text: "Next"
                     on_release: root.add_data(street_address.text, city.text, zip_code.text, state.text, country.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1557,6 +1568,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen4')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1636,7 +1648,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_press: root.next_pressed(spinner_id.text, investment.text, spinner2.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1650,6 +1662,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen5')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1724,7 +1737,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(business_name.text,business_location.text,business_address.text,branch_name.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1740,6 +1753,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenInstitutionalForm1')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1819,7 +1833,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(spin.text,nearest_location.text,spinner_id.text,year_of_estd.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1835,6 +1849,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenInstitutionalForm2')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -1948,7 +1963,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(spinner_id.text,last_six_months_turnover.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -1963,6 +1978,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenInstitutionalForm3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2030,7 +2046,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(director_name.text,director_mobile_number.text,din.text,cin.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2045,6 +2061,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenInstitutionalForm3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2068,7 +2085,7 @@ KV = '''
 
 
             MDLabel:
-                text: 'Step-5'
+                text: 'Step-4'
                 halign: 'center'
                 bold: True
 
@@ -2144,7 +2161,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(reg_office_address.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2161,6 +2178,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreen5')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2248,7 +2266,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(spinner1.text, company_name.text, spinner2.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2262,6 +2280,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenIndividualForm1')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2404,7 +2423,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(annual_salary.text, designation.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2419,6 +2438,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenIndividualForm2')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2494,7 +2514,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(company_address.text, company_pin_code.text, company_country.text, landmark.text, business_phone_number.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2512,6 +2532,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenIndividualForm3')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2589,7 +2610,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(account_holder_name.text, spinner_id.text, account_number.text, bank_name.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2604,6 +2625,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenIndividualBankForm1')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2655,7 +2677,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Submit"
                     on_release: root.go_to_lender_dashboard(ifsc_code.text, branch_name.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2673,6 +2695,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenInstitutionalForm5')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
     MDBoxLayout:
         orientation: 'vertical'
@@ -2749,7 +2772,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Next"
                     on_release: root.add_data(account_holder_name.text, spinner_id.text, account_number.text, bank_name.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2764,6 +2787,7 @@ KV = '''
         left_action_items: [['arrow-left', lambda x: setattr(app.root, 'current', 'LenderScreenInstitutionalBankForm1')]]
         right_action_items: [['home', lambda x: root.go_to_dashboard()]]
         title_align: 'center'  # Center-align the title
+        md_bg_color: 0.043, 0.145, 0.278, 1
 
 
     MDBoxLayout:
@@ -2817,7 +2841,7 @@ KV = '''
                 MDRaisedButton:
                     text: "Submit"
                     on_release: root.go_to_lender_dashboard(ifsc_code.text, branch_name.text)
-                    md_bg_color: 0.031, 0.463, 0.91, 1
+                    md_bg_color: 0.043, 0.145, 0.278, 1
                     pos_hint: {'right': 1, 'y': 0.5}
                     text_color: 1, 1, 1, 1
                     size_hint: 1, None
@@ -2833,11 +2857,6 @@ cursor = conn.cursor()
 
 class LenderScreen(Screen):
     Builder.load_string(KV)
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
     def add_data(self, name, gender, date):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -2879,13 +2898,13 @@ class LenderScreen(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
 
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['full_name'] = name
@@ -2926,19 +2945,7 @@ class LenderScreen(Screen):
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
 
-    # def go_to_lenderscreen1(self):
-    def profile(self):
-        return anvil.server.call('profile')
-
-
 class LenderScreen1(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def add_data(self, mobile_number, alternate_email):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -2970,12 +2977,12 @@ class LenderScreen1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['mobile'] = mobile_number
@@ -3017,13 +3024,6 @@ class LenderScreen1(Screen):
 
 
 class LenderScreen2(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3135,12 +3135,12 @@ class LenderScreen2(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['aadhaar_no'] = aadhar_number
@@ -3175,12 +3175,6 @@ class LenderScreen2(Screen):
 
 
 class LenderScreen3(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def next_pressed(self, id):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -3241,12 +3235,12 @@ class LenderScreen3(Screen):
             cursor.execute("UPDATE fin_registration_table SET highest_qualification = ? WHERE customer_id = ?",
                            (id, row_id_list[log_index]))
             conn.commit()
-            data = self.profile()
+            data = app_tables.fin_user_profile.search()
             id_list = []
             for i in data:
                 id_list.append(i['email_user'])
 
-            user_email = self.get_email()
+            user_email = anvil.server.call('another_method')
             if user_email in id_list:
                 index = id_list.index(user_email)
                 data[index]['qualification'] = id
@@ -3276,12 +3270,6 @@ class LenderScreen3(Screen):
 
 
 class LenderScreen_Edu_10th(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3406,9 +3394,6 @@ class LenderScreen_Edu_10th(Screen):
 
 class LenderScreen_Edu_Intermediate(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3559,13 +3544,6 @@ class LenderScreen_Edu_Intermediate(Screen):
 
 
 class LenderScreen_Edu_Bachelors(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3746,13 +3724,6 @@ class LenderScreen_Edu_Bachelors(Screen):
 
 
 class LenderScreen_Edu_Masters(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3961,13 +3932,6 @@ class LenderScreen_Edu_Masters(Screen):
 
 
 class LenderScreen_Edu_PHD(Screen):
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4202,10 +4166,6 @@ class LenderScreen_Edu_PHD(Screen):
 
 class LenderScreen4(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
     def add_data(self, street, city, zip_code, state, country):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4235,12 +4195,12 @@ class LenderScreen4(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['city'] = city
@@ -4279,18 +4239,7 @@ class LenderScreen4(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'LenderScreen3'
 
-    def profile(self):
-        return anvil.server.call('profile')
-
-
 class LenderScreen5(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def next_pressed(self, id, investment, period):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
@@ -4339,12 +4288,12 @@ class LenderScreen5(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['loan_type'] = id
@@ -4379,13 +4328,6 @@ class LenderScreen5(Screen):
 
 class LenderScreenInstitutionalForm1(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, business_name, business_location, business_address, business_branch_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4419,12 +4361,12 @@ class LenderScreenInstitutionalForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
 
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['business_name'] = business_name
@@ -4461,13 +4403,6 @@ class LenderScreenInstitutionalForm1(Screen):
 
 class LenderScreenInstitutionalForm2(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, business_type, nearest_location, no_of_employees_working, year_of_estd):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4501,11 +4436,11 @@ class LenderScreenInstitutionalForm2(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['business_type'] = business_type
@@ -4542,14 +4477,6 @@ class LenderScreenInstitutionalForm2(Screen):
 
 
 class LenderScreenInstitutionalForm3(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4654,11 +4581,11 @@ class LenderScreenInstitutionalForm3(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['industry_type'] = industry_type
@@ -4697,14 +4624,6 @@ class LenderScreenInstitutionalForm3(Screen):
 
 
 class LenderScreenInstitutionalForm4(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, director_name, director_mobile_number, DIN, CIN):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4737,11 +4656,11 @@ class LenderScreenInstitutionalForm4(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['director_name'] = director_name
@@ -4782,14 +4701,6 @@ class LenderScreenInstitutionalForm4(Screen):
 
 
 class LenderScreenInstitutionalForm5(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4896,11 +4807,11 @@ class LenderScreenInstitutionalForm5(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['registered_off_add'] = registered_office_address
@@ -4936,14 +4847,6 @@ class LenderScreenInstitutionalForm5(Screen):
 
 class LenderScreenIndividualForm1(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, employeent_type, company_name, organization):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -4975,11 +4878,11 @@ class LenderScreenIndividualForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['employment_type'] = employeent_type
@@ -5014,13 +4917,6 @@ class LenderScreenIndividualForm1(Screen):
 
 
 class LenderScreenIndividualForm2(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -5155,11 +5051,11 @@ class LenderScreenIndividualForm2(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['annual_salary'] = annual_salary
@@ -5202,14 +5098,6 @@ class LenderScreenIndividualForm2(Screen):
 
 
 class LenderScreenIndividualForm3(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, company_address, company_pincode, company_country, landmark, business_number):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5243,11 +5131,11 @@ class LenderScreenIndividualForm3(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['company_address'] = company_address
@@ -5297,14 +5185,6 @@ class LenderScreenIndividualForm3(Screen):
 
 
 class LenderScreenIndividualBankForm1(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, account_holder_name, account_type, account_number, bank_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5337,11 +5217,11 @@ class LenderScreenIndividualBankForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['account_name'] = account_holder_name
@@ -5382,14 +5262,6 @@ class LenderScreenIndividualBankForm1(Screen):
 
 
 class LenderScreenIndividualBankForm2(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def go_to_lender_dashboard(self, bank_id, branch_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5424,11 +5296,11 @@ class LenderScreenIndividualBankForm2(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data =app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['bank_id'] = bank_id
@@ -5471,14 +5343,6 @@ class LenderScreenIndividualBankForm2(Screen):
 
 
 class LenderScreenInstitutionalBankForm1(Screen):
-
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def add_data(self, account_holder_name, account_type, account_number, bank_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5511,11 +5375,11 @@ class LenderScreenInstitutionalBankForm1(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['account_name'] = account_holder_name
@@ -5553,13 +5417,6 @@ class LenderScreenInstitutionalBankForm1(Screen):
 
 class LenderScreenInstitutionalBankForm2(Screen):
 
-    def get_email(self):
-        data = anvil.server.call('another_method')
-        return data
-
-    def profile(self):
-        return anvil.server.call('profile')
-
     def go_to_lender_dashboard(self, bank_id, branch_name):
         modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
         spinner = MDSpinner()
@@ -5594,11 +5451,11 @@ class LenderScreenInstitutionalBankForm2(Screen):
             # Handle the case where the user is not logged in
             print("User is not logged in.")
 
-        data = self.profile()
+        data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
             id_list.append(i['email_user'])
-        user_email = self.get_email()
+        user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
             data[index]['bank_id'] = bank_id
