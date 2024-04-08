@@ -1035,17 +1035,19 @@ class ApprovedLoansLF(Screen):
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
+
+        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        c = -1
         customer_id = []
         product_name = []
         for i in view:
@@ -1064,30 +1066,36 @@ class ApprovedLoansLF(Screen):
                 index_list.append(c)
         b = 1
         k = -1
+        print(profile_customer_id)
         for i in index_list:
             b += 1
             k += 1
-            if customer_id[i] in profile_customer_id:
-                number = profile_customer_id.index(customer_id[i])
+            print(i)
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(
+                    on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                self.ids.container1.add_widget(item)
             else:
-                number = 0
-            item = ThreeLineAvatarIconListItem(
-
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-            self.ids.container1.add_widget(item)
+                print("Index out of range!")
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
@@ -1139,17 +1147,19 @@ class ClosedLoansLF(Screen):
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
+
+        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        c = -1
         customer_id = []
         product_name = []
         for i in view:
@@ -1168,31 +1178,36 @@ class ClosedLoansLF(Screen):
                 index_list.append(c)
         b = 1
         k = -1
+        print(profile_customer_id)
         for i in index_list:
             b += 1
             k += 1
-            if customer_id[i] in profile_customer_id:
-                number = profile_customer_id.index(customer_id[i])
+            print(i)
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(
+                    on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                self.ids.container3.add_widget(item)
             else:
-                number = 0
-            item = ThreeLineAvatarIconListItem(
-
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-            self.ids.container3.add_widget(item)
-
+                print("Index out of range!")
     def icon_button_clicked(self, instance, loan_id):
         value = instance.text.split(':')
         value = value[-1][1:]
@@ -1240,17 +1255,19 @@ class RejectedLoansLF(Screen):
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
+
+        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        c = -1
         customer_id = []
         product_name = []
         for i in view:
@@ -1269,30 +1286,36 @@ class RejectedLoansLF(Screen):
                 index_list.append(c)
         b = 1
         k = -1
+        print(profile_customer_id)
         for i in index_list:
             b += 1
             k += 1
-            if customer_id[i] in profile_customer_id:
-                number = profile_customer_id.index(customer_id[i])
+            print(i)
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(
+                    on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                self.ids.container4.add_widget(item)
             else:
-                number = 0
-            item = ThreeLineAvatarIconListItem(
-
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-            self.ids.container4.add_widget(item)
+                print("Index out of range!")
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
@@ -1345,17 +1368,19 @@ class UnderProcessLoansLF(Screen):
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
+
+        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        c = -1
         customer_id = []
         product_name = []
         for i in view:
@@ -1374,30 +1399,36 @@ class UnderProcessLoansLF(Screen):
                 index_list.append(c)
         b = 1
         k = -1
+        print(profile_customer_id)
         for i in index_list:
             b += 1
             k += 1
-            if customer_id[i] in profile_customer_id:
-                number = profile_customer_id.index(customer_id[i])
+            print(i)
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(
+                    on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                self.ids.container2.add_widget(item)
             else:
-                number = 0
-            item = ThreeLineAvatarIconListItem(
-
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-            self.ids.container2.add_widget(item)
+                print("Index out of range!")
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
@@ -1451,17 +1482,19 @@ class ViewAllLoansLF(Screen):
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
         data = app_tables.fin_foreclosure.search()
+
+        customer_id = []
         loan_id = []
         borrower_name = []
         loan_status = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
             borrower_name.append(i['borrower_name'])
             loan_status.append(i['status'])
 
+        c = -1
         customer_id = []
         product_name = []
         for i in view:
@@ -1475,35 +1508,39 @@ class ViewAllLoansLF(Screen):
         c = -1
         index_list = []
         for i in range(s):
-            c += 1
-            if loan_status[c] == 'under process' or loan_status[c] == 'approved' or loan_status[c] == 'rejected':
-                index_list.append(c)
+            index_list.append(c)
         b = 1
         k = -1
+        print(profile_customer_id)
         for i in index_list:
             b += 1
             k += 1
-            if customer_id[i] in profile_customer_id:
-                number = profile_customer_id.index(customer_id[i])
+            print(i)
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(
+                    on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                self.ids.container2.add_widget(item)
             else:
-                number = 0
-            item = ThreeLineAvatarIconListItem(
-
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-            self.ids.container5.add_widget(item)
+                print("Index out of range!")
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
@@ -1728,7 +1765,7 @@ class ViewProfileScreenLF(Screen):
             self.manager.current = 'DashboardScreenLF'
 
     def rejected_click(self):
-        data = self.app_tables.fin_foreclosure.search()
+        data = app_tables.fin_foreclosure.search()
         loan_id = self.ids.loan1.text
         print(loan_id)
 
