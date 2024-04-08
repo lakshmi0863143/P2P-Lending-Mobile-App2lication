@@ -441,12 +441,10 @@ extension_loan_request = """
                                 md_bg_color: 0.043, 0.145, 0.278, 1
                                 font_name: "Roboto-Bold"
                                 size_hint: 0.4, None
+                                height: dp(50)
                                 on_release:root.add_data()
-                                height:"50dp"
-                                pos_hint: {'right': 0.5, 'y': 0.5}
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
                                 font_size:dp(15)
-
-
 """
 Builder.load_string(extension_loan_request)
 
@@ -599,6 +597,8 @@ class ExtensionLoansProfileScreen(Screen):
         if value in loan_details:
             borrower_customer_id, loan_amount, tenure, product_name, interest_rate, borrower_name = loan_details[value]
             extension_allowed, extension_fee = extension_details.get(product_name, ('No', 0))
+
+            # Check if the borrower's customer ID is in the profile customer ID list
             if borrower_customer_id in profile_customer_id:
                 number = profile_customer_id.index(borrower_customer_id)
                 self.ids.number.text = str(profile_mobile_number[number])
@@ -688,34 +688,40 @@ class ExtendLoansScreen(Screen):
         self.root_screen = self.manager.get_screen('ExtensionLoansProfileScreen')
         loan_id = str(self.root_screen.ids.loan_id.text)
         self.ids.loan_id.text = str(loan_id)
+
         loan_amount = str(self.root_screen.ids.loan_amount.text)
         self.ids.loan_amount.text = str(loan_amount)
+
         extension_fee = str(self.root_screen.ids.extension_fee.text)
         self.ids.extension_fee.text = str(extension_fee)
+
         tenure = str(self.root_screen.ids.tenure.text)
         loan_extension_months = str(self.root_screen.ids.extension_months.text)
         extension_amount = float(extension_fee) * float(loan_amount) / 100
-        print(extension_amount)
         self.ids.extension_amount.text = f"{str(extension_amount)}"
+
         emi = app_tables.fin_product_details.search()
         if emi:
             roi = emi[0]['roi']
             roi = float(roi)
-            print(roi)
         else:
-            return "ROI not found for the selected category"
+            self.show_popup("Error", "ROI not found for the selected category")
+            return
+
         monthly_interest_rate = (roi / 100) / 12
         total_tenure = app_tables.fin_emi_table.search(loan_id=loan_id)
-        total_tenure = total_tenure[0]['emi_number']
-        # Calculate EMI using the formula
-        remaining_tenure = (float(tenure) - float(total_tenure)) + float(loan_extension_months)
+        try:
+            total_tenure = total_tenure[0]['emi_number']
+        except IndexError:
+            self.show_popup("Error", "EMI number not found for the loan")
+            return
 
+        remaining_tenure = (float(tenure) - float(total_tenure)) + float(loan_extension_months)
         loan_extension = (float(loan_amount) * monthly_interest_rate * pow(1 + monthly_interest_rate,
                                                                            float(remaining_tenure))) / \
                          (pow(1 + monthly_interest_rate, float(remaining_tenure)) - 1)
         emi = loan_extension
         self.ids.new_emi.text = f"{float(emi):.2f}"
-        print(emi)
 
         payment = app_tables.fin_emi_table.search()
         if payment:
@@ -723,16 +729,22 @@ class ExtendLoansScreen(Screen):
             if total_payment is not None:
                 total_payment = float(total_payment)
             else:
-                return "Invalid total payment emi number"
+                self.show_popup("Error", "Invalid total payment EMI number")
+                return
+
             emi_paid = total_payment * emi
             remaining_loan_amount = (float(loan_amount) - emi_paid) + float(extension_amount)
-            print(remaining_loan_amount)
             self.ids.finial_repayment_amount.text = f"{remaining_loan_amount:.2f}"
-
+        else:
+            self.show_popup("Error", "No payment data found")
     def on_pre_leave(self):
         # Unbind the back button event when leaving the screen
         Window.bind(on_keyboard=self.on_keyboard)
         Window.bind(on_keyboard=self.on_back_button)
+
+    def show_popup(self, title, content):
+        popup = Popup(title=title, content=Label(text=content), size_hint=(None, None), size=(400, 200))
+        popup.open()
 
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
