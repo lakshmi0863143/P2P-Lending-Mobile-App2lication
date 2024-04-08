@@ -425,7 +425,7 @@ loan_forecloseB = '''
                         bold: True
 
                     MDLabel:
-                        id: total_due_amount1
+                        id: total_due_amount
                         text: ""
 
                 Widget:
@@ -484,8 +484,7 @@ loan_forecloseB = '''
                         text: "SUBMIT"
                         id : submit
                         md_bg_color: 0.043, 0.145, 0.278, 1 
-                        on_release: root.add_data(loan_id_label1.text, outstanding_amount.text, foreclosure_fee.text, foreclosure_amount.text, reason.text)
-
+                        on_release: root.add_data(loan_id_label1.text,outstanding_amount.text, foreclosure_fee.text, foreclosure_amount.text, reason.text , total_due_amount.text, totalamount.text , monthly_emi1.text)
                         size_hint: 1, None
 
 
@@ -774,18 +773,21 @@ class ForecloseDetails(Screen):
             index3 = loan_id1.index(value)
             monthly_installment = loan_amount[index3] / tenure[index3]
             print(loan_amount[index3], tenure[index3])
+            monthly_installment = round(monthly_installment, 2)
             self.ids.monthly_installment.text = str(monthly_installment)
 
         if value in loan_id1:
             index4 = loan_id1.index(value)
             interest_amount = month_emi[index4] - monthly_installment
             print(month_emi[index4], monthly_installment)
+            interest_amount = round(interest_amount, 2)
             self.ids.interest_amount.text = str(interest_amount)
 
         if value in loan_id1:
             index5 = loan_id1.index(value)
             overall_outstanding_amount = loan_amount[index5] - (monthly_installment * emi_num)
             print(loan_amount[index5], monthly_installment, emi_num)
+            overall_outstanding_amount = round(overall_outstanding_amount, 2)
             self.ids.overall_amount.text = str(overall_outstanding_amount)
 
         if value in loan_id1:
@@ -793,6 +795,7 @@ class ForecloseDetails(Screen):
             outstanding_months = tenure[index6] - emi_num
             overall_monthly_installment = monthly_installment * outstanding_months
             print(monthly_installment, outstanding_months)
+            overall_monthly_installment = round(overall_monthly_installment, 2)
             self.ids.over_month.text = str(overall_monthly_installment)
 
         if value in loan_id1:
@@ -800,6 +803,7 @@ class ForecloseDetails(Screen):
             interest_amount_per_month = month_emi[index7] - monthly_installment
             overall_interest_amount = interest_amount_per_month * outstanding_months
             print(interest_amount_per_month, outstanding_months)
+            overall_interest_amount = round(overall_interest_amount, 2)
             self.ids.overall_interest_amount.text = str(overall_interest_amount)
 
         if value in loan_id1:
@@ -828,18 +832,59 @@ class ForecloseDetails(Screen):
             index11 = product_id1.index(product_id1[index10])
             self.ids.foreclosure_fee.text = str(foreclose_fee[index11])
             foreclose_amount = overall_outstanding_amount * (foreclose_fee[index11] / 100)
+            foreclose_amount = round(foreclose_amount, 2)
             print(overall_outstanding_amount, foreclose_fee[index11])
             self.ids.foreclosure_amount.text = str(foreclose_amount)
             total_due_amount = overall_outstanding_amount + foreclose_amount
-            self.ids.total_due_amount1.text = str(total_due_amount)
+            total_due_amount = round(total_due_amount, 2)
+            self.ids.total_due_amount.text = str(total_due_amount)
 
-    def add_data(self, loan_id, outstanding_amount, foreclose_fee, foreclose_amount, reason):
-        print(loan_id, outstanding_amount, foreclose_amount, foreclose_fee)
-        app_tables.fin_foreclosure.add_row(loan_id=loan_id, outstanding_amount=float(outstanding_amount),
-                                           foreclose_fee=int(foreclose_fee), foreclose_amount=float(foreclose_amount),
-                                           reason=reason, status='under process')
+    date = datetime.today()
+
+    def add_data(self, loan_id, outstanding_amount, foreclose_fee, foreclose_amount, reason, total_due_amount, totalamount, monthly_emi1):
+        data = app_tables.fin_loan_details.search()
+        data1 = app_tables.fin_emi_table.search()
+        loan_id3 = []
+        interest_rate = []
+        borrower_name1 = []
+        loan_amount = []
+
+        for i in data:
+            loan_id3.append(i['loan_id'])
+            interest_rate.append(i['interest_rate'])
+            borrower_name1.append(i['borrower_full_name'])
+            loan_amount.append(i['loan_amount'])
+        if loan_id in loan_id3:
+            index = loan_id3.index(loan_id)
+
+        emi_number = []
+        loan_id4 = []
+
+        for i in data1:
+            emi_number.append(i['emi_number'])
+            loan_id4.append(i['loan_id'])
+        if loan_id in loan_id4:
+            index = loan_id4.index(loan_id)
+            highest_number = max(emi_number) if emi_number else 0
+            total_payment = highest_number
+
+            print(loan_id, outstanding_amount, foreclose_amount, foreclose_fee, interest_rate[index], reason,
+                  total_due_amount, borrower_name1[index], loan_amount[index], totalamount, monthly_emi1, date,total_payment )
+            app_tables.fin_foreclosure.add_row(loan_id=loan_id, outstanding_amount=float(outstanding_amount),
+                                               foreclose_fee=int(foreclose_fee),
+                                               foreclose_amount=float(foreclose_amount),
+                                               reason=reason, status='under process',
+                                               total_due_amount=float(total_due_amount),
+                                               paid_amount= float(totalamount),
+                                               emi_amount=float(monthly_emi1),
+                                               requested_on=date,
+                                               foreclosure_emi_num=total_payment,
+                                               interest_rate=interest_rate[index],
+                                               borrower_name=borrower_name1[index],
+                                               loan_amount=loan_amount[index])
         self.show_snackbar(f"This Loan ID {loan_id} has been submitted")
         self.manager.current = 'DashboardScreen'
+
     def show_snackbar(self, text):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
