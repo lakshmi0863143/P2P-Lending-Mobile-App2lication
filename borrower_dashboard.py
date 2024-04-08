@@ -125,7 +125,8 @@ user_helpers = """
 
                 size_hint_x: None
                 width: dp(110)
-
+                on_release: root.go_to_dues_screen()
+        
                 BoxLayout:
                     orientation: 'horizontal'
                     spacing:dp(10)
@@ -2167,7 +2168,7 @@ class DashboardScreen(Screen):
         self.manager.add_widget(Factory.WalletScreen(name='WalletScreen'))
         self.manager.current = 'WalletScreen'
 
-    def go_to_borrowerdues_screen(self):
+    def go_to_dues_screen(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
 
         # Create MDLabel with white text color, increased font size, and bold text
@@ -2194,14 +2195,17 @@ class DashboardScreen(Screen):
         # Get the existing ScreenManager
         sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = BorrowerDuesScreen(name='BorrowerDuesScreen')
+        self.manager.add_widget(Factory.DuesScreen(name='DuesScreen'))
+        self.manager.current = 'DuesScreen'
 
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'BorrowerDuesScreen'
+        # # Create a new instance of the LoginScreen
+        # login_screen = BorrowerDuesScreen(name='DuesScreen')
+        #
+        # # Add the LoginScreen to the existing ScreenManager
+        # sm.add_widget(login_screen)
+        #
+        # # Switch to the LoginScreen
+        # sm.current = 'BorrowerDuesScreen'
 
     def help_module(self):
         from help_module import HelpScreen
