@@ -3,13 +3,10 @@ import anvil.server
 from anvil.tables import app_tables
 from kivy.clock import Clock
 from kivy.uix.modalview import ModalView
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivy.core.window import Window
-from kivy.uix.screenmanager import Screen, SlideTransition, ScreenManager
 import sqlite3
-import anvil.server
-from kivy.uix.screenmanager import Screen, SlideTransition
+from kivy.uix.screenmanager import Screen, SlideTransition,ScreenManager
 from kivymd.uix.list import *
 from kivy.animation import Animation
 from kivymd.uix.label import MDLabel
@@ -797,16 +794,17 @@ class ViewLoansScreen(Screen):
     def performance_go_to_under_process_loans(self, modal_view):
         # self.manager.current = 'ViewProfileScreen'
         modal_view.dismiss()
+        from lender_underprocess import ViewUnder
         sm = self.manager
 
         # Create a new instance of the LoginScreen
-        under_process = ViewUnderProcessLoansScreen(name='ViewUnderProcessLoansScreen')
+        under_process = ViewUnder(name='ViewUnder')
 
         # Add the LoginScreen to the existing ScreenManager
         sm.add_widget(under_process)
 
         # Switch to the LoginScreen
-        sm.current = 'ViewUnderProcessLoansScreen'
+        sm.current = 'ViewUnder'
 
     def go_to_closed_loans(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 600), background_color=[0, 0, 0, 0])
