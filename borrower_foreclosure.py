@@ -548,7 +548,7 @@ class LoansDetailsB(Screen):
 
             b = 1
             k = -1
-            for i in index_list:
+            for i in reversed(index_list):
                 b += 1
                 k += 1
                 number = profile_customer_id.index(customer_id[i])

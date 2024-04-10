@@ -174,7 +174,7 @@ class TodayDuesTD(Screen):
         b = 1
         k = -1
 
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             today_date = datetime.combine(date.today(), datetime.min.time()).replace(tzinfo=utc)

@@ -1067,7 +1067,7 @@ class ApprovedLoansLF(Screen):
         b = 1
         k = -1
         print(profile_customer_id)
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             print(i)
@@ -1179,7 +1179,7 @@ class ClosedLoansLF(Screen):
         b = 1
         k = -1
         print(profile_customer_id)
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             print(i)
@@ -1287,7 +1287,7 @@ class RejectedLoansLF(Screen):
         b = 1
         k = -1
         print(profile_customer_id)
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             print(i)
@@ -1400,7 +1400,7 @@ class UnderProcessLoansLF(Screen):
         b = 1
         k = -1
         print(profile_customer_id)
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             print(i)
@@ -1512,7 +1512,7 @@ class ViewAllLoansLF(Screen):
         b = 1
         k = -1
         print(profile_customer_id)
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             print(i)

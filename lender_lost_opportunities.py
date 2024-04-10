@@ -224,7 +224,7 @@ class LostOpportunitiesScreen(Screen):
 
         b = 1
         k = -1
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             if customer_id[i] in profile_customer_id:
