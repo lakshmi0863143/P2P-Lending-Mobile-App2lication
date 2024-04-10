@@ -1,4 +1,5 @@
 import anvil
+from anvil.tables import app_tables
 
 from kivy.core.window import Window
 from kivy.properties import ListProperty, Clock
@@ -7,6 +8,7 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
+from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget
 from kivymd.uix.slider import MDSlider
 from kivymd.uix.label import MDLabel
 import sqlite3
@@ -21,7 +23,22 @@ from kivymd.uix.spinner import MDSpinner
 user_helpers2 = """
 <WindowManager>:
     BorrowerDuesScreen:
+    DuesScreen:
+<DuesScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            title:"Today's Dues"
+            elevation: 3
+            left_action_items: [['arrow-left', lambda x: root.go_back()]]
+            right_action_items: [['refresh', lambda x: root.refresh()]]
+            md_bg_color: 0.043, 0.145, 0.278, 1
+        MDScrollView:
 
+            MDList:
+                id: container 
+            
+            
 <BorrowerDuesScreen>:
     BoxLayout:
         pos_hint: {'center_x':0.5, 'center_y':0.5}
@@ -426,6 +443,145 @@ class BorrowerDuesScreen(Screen):
     def current(self):
         self.manager.current = 'DashboardScreen'
 
+class DuesScreen(Screen):
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        data = app_tables.fin_loan_details.search()
+        email = self.get_table()
+        profile = app_tables.fin_user_profile.search()
+        customer_id = []
+        loan_id = []
+        email1 = []
+        borrower_name = []
+        loan_status = []
+        product_name = []
+        s = 0
+        for i in data:
+            s += 1
+            customer_id.append(i['borrower_customer_id'])
+            loan_id.append(i['loan_id'])
+            borrower_name.append(i['borrower_full_name'])
+            loan_status.append(i['loan_updated_status'])
+            product_name.append(i['product_name'])
+            email1.append(i['borrower_email_id'])
+
+        profile_customer_id = []
+        profile_mobile_number = []
+        profile_email_id = []
+        profile_account_number = []
+
+        for i in profile:
+            profile_customer_id.append(i['customer_id'])
+            profile_mobile_number.append(i['mobile'])
+            profile_email_id.append('email_user')
+            profile_account_number.append('account_number')
+        cos_id = None
+        index = -1
+        if email in profile_email_id:
+            index = profile_email_id.index(email)
+
+        if email in email1:
+            index = email1.index(email)
+            cos_id = customer_id[index]
+
+        if cos_id is not None:
+            print(cos_id, type(cos_id))
+            print(customer_id[-1], type(customer_id[-1]))
+            c = -1
+            index_list = []
+            for i in range(s):
+                c += 1
+                if customer_id[c] == cos_id:
+                    index_list.append(c)
+
+            b = 1
+            k = -1
+            for i in index_list:
+                b += 1
+                k += 1
+                number = profile_customer_id.index(customer_id[i])
+                item = ThreeLineAvatarIconListItem(
+
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
+                self.ids.container.add_widget(item)
+
+    def icon_button_clicked(self, instance, loan_id):
+        # Highlight the selected item
+        self.highlight_item(instance)
+
+        data = app_tables.fin_loan_details.search()  # Fetch data here
+        loan_status = None
+        for loan in data:
+            if loan['loan_id'] == loan_id:
+                loan_status = loan['loan_updated_status']
+                break
+
+        sm = self.manager
+
+        # Create a new instance of the ApplicationTrackerScreen
+        approved = BorrowerDuesScreen(name='BorrowerDuesScreen')
+
+        # Add the ApplicationTrackerScreen to the existing ScreenManager
+        sm.add_widget(approved)
+
+        # Switch to the ApplicationTrackerScreen
+        sm.current = 'BorrowerDuesScreen'
+        self.manager.get_screen('BorrowerDuesScreen')
+
+    def highlight_item(self, item):
+        # Deselect all other items
+        self.deselect_items()
+
+        # Change the background color of the clicked item to indicate selection
+        item.bg_color = (0.5, 0.5, 0.5, 1)  # Change color as desired
+        self.selected_item = item
+
+    def deselect_items(self):
+        # Deselect all items in the list
+        for item in self.ids.container.children:
+            if isinstance(item, ThreeLineAvatarIconListItem):
+                item.bg_color = (1, 1, 1, 1)  # Reset background color for all items
+
+    def get_table(self):
+        # Make a call to the Anvil server function
+        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
+        return anvil.server.call('another_method')
+
+    def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        # Unbind the back button event when leaving the screen
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+
+        if key == 27:
+            self.go_back()
+            return True
+        return False
+
+    def refresh(self):
+        self.ids.container.clear_widgets()
+        self.__init__()
+
+    def go_back(self):
+        self.manager.current = 'DashboardScreen'
 
 class MyScreenManager(ScreenManager):
     pass
