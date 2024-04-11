@@ -54,6 +54,7 @@ loan_forecloseB = '''
             elevation: 3
             left_action_items: [['arrow-left', lambda x: root.on_back_button_press()]]
             md_bg_color: 0.043, 0.145, 0.278, 1 
+            title_align: 'left'
 
         ScrollView:
             MDBoxLayout:
@@ -95,14 +96,14 @@ loan_forecloseB = '''
                                 text: "Loan ID:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: loan
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -112,14 +113,14 @@ loan_forecloseB = '''
                                 text: "Loan Amount:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: amount
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -129,14 +130,14 @@ loan_forecloseB = '''
                                 text: "Borrower Name:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: name
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                         MDGridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -145,14 +146,14 @@ loan_forecloseB = '''
                                 text: "Tenure(Months):" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: tenure
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -162,14 +163,14 @@ loan_forecloseB = '''
                                 text: "Interest Rate:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: interest
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -179,14 +180,14 @@ loan_forecloseB = '''
                                 text: "Credit limit:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: limit
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                         MDGridLayout:
                             cols: 2
                             spacing: dp(10)
@@ -195,14 +196,14 @@ loan_forecloseB = '''
                                 text: "Total Payment Made:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: total_payment
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -212,14 +213,14 @@ loan_forecloseB = '''
                                 text: "Foreclosure Type:" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                                 bold: True
                             MDLabel:
                                 id: closer_type
                                 text: "" 
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
 
                         MDGridLayout:
                             cols: 2
@@ -310,31 +311,39 @@ loan_forecloseB = '''
 
                     MDLabel:
                         text: "Total amount Paid "
+                        halign: "left"
                         bold: True
 
                     MDLabel:
                         id: totalamount
+                        halign: "left"
                         text: ""
 
                     MDLabel:
                         text: "Monthly installment"
+                        halign: "left"
 
                     MDLabel:
                         id: monthly_installment
+                        halign: "left"
                         text: ""
 
                     MDLabel:
                         text: "Interest Amount"
+                        halign: "left"
 
                     MDLabel:
                         id: interest_amount
+                        halign: "left"
                         text: ""
 
                     MDLabel:
                         text: "Monthly EMI"
+                        halign: "left"
 
                     MDLabel:
                         id: monthly_emi1
+                        halign: "left"
                         text: ""
                 Widget:
                     size_hint_y: None
@@ -355,29 +364,37 @@ loan_forecloseB = '''
 
                     MDLabel:
                         text: "Over all Outstanding Amount"
+                        halign: "left"
                         bold: True
 
                     MDLabel:
                         id: overall_amount
+                        halign: "left"
                         text: ""
                     MDLabel:
                         text: "Over all Monthly installment"
+                        halign: "left"
 
                     MDLabel:
                         id: over_month
+                        halign: "left"
                         text: ""
                     MDLabel:
                         text: "Overall Interest Amount "
+                        halign: "left"
 
                     MDLabel:
                         id: overall_interest_amount
+                        halign: "left"
                         text: ""
 
                     MDLabel:
                         text: "Total Amount"
+                        halign: "left"
 
                     MDLabel:
                         id: total_amount
+                        halign: "left"
                         text: ""
 
                 Widget:
@@ -390,6 +407,7 @@ loan_forecloseB = '''
 
                 MDLabel:
                     text: "Amount Due"
+                    halign: "left"
                     bold: True
 
                 GridLayout:
@@ -400,32 +418,40 @@ loan_forecloseB = '''
 
                     MDLabel:
                         text: "Outstanding Amount"
+                        halign: "left"
 
 
                     MDLabel:
                         id: outstanding_amount
+                        halign: "left"
                         text: ""
 
                     MDLabel:
                         text: "Foreclosure Fee "
+                        halign: "left"
 
                     MDLabel:
                         id: foreclosure_fee
+                        halign: "left"
                         text: ""
 
                     MDLabel:
                         text: "Foreclosure Amount"
+                        halign: "left"
 
                     MDLabel:
                         id: foreclosure_amount
+                        halign: "left"
                         text: ""
 
                     MDLabel:
                         text: "Total Due Amount"
+                        halign: "left"
                         bold: True
 
                     MDLabel:
                         id: total_due_amount
+                        halign: "left"
                         text: ""
 
                 Widget:

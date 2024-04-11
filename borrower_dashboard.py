@@ -12,6 +12,7 @@ from kivy.clock import mainthread
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.spinner import MDSpinner
 from borrower_extend_loan import ExtensionLoansRequest
+from borrower_view_transaction_history import TransactionBH
 from borrower_application_tracker import ALLLoansAPT
 from borrower_dues import BorrowerDuesScreen
 from new_loan_request import NewloanScreen
@@ -292,6 +293,7 @@ user_helpers = """
                             md_bg_color: "#ffffff"  # Customize background color
                             orientation: "vertical"
                             padding:dp(0), dp(7)
+                            on_release: root.go_to_transaction_history()
 
 
                             MDIcon:
@@ -2180,6 +2182,18 @@ class DashboardScreen(Screen):
 
         self.manager.add_widget(Factory.DashboardScreenVLB(name='DashboardScreenVLB'))
         self.manager.current = 'DashboardScreenVLB'
+
+    def go_to_transaction_history(self):
+        sm = self.manager
+
+        # Create a new instance of the LoginScreen
+        login_screen = TransactionBH(name='TransactionBH')
+
+        # Add the LoginScreen to the existing ScreenManager
+        sm.add_widget(login_screen)
+
+        # Switch to the LoginScreen
+        sm.current = 'TransactionBH'
 
     def go_to_app_tracker(self):
         modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
