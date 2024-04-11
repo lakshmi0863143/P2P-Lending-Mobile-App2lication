@@ -1,12 +1,15 @@
 import os
 
 from anvil.tables import app_tables
+from kivy.animation import Animation
 from kivy.app import App
 from kivy.core.window import Window
+from kivy.uix.label import Label
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.lang import Builder
 from kivymd.uix.button import MDRectangleFlatButton
 from kivy.metrics import dp
+from kivymd.uix.label import MDLabel
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.pickers import MDDatePicker
 import sqlite3
@@ -29,6 +32,7 @@ import anvil.server
 from kivy.uix.modalview import ModalView
 from kivymd.uix.spinner import MDSpinner
 from kivy.clock import Clock
+from kivy.uix.popup import Popup
 
 # anvil.server.connect("server_VRGEXX5AO24374UMBBQ24XN6-ZAWBX57M6ZDN6TBV")
 
@@ -2857,16 +2861,41 @@ cursor = conn.cursor()
 
 class LenderScreen(Screen):
     Builder.load_string(KV)
+
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def add_data(self, name, gender, date):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_data_addition_action(name, gender, date, modal_view), 2)
 
     def perform_data_addition_action(self, name, gender, date, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
 
         if not name.strip():
@@ -2945,18 +2974,42 @@ class LenderScreen(Screen):
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
 
+
 class LenderScreen1(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def add_data(self, mobile_number, alternate_email):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_data_addition_action(mobile_number, alternate_email, modal_view), 2)
 
     def perform_data_addition_action(self, mobile_number, alternate_email, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
@@ -3024,6 +3077,18 @@ class LenderScreen1(Screen):
 
 
 class LenderScreen2(Screen):
+
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3109,15 +3174,28 @@ class LenderScreen2(Screen):
     # Repeat similar methods for file manager 2...
 
     def add_data(self, aadhar_number, pan_number):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_data_addition_action(aadhar_number, pan_number, modal_view), 2)
 
     def perform_data_addition_action(self, aadhar_number, pan_number, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
@@ -3176,16 +3254,40 @@ class LenderScreen2(Screen):
 
 class LenderScreen3(Screen):
 
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def next_pressed(self, id):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_data_addition_action(id, modal_view), 2)
 
     def perform_data_addition_action(self, id, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
         if id == '10th class':
             LenderScreen_Edu_10th()
@@ -3270,6 +3372,16 @@ class LenderScreen3(Screen):
 
 
 class LenderScreen_Edu_10th(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3367,16 +3479,28 @@ class LenderScreen_Edu_10th(Screen):
         self.manager.current = 'LenderScreen3'
 
     def go_to_lender_screen4(self):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
 
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_loan_request_action10th(modal_view), 2)
 
     def perform_loan_request_action10th(self, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
@@ -3394,6 +3518,16 @@ class LenderScreen_Edu_10th(Screen):
 
 class LenderScreen_Edu_Intermediate(Screen):
 
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -3518,16 +3652,28 @@ class LenderScreen_Edu_Intermediate(Screen):
         self.manager.current = 'LenderScreen3'
 
     def go_to_lender_screen4(self):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
 
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_loan_request_action11th(modal_view), 2)
 
     def perform_loan_request_action11th(self, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
@@ -3544,6 +3690,18 @@ class LenderScreen_Edu_Intermediate(Screen):
 
 
 class LenderScreen_Edu_Bachelors(Screen):
+
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3698,16 +3856,28 @@ class LenderScreen_Edu_Bachelors(Screen):
         self.manager.current = 'LenderScreen3'
 
     def go_to_lender_screen4(self):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
 
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_loan_request_action_bachelors(modal_view), 2)
 
     def perform_loan_request_action_bachelors(self, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
@@ -3724,6 +3894,17 @@ class LenderScreen_Edu_Bachelors(Screen):
 
 
 class LenderScreen_Edu_Masters(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -3906,16 +4087,28 @@ class LenderScreen_Edu_Masters(Screen):
         self.manager.current = 'LenderScreen3'
 
     def go_to_lender_screen4(self):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
 
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_masters_action(modal_view), 2)
 
     def perform_masters_action(self, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
@@ -3932,6 +4125,17 @@ class LenderScreen_Edu_Masters(Screen):
 
 
 class LenderScreen_Edu_PHD(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4139,16 +4343,28 @@ class LenderScreen_Edu_PHD(Screen):
         self.manager.current = 'LenderScreen3'
 
     def go_to_lender_screen4(self):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
 
         # Perform the actual action (e.g., fetching loan requests)
         # You can replace the sleep with your actual logic
         Clock.schedule_once(lambda dt: self.perform_phd_action(modal_view), 2)
 
     def perform_phd_action(self, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view after performing the action
         modal_view.dismiss()
         # Get the existing ScreenManager
@@ -4166,18 +4382,59 @@ class LenderScreen_Edu_PHD(Screen):
 
 class LenderScreen4(Screen):
 
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def add_data(self, street, city, zip_code, state, country):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(street, city, zip_code, state, country, modal_view), 2)
 
     def perform_data_addition_action4(self, street, city, zip_code, state, country, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([street, city, zip_code, state, country]):
+            missing_fields = [field_name for field_name, field_value in {
+                'Street': street,
+                'City': city,
+                'Zip Code': zip_code,
+                'State': state,
+                'Country': country
+            }.items() if not field_value]
+
+            # Display a validation error dialog
+            error_message = "Please fill in the following fields:\n"
+            error_message += "\n".join(f"- {field}" for field in missing_fields)
+            self.show_validation_error(error_message)
+            return  # Prevent further execution if there are missing fields
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -4195,6 +4452,7 @@ class LenderScreen4(Screen):
         else:
             # Handle the case where the user is not logged in
             print("User is not logged in.")
+
         data = app_tables.fin_user_profile.search()
         id_list = []
         for i in data:
@@ -4215,6 +4473,22 @@ class LenderScreen4(Screen):
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderScreen5'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
 
     def on_mobile_number_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -4239,36 +4513,56 @@ class LenderScreen4(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'LenderScreen3'
 
+
 class LenderScreen5(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def next_pressed(self, id, investment, period):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(id, investment, period, modal_view), 2)
 
     def perform_data_addition_action4(self, id, investment, period, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
-        if id == 'Individual':
-            # self.manager.current = 'LenderScreenIndividualForm1'
-            sm = self.manager
-            lender_screen = LenderScreenIndividualForm1(name='LenderScreenIndividualForm1')
-            sm.add_widget(lender_screen)
-            sm.transition.direction = 'left'  # Set the transition direction explicitly
-            sm.current = 'LenderScreenIndividualForm1'
 
-        elif id == 'Institutional':
-            # ++++++++
-            # self.manager.current = 'LenderScreenInstitutionalForm1'
-            sm = self.manager
-            lender_screen = LenderScreenInstitutionalForm1(name='LenderScreenInstitutionalForm1')
-            sm.add_widget(lender_screen)
-            sm.transition.direction = 'left'  # Set the transition direction explicitly
-            sm.current = 'LenderScreenInstitutionalForm1'
+        # Check for missing fields
+        if not all([id, investment, period]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if there are missing fields
+
+        # Debugging statements
+        print("Investment:", investment)
+        print("Period:", period)
+
+        # Remaining code as before
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -4302,6 +4596,31 @@ class LenderScreen5(Screen):
         else:
             print('email not found')
 
+        sm = self.manager
+        if id == 'Individual':
+            lender_screen = LenderScreenIndividualForm1(name='LenderScreenIndividualForm1')
+        elif id == 'Institutional':
+            lender_screen = LenderScreenInstitutionalForm1(name='LenderScreenInstitutionalForm1')
+
+        sm.add_widget(lender_screen)
+        sm.transition.direction = 'left'  # Set the transition direction explicitly
+        sm.current = lender_screen.name
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
     def on_investment_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
         self.ids.investment.input_type = 'number'
@@ -4328,20 +4647,51 @@ class LenderScreen5(Screen):
 
 class LenderScreenInstitutionalForm1(Screen):
 
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def add_data(self, business_name, business_location, business_address, business_branch_name):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(business_name, business_location, business_address,
                                                           business_branch_name, modal_view), 2)
 
     def perform_data_addition_action4(self, business_name, business_location, business_address, business_branch_name,
                                       modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([business_name, business_location, business_address, business_branch_name]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if there are missing fields
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -4381,6 +4731,22 @@ class LenderScreenInstitutionalForm1(Screen):
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderScreenInstitutionalForm2'
 
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
+
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
 
@@ -4402,21 +4768,51 @@ class LenderScreenInstitutionalForm1(Screen):
 
 
 class LenderScreenInstitutionalForm2(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def add_data(self, business_type, nearest_location, no_of_employees_working, year_of_estd):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(business_type, nearest_location, no_of_employees_working,
                                                           year_of_estd, modal_view), 2)
 
     def perform_data_addition_action4(self, business_type, nearest_location, no_of_employees_working, year_of_estd,
                                       modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([business_type, nearest_location, no_of_employees_working, year_of_estd]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if there are missing fields
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -4456,6 +4852,22 @@ class LenderScreenInstitutionalForm2(Screen):
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderScreenInstitutionalForm3'
 
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
+
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
 
@@ -4477,6 +4889,17 @@ class LenderScreenInstitutionalForm2(Screen):
 
 
 class LenderScreenInstitutionalForm3(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4551,17 +4974,37 @@ class LenderScreenInstitutionalForm3(Screen):
         self.ids.upload_label1.text = 'Upload Successfully'
 
     def add_data(self, industry_type, last_six_months_turnover):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(industry_type, last_six_months_turnover, modal_view), 2)
 
     def perform_data_addition_action4(self, industry_type, last_six_months_turnover, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([industry_type, last_six_months_turnover]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if there are missing fields
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -4598,6 +5041,22 @@ class LenderScreenInstitutionalForm3(Screen):
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderScreenInstitutionalForm5'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
 
     def on_last_six_months_turnover_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -4701,6 +5160,18 @@ class LenderScreenInstitutionalForm4(Screen):
 
 
 class LenderScreenInstitutionalForm5(Screen):
+
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
                                          "image_label1")
@@ -4776,18 +5247,37 @@ class LenderScreenInstitutionalForm5(Screen):
         self.ids.upload_label1.text = 'Upload Successfully'
 
     def add_data(self, registered_office_address):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
-            lambda dt: self.perform_data_addition_action(registered_office_address, modal_view),
-            2)
+            lambda dt: self.perform_data_addition_action(registered_office_address, modal_view), 2)
 
     def perform_data_addition_action(self, registered_office_address, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing field
+        if not registered_office_address:
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in the registered office address.")
+            return  # Prevent further execution if the field is missing
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -4825,6 +5315,22 @@ class LenderScreenInstitutionalForm5(Screen):
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderScreenInstitutionalBankForm1'
 
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
+
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
 
@@ -4846,19 +5352,49 @@ class LenderScreenInstitutionalForm5(Screen):
 
 
 class LenderScreenIndividualForm1(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def add_data(self, employeent_type, company_name, organization):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(employeent_type, company_name, organization, modal_view), 2)
 
     def perform_data_addition_action4(self, employeent_type, company_name, organization, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([employeent_type, company_name, organization]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if any field is missing
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -4889,12 +5425,28 @@ class LenderScreenIndividualForm1(Screen):
             data[index]['company_name'] = company_name
             data[index]['organization_type'] = organization
         else:
-            print('email not fond')
+            print('email not found')
         sm = self.manager
         lender_screen = LenderScreenIndividualForm2(name='LenderScreenIndividualForm2')
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderScreenIndividualForm2'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
 
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
@@ -4917,6 +5469,16 @@ class LenderScreenIndividualForm1(Screen):
 
 
 class LenderScreenIndividualForm2(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def check_and_open_file_manager1(self):
         self.check_and_open_file_manager("upload_icon1", "upload_label1", "selected_file_label1", "selected_image1",
@@ -5021,17 +5583,36 @@ class LenderScreenIndividualForm2(Screen):
         self.ids.upload_label2.text = 'Upload Successfully'
 
     def add_data(self, annual_salary, designation):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
-        Clock.schedule_once(
-            lambda dt: self.perform_data_addition_action4(annual_salary, designation, modal_view), 2)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.perform_data_addition_action4(annual_salary, designation, modal_view), 2)
 
     def perform_data_addition_action4(self, annual_salary, designation, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([annual_salary, designation]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if any field is missing
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -5064,15 +5645,30 @@ class LenderScreenIndividualForm2(Screen):
             print('email not found')
         sm = self.manager
 
-        # Create a new instance of the LoginScreen
+        # Create a new instance of the LenderScreenIndividualForm3
         lender_screen = LenderScreenIndividualForm3(name='LenderScreenIndividualForm3')
 
-        # Add the LoginScreen to the existing ScreenManager
+        # Add the LenderScreenIndividualForm3 to the existing ScreenManager
         sm.add_widget(lender_screen)
 
-        # Switch to the LoginScreen
+        # Switch to the LenderScreenIndividualForm3
         sm.current = 'LenderScreenIndividualForm3'
 
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
     def on_annual_salary_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
         self.ids.annual_salary.input_type = 'number'
@@ -5098,20 +5694,52 @@ class LenderScreenIndividualForm2(Screen):
 
 
 class LenderScreenIndividualForm3(Screen):
+
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def add_data(self, company_address, company_pincode, company_country, landmark, business_number):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(company_address, company_pincode, company_country, landmark,
                                                           business_number, modal_view), 2)
 
     def perform_data_addition_action4(self, company_address, company_pincode, company_country, landmark,
                                       business_number, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([company_address, company_pincode, company_country, landmark, business_number]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if any field is missing
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -5147,14 +5775,30 @@ class LenderScreenIndividualForm3(Screen):
             print('email not found')
         sm = self.manager
 
-        # Create a new instance of the LoginScreen
+        # Create a new instance of the LenderScreenIndividualBankForm1
         lender_screen = LenderScreenIndividualBankForm1(name='LenderScreenIndividualBankForm1')
 
-        # Add the LoginScreen to the existing ScreenManager
+        # Add the LenderScreenIndividualBankForm1 to the existing ScreenManager
         sm.add_widget(lender_screen)
 
-        # Switch to the LoginScreen
+        # Switch to the LenderScreenIndividualBankForm1
         sm.current = 'LenderScreenIndividualBankForm1'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
 
     def on_company_pin_code_touch_down(self):
         # Change keyboard mode to numeric when the mobile number text input is touched
@@ -5185,177 +5829,50 @@ class LenderScreenIndividualForm3(Screen):
 
 
 class LenderScreenIndividualBankForm1(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def add_data(self, account_holder_name, account_type, account_number, bank_name):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
             lambda dt: self.perform_data_addition_action4(account_holder_name, account_type, account_number, bank_name,
                                                           modal_view), 2)
 
     def perform_data_addition_action4(self, account_holder_name, account_type, account_number, bank_name, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
-        cursor.execute('select * from fin_users')
-        rows = cursor.fetchall()
-        row_id_list = []
-        status = []
-        email_list = []
-        for row in rows:
-            row_id_list.append(row[0])
-            status.append(row[-1])
-            email_list.append(row[2])
-        if 'logged' in status:
-            log_index = status.index('logged')
 
-            cursor.execute(
-                "UPDATE fin_registration_table SET account_holder_name = ?, account_type = ?, account_number = ?, bank_name = ? WHERE customer_id = ?",
-                (account_holder_name, account_type, account_number, bank_name, row_id_list[log_index]))
-            conn.commit()
-        else:
-            # Handle the case where the user is not logged in
-            print("User is not logged in.")
-        data = app_tables.fin_user_profile.search()
-        id_list = []
-        for i in data:
-            id_list.append(i['email_user'])
-        user_email = anvil.server.call('another_method')
-        if user_email in id_list:
-            index = id_list.index(user_email)
-            data[index]['account_name'] = account_holder_name
-            data[index]['account_type'] = account_type
-            data[index]['account_number'] = account_number
-            data[index]['bank_name'] = bank_name
-        else:
-            print('email not found')
-        sm = self.manager
+        # Check for missing fields
+        if not all([account_holder_name, account_type, account_number, bank_name]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if any field is missing
 
-        # Create a new instance of the LoginScreen
-        lender_screen = LenderScreenIndividualBankForm2(name='LenderScreenIndividualBankForm2')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(lender_screen)
-
-        # Switch to the LoginScreen
-        sm.current = 'LenderScreenIndividualBankForm2'
-
-    def go_to_dashboard(self):
-        self.manager.current = 'DashScreen'
-
-    def on_pre_enter(self):
-        Window.bind(on_keyboard=self.on_back_button)
-
-    def on_pre_leave(self):
-        Window.unbind(on_keyboard=self.on_back_button)
-
-    def on_back_button(self, instance, key, scancode, codepoint, modifier):
-        if key == 27:
-            self.go_back()
-            return True
-        return False
-
-    def go_back(self):
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'LenderScreenIndividualForm3'
-
-
-class LenderScreenIndividualBankForm2(Screen):
-    def go_to_lender_dashboard(self, bank_id, branch_name):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
-        modal_view.open()
-
-        # Perform the actual action (e.g., adding data)
-        Clock.schedule_once(
-            lambda dt: self.perform_data_addition_action4(bank_id, branch_name,
-                                                          modal_view), 2)
-
-    def perform_data_addition_action4(self, bank_id, branch_name, modal_view):
-        modal_view.dismiss()
-        cursor.execute('select * from fin_users')
-        rows = cursor.fetchall()
-        row_id_list = []
-        status = []
-        email_list = []
-        b = 'lender'
-        for row in rows:
-            row_id_list.append(row[0])
-            status.append(row[-1])
-            email_list.append(row[2])
-        if 'logged' in status:
-            log_index = status.index('logged')
-
-            cursor.execute(
-                "UPDATE fin_registration_table SET bank_id = ?, branch_name = ?, user_type = ? WHERE customer_id = ?",
-                (bank_id, branch_name, b, row_id_list[log_index]))
-            conn.commit()
-        else:
-            # Handle the case where the user is not logged in
-            print("User is not logged in.")
-
-        data =app_tables.fin_user_profile.search()
-        id_list = []
-        for i in data:
-            id_list.append(i['email_user'])
-        user_email = anvil.server.call('another_method')
-        if user_email in id_list:
-            index = id_list.index(user_email)
-            data[index]['bank_id'] = bank_id
-            data[index]['account_bank_branch'] = branch_name
-            data[index]['usertype'] = b
-            data[index]['registration_approve'] = True
-        else:
-            print('email not fond')
-
-        # Get the existing ScreenManager
-        sm = self.manager
-
-        # Create a new instance of the LoginScreen
-        lender_dashboard = LenderDashboard(name='LenderDashboard')
-
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(lender_dashboard)
-
-        # Switch to the LoginScreen
-        sm.current = 'LenderDashboard'
-
-    def go_to_dashboard(self):
-        self.manager.current = 'DashScreen'
-
-    def on_pre_enter(self):
-        Window.bind(on_keyboard=self.on_back_button)
-
-    def on_pre_leave(self):
-        Window.unbind(on_keyboard=self.on_back_button)
-
-    def on_back_button(self, instance, key, scancode, codepoint, modifier):
-        if key == 27:
-            self.go_back()
-            return True
-        return False
-
-    def go_back(self):
-        self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'LenderScreenIndividualBankForm1'
-
-
-class LenderScreenInstitutionalBankForm1(Screen):
-    def add_data(self, account_holder_name, account_type, account_number, bank_name):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
-        modal_view.open()
-
-        # Perform the actual action (e.g., adding data)
-        Clock.schedule_once(
-            lambda dt: self.perform_data_addition_action4(account_holder_name, account_type, account_number, bank_name,
-                                                          modal_view), 2)
-
-    def perform_data_addition_action4(self, account_holder_name, account_type, account_number, bank_name, modal_view):
-        modal_view.dismiss()
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -5388,6 +5905,7 @@ class LenderScreenInstitutionalBankForm1(Screen):
             data[index]['bank_name'] = bank_name
         else:
             print('email not valid')
+
         # self.manager.current = 'LenderScreenInstitutionalBankForm2'
         sm = self.manager
         lender_screen = LenderScreenInstitutionalBankForm2(name='LenderScreenInstitutionalBankForm2')
@@ -5395,6 +5913,21 @@ class LenderScreenInstitutionalBankForm1(Screen):
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderScreenInstitutionalBankForm2'
 
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
     def go_to_dashboard(self):
         self.manager.current = 'DashScreen'
 
@@ -5412,24 +5945,53 @@ class LenderScreenInstitutionalBankForm1(Screen):
 
     def go_back(self):
         self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'LenderScreenInstitutionalForm5'
+        self.manager.current = 'LenderScreenIndividualForm3'
 
 
-class LenderScreenInstitutionalBankForm2(Screen):
+class LenderScreenIndividualBankForm2(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
 
     def go_to_lender_dashboard(self, bank_id, branch_name):
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        # Perform the actual action (e.g., adding data)
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
         Clock.schedule_once(
-            lambda dt: self.perform_data_addition_action4(bank_id, branch_name,
-                                                          modal_view), 2)
+            lambda dt: self.perform_data_addition_action4(bank_id, branch_name, modal_view), 2)
 
     def perform_data_addition_action4(self, bank_id, branch_name, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([bank_id, branch_name]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if any field is missing
+
         cursor.execute('select * from fin_users')
         rows = cursor.fetchall()
         row_id_list = []
@@ -5463,12 +6025,268 @@ class LenderScreenInstitutionalBankForm2(Screen):
             data[index]['usertype'] = b
             data[index]['registration_approve'] = True
         else:
-            print('email not fond')
+            print('email not found')
         sm = self.manager
         lender_screen = LenderDashboard(name='LenderDashboard')
         sm.add_widget(lender_screen)
         sm.transition.direction = 'left'  # Set the transition direction explicitly
         sm.current = 'LenderDashboard'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
+
+    def go_to_dashboard(self):
+        self.manager.current = 'DashScreen'
+
+    def on_pre_enter(self):
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        if key == 27:
+            self.go_back()
+            return True
+        return False
+
+    def go_back(self):
+        self.manager.transition = SlideTransition(direction='right')
+        self.manager.current = 'LenderScreenIndividualBankForm1'
+
+
+class LenderScreenInstitutionalBankForm1(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
+    def add_data(self, account_holder_name, account_type, account_number, bank_name):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(
+            lambda dt: self.perform_data_addition_action4(account_holder_name, account_type, account_number, bank_name,
+                                                          modal_view), 2)
+
+    def perform_data_addition_action4(self, account_holder_name, account_type, account_number, bank_name, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
+        modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([account_holder_name, account_type, account_number, bank_name]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if any field is missing
+
+        cursor.execute('select * from fin_users')
+        rows = cursor.fetchall()
+        row_id_list = []
+        status = []
+        email_list = []
+        for row in rows:
+            row_id_list.append(row[0])
+            status.append(row[-1])
+            email_list.append(row[2])
+        if 'logged' in status:
+            log_index = status.index('logged')
+
+            cursor.execute(
+                "UPDATE fin_registration_table SET account_holder_name = ?, account_type = ?, account_number = ?, bank_name = ? WHERE customer_id = ?",
+                (account_holder_name, account_type, account_number, bank_name, row_id_list[log_index]))
+            conn.commit()
+        else:
+            # Handle the case where the user is not logged in
+            print("User is not logged in.")
+        data = app_tables.fin_user_profile.search()
+        id_list = []
+        for i in data:
+            id_list.append(i['email_user'])
+        user_email = anvil.server.call('another_method')
+        if user_email in id_list:
+            index = id_list.index(user_email)
+            data[index]['account_name'] = account_holder_name
+            data[index]['account_type'] = account_type
+            data[index]['account_number'] = account_number
+            data[index]['bank_name'] = bank_name
+        else:
+            print('email not valid')
+
+        # self.manager.current = 'LenderScreenInstitutionalBankForm2'
+        sm = self.manager
+        lender_screen = LenderScreenInstitutionalBankForm2(name='LenderScreenInstitutionalBankForm2')
+        sm.add_widget(lender_screen)
+        sm.transition.direction = 'left'  # Set the transition direction explicitly
+        sm.current = 'LenderScreenInstitutionalBankForm2'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
+    def go_to_dashboard(self):
+        self.manager.current = 'DashScreen'
+
+    def on_pre_enter(self):
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        if key == 27:
+            self.go_back()
+            return True
+        return False
+
+    def go_back(self):
+        self.manager.transition = SlideTransition(direction='right')
+        self.manager.current = 'LenderScreenInstitutionalForm5'
+
+
+class LenderScreenInstitutionalBankForm2(Screen):
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
+    def go_to_lender_dashboard(self, bank_id, branch_name):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(
+            lambda dt: self.perform_data_addition_action4(bank_id, branch_name, modal_view), 2)
+
+    def perform_data_addition_action4(self, bank_id, branch_name, modal_view):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
+        modal_view.dismiss()
+
+        # Check for missing fields
+        if not all([bank_id, branch_name]):
+            # Display a validation error dialog
+            self.show_validation_error("Please fill in all fields.")
+            return  # Prevent further execution if any field is missing
+
+        cursor.execute('select * from fin_users')
+        rows = cursor.fetchall()
+        row_id_list = []
+        status = []
+        email_list = []
+        b = 'lender'
+        for row in rows:
+            row_id_list.append(row[0])
+            status.append(row[-1])
+            email_list.append(row[2])
+        if 'logged' in status:
+            log_index = status.index('logged')
+
+            cursor.execute(
+                "UPDATE fin_registration_table SET bank_id = ?, branch_name = ?, user_type = ? WHERE customer_id = ?",
+                (bank_id, branch_name, b, row_id_list[log_index]))
+            conn.commit()
+        else:
+            # Handle the case where the user is not logged in
+            print("User is not logged in.")
+
+        data = app_tables.fin_user_profile.search()
+        id_list = []
+        for i in data:
+            id_list.append(i['email_user'])
+        user_email = anvil.server.call('another_method')
+        if user_email in id_list:
+            index = id_list.index(user_email)
+            data[index]['bank_id'] = bank_id
+            data[index]['account_bank_branch'] = branch_name
+            data[index]['usertype'] = b
+            data[index]['registration_approve'] = True
+        else:
+            print('email not found')
+        sm = self.manager
+        lender_screen = LenderDashboard(name='LenderDashboard')
+        sm.add_widget(lender_screen)
+        sm.transition.direction = 'left'  # Set the transition direction explicitly
+        sm.current = 'LenderDashboard'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_back_button)

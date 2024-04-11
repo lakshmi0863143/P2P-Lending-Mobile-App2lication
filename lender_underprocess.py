@@ -776,7 +776,7 @@ class ViewUnder(Screen):
     def go_back(self):
         # Navigate to the previous screen with a slide transition
         self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'ViewUnderScreen'
+        self.manager.current = 'ViewLoansScreen'
 
     def refresh(self):
         self.ids.container.clear_widgets()

@@ -203,7 +203,7 @@ user_helpers = """
                     orientation: 'horizontal'
                     spacing:dp(10)
                     MDLabel:
-                        text: "Loan Foreclose"
+                        text: "Foreclosure Loan"
                         font_size:dp(14)
 
                         bold:True

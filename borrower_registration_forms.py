@@ -1,11 +1,13 @@
 import os
 import anvil.server
 from anvil.tables import app_tables
+from kivy.animation import Animation
 from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen, SlideTransition
 from kivy.lang import Builder
 from kivymd.uix.button import MDRectangleFlatButton
 from kivy.metrics import dp
+from kivymd.uix.label import MDLabel
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.pickers import MDDatePicker
 import sqlite3
@@ -3041,22 +3043,50 @@ class BorrowerScreen(Screen):
 
         return errors
 
+    def animate_loading_text(self, loading_label, modal_height):
+        # Define the animation to move the label vertically
+        anim = Animation(y=modal_height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.bind(on_complete=lambda *args: self.animate_loading_text(loading_label, modal_height))
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim  # Store the animation object in a custom attribute
+
     def add_data(self, name, gender, date_of_birth):
-        # Show modal view with spinner
-        modal_view = ModalView(size_hint=(None, None), size=(100, 100), background_color=[0, 0, 0, 0])
-        spinner = MDSpinner()
-        modal_view.add_widget(spinner)
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size="50sp", bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
         modal_view.open()
 
-        validation_errors = self.validate_input(name, gender, date_of_birth)
+        # Perform the animation
+        anim = Animation(y=modal_view.height - loading_label.height, duration=1) + \
+               Animation(y=0, duration=1)
+        # Loop the animation
+        anim.repeat = True
+        anim.start(loading_label)
+        # Store the animation object
+        loading_label.animation = anim
 
-        # Delay to simulate processing time (replace with your actual logic)
+        # Perform the actual action (e.g., fetching loan requests)
+        # You can replace the sleep with your actual logic
+        validation_errors = []  # Define validation_errors here
         Clock.schedule_once(lambda dt: self.process_data(name, gender, date_of_birth, modal_view, validation_errors), 2)
 
     def process_data(self, name, gender, date_of_birth, modal_view, validation_errors):
+        modal_view.children[0].animation.cancel_all(modal_view.children[0].animation)
         # Close the modal view
         modal_view.dismiss()
-        validation_errors = self.validate_input(name, gender, date_of_birth)
+        validation_errors = self.validate_input(name, gender, date_of_birth)  # Define validation_errors here
 
         if validation_errors:
             for error in validation_errors:
@@ -4643,7 +4673,7 @@ class BorrowerScreen7(Screen):
         user_email = anvil.server.call('another_method')
         if user_email in id_list:
             index = id_list.index(user_email)
-            data[index]['profficen'] = spinner_id
+            data[index]['profession'] = spinner_id
         else:
             print('no email found')
 
