@@ -39,210 +39,380 @@ user_helpers = """
 
 
 <DashboardScreen>:
-    MDFloatLayout:
-        md_bg_color:1,1,1,1
-        size_hint: 1, 1 
+    MDBoxLayout:
+        size_hint: 1, 1
+        orientation: "vertical"
+        #md_bg_color: "#ff1616"
+        spacing: dp(5)
+        padding: dp(5)
+        MDBoxLayout:
+            orientation:"horizontal"
+            pos_hint:{"top":1}
+            size_hint_y: 0.15
 
-        MDTopAppBar:
-            md_bg_color:11, 37,71,1
-            specific_text_color:1/255, 26/255, 51/255, 1
-            elevation: 3
-            left_action_items: [['account', lambda x: root.go_to_profile()]]
-            right_action_items: [['wallet', lambda x:root.go_to_wallet()],['logout', lambda x: root.logout()]]
-            pos_hint: {'center_x': 0.5, 'center_y': 0.96}
-        Image:
-            source:"LOGO.png"
-            pos_hint: {'center_x': 0.5, 'center_y': 0.96555}        
-            md_bg_color:0,0,0,1
-            size_hint: None,None 
-            height: dp(50)
-            width: dp(60)
-        MDGridLayout:
-            cols: 3
-
-            spacing: dp(15)
-            size_hint_y: None
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            height: self.minimum_height
-            width: self.minimum_width
-            size_hint_x: None
-
-            MDFlatButton:
-                size_hint: None, None
-
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color: 0.043, 0.145, 0.278, 1
-
+            MDBoxLayout:
+                orientation:"vertical"
                 size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
-                on_release: root.go_to_newloan_screen()
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "New Loan Requests"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                height:self.minimum_height
+                pos_hint:{"center_y":0.5}
+                padding: dp(5)
+                MDLabel:
+                    text:"Hello!"
+                    bold: True
+                    font_size: dp(20)
+                    size_hint_y: None
+                    height: self.texture_size[1]
+                MDLabel:
+                    id:username
+                    font_size: dp(15)
+                    size_hint_y: None
+                    height: self.texture_size[1]
 
-            MDFlatButton:
-                size_hint: None, None
-
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color: 0.043, 0.145, 0.278, 1 
-                on_release: root.go_to_view_loan_screen()
+            MDBoxLayout:
+                orientation:"horizontal"
                 size_hint_y: None
-                height: dp(60)
+                pos_hint:{"center_y":0.68}
                 size_hint_x: None
-                width: dp(110)
+                pos_hint:{"center_x":0.5}
+                padding: dp(5)  
 
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "View Loans"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                Widget:
 
-            MDFlatButton:
-                size_hint: None, None
-
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color: 0.043, 0.145, 0.278, 1 
-
-
+                Image:
+                    source: "logo.png"
+                    size_hint: (None, None)  
+                    size: dp(70), dp(70)  
+                    pos_hint: {"center_y": 0.7}
+            MDBoxLayout:
+                orientation:"horizontal"
                 size_hint_y: None
-                height: dp(60)
+                pos_hint:{"center_y":0.56}
+                padding: dp(5) 
+                spacing:dp(25) 
 
-                size_hint_x: None
-                width: dp(110)
-                on_release: root.go_to_dues_screen()
-        
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
+                Widget:
+
+                MDIcon:
+                    icon: 'wallet'  
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_x: None
+                    width: dp(24)
+                    on_touch_down: root.go_to_wallet() if self.collide_point(*args[1].pos) else None
+
+
+                MDIcon:
+                    id: logout_icon
+                    icon: 'logout'  
+                    halign: 'center'
+                    valign: 'middle'
+                    size_hint_x: None
+                    width: dp(24)
+                    on_touch_down: root.logout() if self.collide_point(*args[1].pos) else None
+
+
+
+
+
+        MDBoxLayout:
+            orientation:"vertical"  
+            size_hint_y:0.99
+            spacing: dp(5)
+            padding: dp(5)
+            MDBoxLayout:
+                orientation:"vertical"  
+                size_hint_y:0.25
+
+
+                MDCard:
+                    pos_hint: {"top": 1}
+                    md_bg_color: 0.043, 0.145, 0.278, 1
+                    orientation: "vertical"
+
                     MDLabel:
-                        text: "Today's Dues"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        text: "Online Cash Advance"
+                        bold: True
+                        font_size: 25
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+                        padding:dp(20), dp(5)
+                        pos_hint: {"center_y": 0.8}
 
-
-            MDFlatButton:
-                size_hint: None, None
-
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color: 0.043, 0.145, 0.278, 1 
-
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
-                on_release: root.go_to_app_tracker()
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
                     MDLabel:
-                        text: "Application Tracker"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        text: "Fast, easy, secure,\\nlow prime rate"
+                        font_size: 20
+                        theme_text_color: "Custom"
+                        text_color: 1, 1, 1, 1
+                        padding: dp(20), dp(5)
+
+                    MDBoxLayout:
+                        orientation: "horizontal"
+                        size_hint_x: 0.28
+                        height: dp(40)  # Adjust the height as needed
+                        pos_hint: {"right": 1, "bottom": 1}  # Align to the right bottom
+
+                        padding: dp(5), dp(5)
+
+                        MDLabel:
+                            text: "Explore"
+                            bold: True
+                            font_size: 22
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+                            padding: dp(0), dp(5)  # Adjust the left padding as needed
+                            #pos_hint:{"center_x":0.7}
+                        Image:
+                            source:"arrow.png"
+                            size_hint: (0.4, 0.4)
+                            pos_hint:{"center_y":0.5}
+                            padding:dp(15)  
 
 
 
-            MDFlatButton:
-                size_hint: None, None
+            MDBoxLayout:
+                orientation:"vertical"  
+                size_hint_y:0.47
 
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color: 0.043, 0.145, 0.278, 1 
+                MDLabel:
+                    text:"Features"
+                    size_hint_y: 0.15
+                    bold: True
+                MDCard:
+                    pos_hint:{"top": 1}
+                    #md_bg_color: "#9ccf0e"
 
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
+                    MDGridLayout:
+                        cols: 3
+                        spacing: dp(5)  # Equal gap between cards
+                        padding: dp(5)  # Proper padding around the grid
 
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "View Transaction History"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                        # Card 1
+                        MDCard:
+                            md_bg_color: "#ffffff"  # Customize background color
+                            orientation: "vertical"
+                            padding:dp(0), dp(7)
+                            on_release: root.go_to_newloan_screen()
 
-            MDFlatButton:
-                size_hint: None, None
+                            MDIcon:
+                                icon: 'newspaper'
+                                halign: 'center'
+                                valign: 'middle'
+                                size_hint_x: None
+                                width: dp(24)
+                                theme_text_color: 'Custom'
+                                text_color: 0.043, 0.145, 0.278, 1 
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color: 0.043, 0.145, 0.278, 1 
-                on_release: root.go_to_fore_closer_details()
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
+                            MDLabel:
+                                text: "New Loan \\nRequests"
+                                font_size: 16
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0, 0, 0, 1
+                                halign: "center"  # Center-align the label text
 
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "Foreclosure Loan"
-                        font_size:dp(14)
+                        MDCard:
+                            md_bg_color: "#ffffff"  # Customize background color
+                            orientation: "vertical"
+                            padding:dp(0), dp(7)
+                            on_release: root.go_to_view_loan_screen()
 
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-            MDLabel:
-                text:""
-            MDFlatButton:
-                size_hint: None, None
-                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
-                md_bg_color: 0.043, 0.145, 0.278, 1 
-                on_release:root.go_to_extend()
-                size_hint_y: None
-                height: dp(60)
-                size_hint_x: None
-                width: dp(110)
-
-                BoxLayout:
-                    orientation: 'horizontal'
-                    spacing:dp(10)
-                    MDLabel:
-                        text: "Extended Loan Request"
-                        font_size:dp(14)
-                        bold:True
-                        theme_text_color: 'Custom'
-                        halign: "center"
-                        text_color:1,1,1,1
-                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+                            MDIcon:
+                                icon: 'file-document'  
+                                halign: 'center'
+                                valign: 'middle'
+                                size_hint_x: None
+                                width: dp(24)
+                                theme_text_color: 'Custom'
+                                text_color: 0.043, 0.145, 0.278, 1 
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
 
-        MDIconButton:
-            icon:'help-circle'
-            theme_text_color: 'Custom'
-            text_color: 1,1,1,1
-            pos_hint: {'center_x': 0.92, 'center_y': 0.1}
-            on_release: root.help_module()
-            md_bg_color: 0.043, 0.145, 0.278, 1     
+
+                            MDLabel:
+                                text: "View Loans"
+                                font_size: 16
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0, 0, 0, 1
+                                halign: "center"
+
+                        MDCard:
+                            md_bg_color: "#ffffff"  # Customize background color
+                            orientation: "vertical"
+                            padding:dp(0), dp(7)
+                            on_release: root.go_to_dues_screen()
+
+
+                            MDIcon:
+                                icon: 'calendar-today' 
+                                halign: 'center'
+                                valign: 'middle'
+                                size_hint_x: None
+                                width: dp(24)
+                                theme_text_color: 'Custom'
+                                text_color: 0.043, 0.145, 0.278, 1 
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+                            MDLabel:
+                                text: "Today's Dues"
+                                font_size: 16
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0, 0, 0, 1
+                                halign: "center"
+
+                        MDCard:
+                            md_bg_color: "#ffffff"  # Customize background color
+                            orientation: "vertical"
+                            padding:dp(0), dp(7)
+                            on_release: root.go_to_app_tracker()
+
+                            MDIcon:
+                                icon: 'progress-check'
+                                halign: 'center'
+                                valign: 'middle'
+                                size_hint_x: None
+                                width: dp(24)
+                                theme_text_color: 'Custom'
+                                text_color: 0.043, 0.145, 0.278, 1 
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+                            MDLabel:
+                                text: "Application \\nTracker"
+                                font_size: 16
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0, 0, 0, 1
+                                halign: "center"
+
+                        MDCard:
+                            md_bg_color: "#ffffff"  # Customize background color
+                            orientation: "vertical"
+                            padding:dp(0), dp(7)
+
+
+                            MDIcon:
+                                icon: 'history'  
+                                halign: 'center'
+                                valign: 'middle'
+                                size_hint_x: None
+                                width: dp(24)
+                                theme_text_color: 'Custom'
+                                text_color: 0.043, 0.145, 0.278, 1 
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+                            MDLabel:
+                                text: "View Transaction \\nHistory"
+                                font_size: 16
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0, 0, 0, 1
+                                halign: "center"
+
+                        MDCard:
+                            md_bg_color: "#ffffff"  # Customize background color
+                            orientation: "vertical"
+                            padding:dp(0), dp(7)
+                            on_release: root.go_to_fore_closer_details()
+
+                            MDIcon:
+                                icon: 'file-document-outline'
+                                halign: 'center'
+                                valign: 'middle'
+                                size_hint_x: None
+                                width: dp(24)
+                                theme_text_color: 'Custom'
+                                text_color: 0.043, 0.145, 0.278, 1 
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+                            MDLabel:
+                                text: "Loan \\nForeclose"
+                                font_size: 16
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0, 0, 0, 1
+                                halign: "center"        
+
+                        MDCard:
+                            md_bg_color: "#ffffff"  # Customize background color
+                            orientation: "vertical"
+                            padding:dp(0), dp(7)
+                            on_release:root.go_to_extend()
+
+                            MDIcon:
+                                icon: 'clock'
+                                halign: 'center'
+                                valign: 'middle'
+                                size_hint_x: None
+                                width: dp(24)
+                                theme_text_color: 'Custom'
+                                text_color: 0.043, 0.145, 0.278, 1 
+                                pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+
+                            MDLabel:
+                                text: "Extended \\nLoan Request"
+                                font_size: 16
+                                bold: True
+                                theme_text_color: "Custom"
+                                text_color: 0, 0, 0, 1
+                                halign: "center"        
+            MDBoxLayout:
+                orientation:"vertical"  
+                size_hint_y:0.25
+
+                MDLabel:
+                    text:"Special promotion"
+                    size_hint_y: 0.15
+                    bold: True
+                MDCard:
+                    pos_hint:{"top": 1}
+                    #md_bg_color: "#320ecf"
+
+                    MDGridLayout:
+                        cols: 2
+                        padding:dp(5)    
+                        spacing:dp(5)
+                        MDCard:
+                            pos_hint:{"top": 1}
+                            md_bg_color: "#ffffff"
+                            orientation:"vertical"
+                            MDBoxLayout:
+                                size_hint_y:0.8
+                                #md_bg_color:"#eb4034"
+                                FitImage:
+                                    source:"invite.png"
+                                    allow_stretch: False  # Allow the image to stretch to fill the widget
+                                    keep_ratio: False 
+
+                            MDLabel:
+                                text:"New Invite Profit"  
+                                font_size:16 
+                                size_hint_y: 0.2
+                                bold: True
+                                halign:"center"  
+                        MDCard:
+                            pos_hint:{"top": 1}
+                            md_bg_color: "#ffffff"
+                            orientation:"vertical"
+                            MDBoxLayout:
+                                size_hint_y:0.8
+                                #md_bg_color:"#eb4034"
+                                FitImage:
+                                    source:"bonus.png"
+                                    allow_stretch: False  # Allow the image to stretch to fill the widget
+                                    keep_ratio: False 
+                            MDLabel:
+                                text:"Cashback bonus"
+                                font_size:16
+                                size_hint_y: 0.2 
+                                bold: True
+                                halign:"center"     
 
 <ProfileScreen>
     canvas.before:
@@ -294,8 +464,8 @@ user_helpers = """
                     MDFloatLayout:
 
                         size_hint:(None,None)
-                        spacing:0
-                        padding:0
+                        spacing:dp(0)
+                        padding:dp(0)
                         pos_hint: {'center_x': 0, 'center_y': 0}
                         MDIconButton:
                             icon: 'camera-plus'
@@ -1907,7 +2077,26 @@ class DashboardScreen(Screen):
     Builder.load_string(user_helpers)
 
     def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
         Window.bind(on_keyboard=self.on_back_button)
+
+        profile = app_tables.fin_user_profile.search()
+        log_email = anvil.server.call('another_method')
+        print(log_email)
+
+        email_user = []
+        name_list = []
+        for i in profile:
+            email_user.append(i['email_user'])
+            name_list.append(i['full_name'])
+
+        # Check if 'logged' is in the status list
+        if log_email in email_user:
+            log_index = email_user.index(log_email)
+            self.ids.username.text = name_list[log_index]
+        else:
+            # Handle the case when 'logged' is not in the status list
+            self.ids.username.text = "User welcome to P2P"
 
     def on_pre_leave(self):
         Window.unbind(on_keyboard=self.on_back_button)
@@ -2206,6 +2395,7 @@ class DashboardScreen(Screen):
         #
         # # Switch to the LoginScreen
         # sm.current = 'BorrowerDuesScreen'
+
 
     def help_module(self):
         from help_module import HelpScreen
