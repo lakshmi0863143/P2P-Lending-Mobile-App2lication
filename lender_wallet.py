@@ -1,4 +1,7 @@
+from datetime import datetime
+
 from anvil.tables import app_tables
+from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -131,6 +134,7 @@ Builder.load_string(
                     font_name: "Roboto-Bold"  
 
         MDBoxLayout:
+            id: box
             orientation: 'horizontal'
             spacing: dp(10)
             padding: dp(10)
@@ -174,9 +178,11 @@ Builder.load_string(
 
 
 class LenderWalletScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, loan_amount_text=None, **kwargs):
         super().__init__(**kwargs)
         self.type = None
+        self.loan_amount = loan_amount_text
+        print(self.loan_amount)  # Print the loan amount received during initialization
         data = app_tables.fin_wallet.search()
         email = self.email()
         w_email = []
@@ -187,11 +193,33 @@ class LenderWalletScreen(Screen):
             w_id.append(i['wallet_id'])
             w_amount.append(i['wallet_amount'])
 
+        index = 0
         if email in w_email:
             index = w_email.index(email)
             self.ids.total_amount.text = str(w_amount[index])
         else:
             print("no email found")
+
+        if loan_amount_text is not None and w_amount[index] >= loan_amount_text:
+            button = MDRoundFlatButton(
+                text="Loan Disbursement",
+                size_hint_y=None,
+                height=30,
+                font_size=14,
+                theme_text_color='Custom',
+                text_color=(1, 1, 1, 1),
+                font_name="Roboto-Bold",
+                md_bg_color= (0.043, 0.145, 0.278, 1)
+            )
+            button.bind(on_release=self.disbrsed_loan)
+            self.ids.box.add_widget(button)
+        elif loan_amount_text != None and w_amount[index] < loan_amount_text:
+            print("Amount Not Sufficient")
+
+    def disbrsed_loan(self, instance):
+        print("amount paid")
+        self.manager.get_screen('ViewLoansProfileScreenLR').paynow()
+
 
     def highlight_button(self, button_type):
         if button_type == 'deposit':
@@ -215,52 +243,101 @@ class LenderWalletScreen(Screen):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
     def submit(self):
-        if self.type == 'deposit':
+        enter_amount = self.ids.enter_amount.text
+        if self.type == None:
+            self.show_snackbar('Please Select Transaction Type')
+        elif self.ids.enter_amount.text == '' and not self.ids.enter_amount.text.isdigit():
+            self.show_snackbar('Enter Valid Amount')
+        elif self.type == 'deposit':
             data = app_tables.fin_wallet.search()
+            transaction = app_tables.fin_wallet_transactions.search()
             email = self.email()
             w_email = []
             w_id = []
             w_amount = []
+            w_customer_id = []
             for i in data:
                 w_email.append(i['user_email'])
                 w_id.append(i['wallet_id'])
                 w_amount.append(i['wallet_amount'])
+                w_customer_id.append(i['customer_id'])
 
+            t_id = []
+            for i in transaction:
+                t_id.append(i['transaction_id'])
+
+            if len(t_id) >= 1:
+                transaction_id = 'TA' + str(int(t_id[-1][2:]) + 1).zfill(4)
+            else:
+                transaction_id = 'TA0001'
+
+            transaction_date_time = datetime.today()
             if email in w_email:
                 index = w_email.index(email)
-                data[index]['wallet_amount'] = int(self.ids.enter_amount.text) + w_amount[index]
-                self.show_snackbar(f'Amount {self.ids.enter_amount.text} Deposited to the this wallet ID {w_id[index]}')
+                data[index]['wallet_amount'] = int(enter_amount) + w_amount[index]
+                self.show_snackbar(f'Amount {enter_amount} Deposited to the this wallet ID {w_id[index]}')
                 self.ids.enter_amount.text = ''
+                app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id, customer_id=w_customer_id[index], user_email=email,
+                                                           transaction_type=self.type, amount=int(enter_amount), status='success', wallet_id=w_id[index],
+                                                           transaction_time_stamp=transaction_date_time)
             else:
                 print("no email found")
 
         elif self.type == 'withdraw':
             data = app_tables.fin_wallet.search()
+            transaction = app_tables.fin_wallet_transactions.search()
             email = self.email()
             w_email = []
             w_id = []
             w_amount = []
+            w_customer_id = []
             for i in data:
                 w_email.append(i['user_email'])
                 w_id.append(i['wallet_id'])
                 w_amount.append(i['wallet_amount'])
+                w_customer_id.append(i['customer_id'])
+
+            t_id = []
+            for i in transaction:
+                t_id.append(i['transaction_id'])
+
+            if len(t_id) >= 1:
+                transaction_id = 'TA' + str(int(t_id[-1][2:]) + 1).zfill(4)
+            else:
+                transaction_id = 'TA0001'
+
+            transaction_date_time = datetime.today()
 
             if email in w_email:
                 index = w_email.index(email)
-                if w_amount[index] > int(self.ids.enter_amount.text):
+                if w_amount[index] >= int(self.ids.enter_amount.text):
                     data[index]['wallet_amount'] = w_amount[index] - int(self.ids.enter_amount.text)
                     self.show_snackbar(
                         f'Amount {self.ids.enter_amount.text} Withdraw from this wallet ID {w_id[index]}')
                     self.ids.enter_amount.text = ''
+                    app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
+                                                               customer_id=w_customer_id[index], user_email=email,
+                                                               transaction_type=self.type, amount=int(enter_amount),
+                                                               status='success', wallet_id=w_id[index],
+                                                               transaction_time_stamp=transaction_date_time)
                 else:
                     self.show_snackbar(
                         f'Insufficient Amount {self.ids.enter_amount.text} Please Deposit Required Money')
+                    app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
+                                                               customer_id=w_customer_id[index], user_email=email,
+                                                               transaction_type=self.type, amount=int(enter_amount),
+                                                               status='fail', wallet_id=w_id[index],
+                                                               transaction_time_stamp=transaction_date_time)
                     self.ids.enter_amount.text = ''
             else:
                 print("no email found")
 
     def refresh(self):
-        self.__init__()
+        # Preserve the current loan_amount_text value when refreshing
+        current_loan_amount = self.loan_amount
+        # Reinitialize the screen with the preserved loan_amount_text value
+        print(current_loan_amount)
+        self.__init__(loan_amount_text=current_loan_amount)
 
     def email(self):
         return anvil.server.call('another_method')

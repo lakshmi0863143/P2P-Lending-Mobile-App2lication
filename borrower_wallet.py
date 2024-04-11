@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from anvil.tables import app_tables
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
@@ -219,46 +221,93 @@ class WalletScreen(Screen):
         Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
     def submit(self):
-        if self.type == 'deposit':
+        enter_amount = self.ids.enter_amount.text
+        if self.type == None:
+            self.show_snackbar('Please Select Transaction Type')
+        elif self.ids.enter_amount.text == '' and not self.ids.enter_amount.text.isdigit():
+            self.show_snackbar('Enter Valid Amount')
+        elif self.type == 'deposit':
             data = app_tables.fin_wallet.search()
+            transaction = app_tables.fin_wallet_transactions.search()
             email = self.email()
             w_email = []
             w_id = []
             w_amount = []
+            w_customer_id = []
             for i in data:
                 w_email.append(i['user_email'])
                 w_id.append(i['wallet_id'])
                 w_amount.append(i['wallet_amount'])
+                w_customer_id.append(i['customer_id'])
 
+            t_id = []
+            for i in transaction:
+                t_id.append(i['transaction_id'])
+
+            if len(t_id) >= 1:
+                transaction_id = 'TA' + str(int(t_id[-1][2:]) + 1).zfill(4)
+            else:
+                transaction_id = 'TA0001'
+
+            transaction_date_time = datetime.today()
             if email in w_email:
                 index = w_email.index(email)
-                data[index]['wallet_amount'] = int(self.ids.enter_amount.text) + w_amount[index]
-                self.show_snackbar(f'Amount {self.ids.enter_amount.text} Deposited to the this wallet ID {w_id[index]}')
+                data[index]['wallet_amount'] = int(enter_amount) + w_amount[index]
+                self.show_snackbar(f'Amount {enter_amount} Deposited to the this wallet ID {w_id[index]}')
                 self.ids.enter_amount.text = ''
+                app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
+                                                           customer_id=w_customer_id[index], user_email=email,
+                                                           transaction_type=self.type, amount=int(enter_amount),
+                                                           status='success', wallet_id=w_id[index],
+                                                           transaction_time_stamp=transaction_date_time)
             else:
                 print("no email found")
 
         elif self.type == 'withdraw':
             data = app_tables.fin_wallet.search()
+            transaction = app_tables.fin_wallet_transactions.search()
             email = self.email()
             w_email = []
             w_id = []
             w_amount = []
+            w_customer_id = []
             for i in data:
                 w_email.append(i['user_email'])
                 w_id.append(i['wallet_id'])
                 w_amount.append(i['wallet_amount'])
+                w_customer_id.append(i['customer_id'])
+
+            t_id = []
+            for i in transaction:
+                t_id.append(i['transaction_id'])
+
+            if len(t_id) >= 1:
+                transaction_id = 'TA' + str(int(t_id[-1][2:]) + 1).zfill(4)
+            else:
+                transaction_id = 'TA0001'
+
+            transaction_date_time = datetime.today()
 
             if email in w_email:
                 index = w_email.index(email)
-                if w_amount[index] > int(self.ids.enter_amount.text):
+                if w_amount[index] >= int(self.ids.enter_amount.text):
                     data[index]['wallet_amount'] = w_amount[index] - int(self.ids.enter_amount.text)
                     self.show_snackbar(
                         f'Amount {self.ids.enter_amount.text} Withdraw from this wallet ID {w_id[index]}')
                     self.ids.enter_amount.text = ''
+                    app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
+                                                               customer_id=w_customer_id[index], user_email=email,
+                                                               transaction_type=self.type, amount=int(enter_amount),
+                                                               status='success', wallet_id=w_id[index],
+                                                               transaction_time_stamp=transaction_date_time)
                 else:
                     self.show_snackbar(
                         f'Insufficient Amount {self.ids.enter_amount.text} Please Deposit Required Money')
+                    app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
+                                                               customer_id=w_customer_id[index], user_email=email,
+                                                               transaction_type=self.type, amount=int(enter_amount),
+                                                               status='fail', wallet_id=w_id[index],
+                                                               transaction_time_stamp=transaction_date_time)
                     self.ids.enter_amount.text = ''
             else:
                 print("no email found")
