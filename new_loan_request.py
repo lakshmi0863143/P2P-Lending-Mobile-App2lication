@@ -52,7 +52,7 @@ user_helpers2 = """
             elevation: 2
             pos_hint: {'top': 1}
             left_action_items: [['arrow-left', lambda x: root.go_back()]]
-            right_action_items: [['home', lambda x:root.go_to_lender_dashboard()]]
+            right_action_items: [['refresh', lambda x: root.refresh()]]
             title_align: 'center'
             md_bg_color: 0.043, 0.145, 0.278, 1
 
@@ -959,9 +959,8 @@ class NewloanScreen(Screen):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'DashboardScreen'
 
-    def go_to_lender_dashboard(self):
-        self.manager.add_widget(Factory.DashboardScreen(name='DashboardScreen'))
-        self.manager.current = 'DashboardScreen'
+    def refresh(self):
+        pass
 
     def current(self):
         self.manager.current = 'DashboardScreen'
