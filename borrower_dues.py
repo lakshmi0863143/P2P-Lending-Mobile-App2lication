@@ -1,5 +1,6 @@
 import anvil
 from anvil.tables import app_tables
+from kivy import properties
 
 from kivy.core.window import Window
 from kivy.properties import ListProperty, Clock
@@ -8,7 +9,7 @@ from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen, ScreenManager, SlideTransition
 from kivymd.uix.button import MDRectangleFlatButton, MDRaisedButton
-from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget
+from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget, TwoLineAvatarIconListItem
 from kivymd.uix.slider import MDSlider
 from kivymd.uix.label import MDLabel
 import sqlite3
@@ -16,9 +17,10 @@ from math import pow
 from kivymd.uix.dialog import MDDialog, dialog
 import anvil.server
 from kivy.uix.spinner import Spinner
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
 from kivymd.uix.spinner import MDSpinner
+import anvil.tables.query as q
 
 user_helpers2 = """
 <WindowManager>:
@@ -424,6 +426,8 @@ Builder.load_string(user_helpers2)
 
 
 class BorrowerDuesScreen(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
     def on_pre_enter(self, *args):
         Window.bind(on_keyboard=self.on_back_button)
 
@@ -447,79 +451,220 @@ class DuesScreen(Screen):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        data = app_tables.fin_loan_details.search()
-        email = self.get_table()
-        profile = app_tables.fin_user_profile.search()
-        customer_id = []
-        loan_id = []
-        email1 = []
-        borrower_name = []
-        loan_status = []
-        product_name = []
-        s = 0
-        for i in data:
-            s += 1
-            customer_id.append(i['borrower_customer_id'])
-            loan_id.append(i['loan_id'])
-            borrower_name.append(i['borrower_full_name'])
-            loan_status.append(i['loan_updated_status'])
-            product_name.append(i['product_name'])
-            email1.append(i['borrower_email_id'])
+        self.user_id = ""
+        # self.init_components(**properties)
 
-        profile_customer_id = []
-        profile_mobile_number = []
-        profile_email_id = []
-        profile_account_number = []
+        today_date = datetime.now(timezone.utc).date()
+        loan_details = []
 
-        for i in profile:
-            profile_customer_id.append(i['customer_id'])
-            profile_mobile_number.append(i['mobile'])
-            profile_email_id.append('email_user')
-            profile_account_number.append('account_number')
-        cos_id = None
-        index = -1
-        if email in profile_email_id:
-            index = profile_email_id.index(email)
+        all_loans_disbursed = app_tables.fin_loan_details.search(
+            loan_updated_status=q.any_of("disbursed loan", "extension", "foreclosure"),
+            first_emi_payment_due_date=q.less_than_or_equal_to(today_date)
+        )
+        loan_list = list(all_loans_disbursed)
+        print(loan_list)
+        for loan in all_loans_disbursed:
+            print(loan)
+            loan_id = loan['loan_id']
+            print(loan_id)
+            all_loans = list(app_tables.fin_emi_table.search(
+                loan_id=loan_id,
+                next_payment=q.less_than_or_equal_to(today_date)
+            ))
+            print(all_loans)
+            if all_loans:
+                all_loans.sort(key=lambda x: x['next_payment'], reverse=True)
+                latest_loan = all_loans[0]
+                loan_detail = app_tables.fin_loan_details.get(loan_id=latest_loan['loan_id'])
+                user_profile = app_tables.fin_user_profile.get(customer_id=loan_detail['lender_customer_id'])
+                if loan_detail is not None and user_profile is not None:
+                    loan_amount = loan_detail['loan_amount']
+                    scheduled_payment = latest_loan['scheduled_payment']
+                    next_payment = latest_loan['next_payment']
+                    days_left = (today_date - next_payment).days
 
-        if email in email1:
-            index = email1.index(email)
-            cos_id = customer_id[index]
+                    emi_number = latest_loan['emi_number']
+                    account_number = latest_loan['account_number']
+                    tenure = loan_detail['tenure']
+                    interest_rate = loan_detail['interest_rate']
+                    borrower_loan_created_timestamp = loan_detail['borrower_loan_created_timestamp']
+                    loan_updated_status = loan_detail['loan_updated_status']
+                    loan_disbursed_timestamp = loan_detail['loan_disbursed_timestamp']
+                    emi_payment_type = loan_detail['emi_payment_type']
+                    lender_customer_id = loan_detail['lender_customer_id']
+                    borrower_customer_id = loan_detail['borrower_customer_id']
+                    first_emi_payment_due_date = loan_detail['first_emi_payment_due_date']
+                    total_repayment_amount = loan_detail['total_repayment_amount']
+                    total_processing_fee_amount = loan_detail['total_processing_fee_amount']
+                    mobile = user_profile['mobile']
+                    product_name = loan_detail['product_name']
+                    product_description = loan_detail['product_description']
+                    lender_full_name = loan_detail['lender_full_name']
+                    loan_state_status = loan_detail['loan_state_status']
+                    product_id = loan_detail['product_id']
+                    total_interest_amount = loan_detail['total_interest_amount']
+                    Scheduled_date = latest_loan['next_payment']
 
-        if cos_id is not None:
-            print(cos_id, type(cos_id))
-            print(customer_id[-1], type(customer_id[-1]))
-            c = -1
-            index_list = []
-            for i in range(s):
-                c += 1
-                if customer_id[c] == cos_id:
-                    index_list.append(c)
+                    loan_details.append({
+                        'loan_id': loan_id,
+                        'loan_amount': loan_amount,
+                        'scheduled_payment': scheduled_payment,
+                        'days_left': days_left,
+                        'tenure': tenure,
+                        'interest_rate': interest_rate,
+                        'borrower_loan_created_timestamp': borrower_loan_created_timestamp,
+                        'emi_number': emi_number,
+                        'account_number': account_number,
+                        'loan_updated_status': loan_updated_status,
+                        'loan_disbursed_timestamp': loan_disbursed_timestamp,
+                        'next_payment': next_payment,
+                        'emi_payment_type': emi_payment_type,
+                        'lender_customer_id': lender_customer_id,
+                        'first_emi_payment_due_date': first_emi_payment_due_date,
+                        'total_repayment_amount': total_repayment_amount,
+                        'total_processing_fee_amount': total_processing_fee_amount,
+                        'mobile': mobile,
+                        'product_description': product_description,
+                        'product_name': product_name,
+                        'lender_full_name': lender_full_name,
+                        'borrower_customer_id': borrower_customer_id,
+                        'loan_state_status': loan_state_status,
+                        'product_id': product_id,
+                        'total_interest_amount': total_interest_amount,
+                        'Scheduled_date': Scheduled_date,
+                    })
+            else:
 
-            b = 1
-            k = -1
-            for i in index_list:
-                b += 1
-                k += 1
-                number = profile_customer_id.index(customer_id[i])
-                item = ThreeLineAvatarIconListItem(
+                # If there are no emi records, append loan details without checking next payment date
+                loan_detail = app_tables.fin_loan_details.get(loan_id=loan_id)
+                user_profile = app_tables.fin_user_profile.get(customer_id=loan_detail['lender_customer_id'])
+                if loan_detail is not None and user_profile is not None:
+                    loan_amount = loan_detail['loan_amount']
+                    first_emi_payment_due_date = loan_detail['first_emi_payment_due_date']
+                    print(first_emi_payment_due_date)
+                    days_left = (today_date - first_emi_payment_due_date).days
+                    # Fetch account number from user profile table based on customer_id
+                    user_profile = app_tables.fin_user_profile.get(customer_id=loan_detail['borrower_customer_id'])
+                    if user_profile is not None:
+                        account_number = user_profile['account_number']
+                    else:
+                        account_number = "N/A"
 
-                    IconLeftWidget(
-                        icon="card-account-details-outline"
-                    ),
-                    text=f"Borrower Name : {borrower_name[i]}",
-                    secondary_text=f"Mobile Number : {profile_mobile_number[number]}",
-                    tertiary_text=f"Product Name : {product_name[i]}",
-                    text_color=(0, 0, 0, 1),  # Black color
-                    theme_text_color='Custom',
-                    secondary_text_color=(0, 0, 0, 1),
-                    secondary_theme_text_color='Custom',
-                    tertiary_text_color=(0, 0, 0, 1),
-                    tertiary_theme_text_color='Custom'
-                )
-                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-                self.ids.container.add_widget(item)
+                    # Set emi_number to 0
+                    emi_number = 0
 
-    def icon_button_clicked(self, instance, loan_id):
+                    tenure = loan_detail['tenure']
+                    interest_rate = loan_detail['interest_rate']
+                    borrower_loan_created_timestamp = loan_detail['borrower_loan_created_timestamp']
+                    loan_updated_status = loan_detail['loan_updated_status']
+                    loan_disbursed_timestamp = loan_detail['loan_disbursed_timestamp']
+                    emi_payment_type = loan_detail['emi_payment_type']
+                    lender_customer_id = loan_detail['lender_customer_id']
+                    total_repayment_amount = loan_detail['total_repayment_amount']
+                    total_processing_fee_amount = loan_detail['total_processing_fee_amount']
+                    mobile = user_profile['mobile']
+                    product_name = loan_detail['product_name']
+                    product_description = loan_detail['product_description']
+                    borrower_customer_id = loan_detail['borrower_customer_id']
+                    lender_full_name = loan_detail['lender_full_name']
+                    scheduled_payment = loan_disbursed_timestamp.date()
+                    loan_state_status = loan_detail['loan_state_status']
+                    product_id = loan_detail['product_id']
+                    total_interest_amount = loan_detail['total_interest_amount']
+                    Scheduled_date = loan_detail['first_emi_payment_due_date']
+
+                    # Calculate next_payment based on first_payment_due_date
+                    if emi_payment_type == 'One Time':
+                        if tenure:
+                            next_payment = loan_disbursed_timestamp.date() + timedelta(days=30 * tenure)
+                    elif emi_payment_type == 'Monthly':
+                        # For monthly payment, set next_payment to a month after first_payment_due_date
+                        next_payment = loan_disbursed_timestamp.date() + timedelta(days=30)
+                    elif emi_payment_type == 'Three Months':
+                        # For three-month payment, set next_payment to three months after first_payment_due_date
+                        next_payment = loan_disbursed_timestamp.date() + timedelta(days=90)
+                    elif emi_payment_type == 'Six Months':
+                        # For six-month payment, set next_payment  six months after first_payment_due_date
+                        next_payment = loan_disbursed_timestamp.date() + timedelta(days=180)
+                    else:
+                        # Default to monthly calculation if emi_payment_type is not recognized
+                        next_payment = loan_disbursed_timestamp.date() + timedelta(days=30)
+
+                    loan_details.append({
+                        'loan_id': loan_id,
+                        'loan_amount': loan_amount,
+                        'scheduled_payment': scheduled_payment,
+                        # Set scheduled_payment to first_payment_due_date first_emi_payment_due_date
+                        'next_payment': next_payment,
+                        'days_left': days_left,
+                        'tenure': tenure,
+                        'interest_rate': interest_rate,
+                        'borrower_loan_created_timestamp': borrower_loan_created_timestamp,
+                        'loan_updated_status': loan_updated_status,
+                        'loan_disbursed_timestamp': loan_disbursed_timestamp,
+                        'emi_number': emi_number,
+                        'account_number': account_number,
+                        'emi_payment_type': emi_payment_type,
+                        'lender_customer_id': lender_customer_id,
+                        'total_repayment_amount': total_repayment_amount,
+                        # 'first_payment_due_date': first_payment_due_date
+                        'total_processing_fee_amount': total_processing_fee_amount,
+                        'mobile': mobile,
+                        'product_description': product_description,
+                        'product_name': product_name,
+                        'lender_full_name': lender_full_name,
+                        'borrower_customer_id': borrower_customer_id,
+                        'loan_state_status': loan_state_status,
+                        'product_id': product_id,
+                        'total_interest_amount': total_interest_amount,
+                        'Scheduled_date': Scheduled_date,
+
+                    })
+            # self.repeating_panel_2.items = loan_details
+            print(loan_details)
+            item = ThreeLineAvatarIconListItem(
+
+                IconLeftWidget(
+                    icon="card-account-details-outline"
+                ),
+                text=f"Borrower id: {loan_details[0]['borrower_customer_id']}",
+                secondary_text=f"Borrower loan id : {loan_details[0]['loan_id']}",
+                tertiary_text=f"Scheduled date : {loan_details[0]['Scheduled_date']}",
+                text_color=(0, 0, 0, 1),  # Black color
+                theme_text_color='Custom',
+                secondary_text_color=(0, 0, 0, 1),
+                secondary_theme_text_color='Custom',
+                tertiary_text_color=(0, 0, 0, 1),
+                tertiary_theme_text_color='Custom'
+            )
+            item.bind(on_release=lambda instance, loan_id=loan_details[0]['loan_id']: self.icon_button_clicked(instance, loan_id))
+            self.ids.container.add_widget(item)
+            for loan_detail_1 in loan_details:
+                print("Processing loan:", loan_detail_1)
+                if loan_detail_1['days_left'] > 6 and loan_detail_1['days_left'] <= 8:
+                    print("Updating status to 'lapsed loan'")
+                    loan_detail_1['loan_state_status'] = 'lapsed loan'
+                    loan_row = app_tables.fin_loan_details.get(loan_id=loan_detail_1['loan_id'])
+                    if loan_row is not None:
+                        loan_row['loan_state_status'] = 'lapsed loan'
+                        loan_row.update()
+                elif loan_detail_1['days_left'] > 8 and loan_detail_1['days_left'] <= 98:
+                    print("Updating status to 'default loan'")
+                    loan_detail_1['loan_state_status'] = 'default loan'
+                    loan_row = app_tables.fin_loan_details.get(loan_id=loan_detail_1['loan_id'])
+                    if loan_row is not None:
+                        loan_row['loan_state_status'] = 'default loan'
+                        loan_row.update()
+                elif loan_detail_1['days_left'] > 98:
+                    print("Updating status to 'default loan'")
+                    loan_detail_1['loan_state_status'] = 'NPA'
+                    loan_row = app_tables.fin_loan_details.get(loan_id=loan_detail['loan_id'])
+                    if loan_row is not None:
+                        loan_row['loan_updated_status'] = 'NPA'
+                        loan_row.update()
+
+
+    def icon_button_clicked(self, instance, loan_id,):
         # Highlight the selected item
         self.highlight_item(instance)
 
