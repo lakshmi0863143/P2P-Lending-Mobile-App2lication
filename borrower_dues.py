@@ -31,7 +31,7 @@ user_helpers2 = """
         orientation: 'vertical'
         MDTopAppBar:
             title:"Today's Dues"
-            elevation: 3
+            elevation: 2
             left_action_items: [['arrow-left', lambda x: root.go_back()]]
             right_action_items: [['refresh', lambda x: root.refresh()]]
             md_bg_color: 0.043, 0.145, 0.278, 1
@@ -426,8 +426,11 @@ Builder.load_string(user_helpers2)
 
 
 class BorrowerDuesScreen(Screen):
-    def __init__(self, **kwargs):
+    def __init__(self, loan_details, **kwargs):
         super().__init__(**kwargs)
+        self.loan_details = loan_details
+        print(self.loan_details)
+
     def on_pre_enter(self, *args):
         Window.bind(on_keyboard=self.on_back_button)
 
@@ -442,12 +445,14 @@ class BorrowerDuesScreen(Screen):
 
     def go_back(self):
         self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'DashboardScreen'
+        self.manager.current = 'DuesScreen'
 
     def current(self):
-        self.manager.current = 'DashboardScreen'
+        self.manager.current = 'DuesScreen'
+
 
 class DuesScreen(Screen):
+    loan_details = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -455,7 +460,7 @@ class DuesScreen(Screen):
         # self.init_components(**properties)
 
         today_date = datetime.now(timezone.utc).date()
-        loan_details = []
+        self.loan_details = loan_details = []
 
         all_loans_disbursed = app_tables.fin_loan_details.search(
             loan_updated_status=q.any_of("disbursed loan", "extension", "foreclosure"),
@@ -622,14 +627,15 @@ class DuesScreen(Screen):
                     })
             # self.repeating_panel_2.items = loan_details
             print(loan_details)
+        for loan_details_1 in loan_details:
             item = ThreeLineAvatarIconListItem(
 
                 IconLeftWidget(
                     icon="card-account-details-outline"
                 ),
-                text=f"Borrower id: {loan_details[0]['borrower_customer_id']}",
-                secondary_text=f"Borrower loan id : {loan_details[0]['loan_id']}",
-                tertiary_text=f"Scheduled date : {loan_details[0]['Scheduled_date']}",
+                text=f"Borrower id: {loan_details_1['borrower_customer_id']}",
+                secondary_text=f"Borrower loan id : {loan_details_1['loan_id']}",
+                tertiary_text=f"Scheduled date : {loan_details_1['Scheduled_date']}",
                 text_color=(0, 0, 0, 1),  # Black color
                 theme_text_color='Custom',
                 secondary_text_color=(0, 0, 0, 1),
@@ -637,7 +643,9 @@ class DuesScreen(Screen):
                 tertiary_text_color=(0, 0, 0, 1),
                 tertiary_theme_text_color='Custom'
             )
-            item.bind(on_release=lambda instance, loan_id=loan_details[0]['loan_id']: self.icon_button_clicked(instance, loan_id))
+            item.bind(on_release=lambda instance, loan_id=loan_details_1['loan_id'],: self.icon_button_clicked(instance,
+                                                                                                              loan_id,
+                                                                                                              loan_details_1))
             self.ids.container.add_widget(item)
             for loan_detail_1 in loan_details:
                 print("Processing loan:", loan_detail_1)
@@ -663,8 +671,7 @@ class DuesScreen(Screen):
                         loan_row['loan_updated_status'] = 'NPA'
                         loan_row.update()
 
-
-    def icon_button_clicked(self, instance, loan_id,):
+    def icon_button_clicked(self, instance, loan_id, loan_details_1, ):
         # Highlight the selected item
         self.highlight_item(instance)
 
@@ -677,8 +684,10 @@ class DuesScreen(Screen):
 
         sm = self.manager
 
+        loan_details = loan_details_1
+
         # Create a new instance of the ApplicationTrackerScreen
-        approved = BorrowerDuesScreen(name='BorrowerDuesScreen')
+        approved = BorrowerDuesScreen(name='BorrowerDuesScreen', loan_details=loan_details)
 
         # Add the ApplicationTrackerScreen to the existing ScreenManager
         sm.add_widget(approved)
@@ -727,6 +736,7 @@ class DuesScreen(Screen):
 
     def go_back(self):
         self.manager.current = 'DashboardScreen'
+
 
 class MyScreenManager(ScreenManager):
     pass
