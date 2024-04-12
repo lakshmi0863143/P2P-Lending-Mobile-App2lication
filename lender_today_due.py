@@ -76,63 +76,99 @@ lender_today_due = '''
                                 text: "Loan ID" 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: loan_id
                                 text: "" 
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
                             MDLabel:
                                 text: "Loan Amount" 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: loan_amount
                                 text: "" 
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
 
                             MDLabel:
                                 text: "Loan Tenure" 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: tenure
                                 text: "" 
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
                             MDLabel:
                                 text: "Interest Rate" 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: interest
                                 text: "" 
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
                             MDLabel:
                                 text: "Account Number" 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: number
                                 text: "" 
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
                             MDLabel:
                                 text: "Emi Amount" 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: emi_amount
                                 text: "" 
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
                             MDLabel:
                                 text: "Extra Amount" 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: extra_amount
                                 text: "" 
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
                             MDLabel:
                                 text: "Total Emi Amount " 
                                 size_hint_y:None
                                 height:dp(50)
+                                halign: "left"
+                                bold: True
                             MDLabel:
                                 id: total_emi_amount
                                 text: ""
-
-
-
-
+                                size_hint_y:None
+                                height:dp(50)
+                                halign: "left"
 
 '''
 Builder.load_string(lender_today_due)

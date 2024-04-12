@@ -98,7 +98,7 @@ user_helpers2 = """
                         text: "" 
                         size_hint_y:None
                         height:dp(50)
-                        halign: "center"
+                        halign: "left"
                         font_size:dp(20)
                 MDLabel:
                     text:""
@@ -325,6 +325,7 @@ user_helpers2 = """
             MDLabel:
                 text: "Loan Amount :"
                 bold:True
+                halign:"left"
                 font_size:dp(16)
             MDTextField:
                 id: text_input1
@@ -332,6 +333,7 @@ user_helpers2 = """
                 multiline: False
                 hint_text: "Enter amount"
                 size_hint: None, None
+                halign:"left"
                 size: "180dp", "45dp"
                 on_text: root.validate_amount(text_input1,self.text)
                 background_color: 1, 1, 1, 0 
@@ -354,6 +356,7 @@ user_helpers2 = """
                 text: "Interest Rate(%) :"
                 bold:True
                 font_size:dp(16)
+                halign:"left"
 
             MDLabel:
                 id: roi
@@ -373,6 +376,7 @@ user_helpers2 = """
                 text: "Processing Fee(%) :"
                 bold:True
                 font_size:dp(16)
+                halign:"left"
 
             MDLabel:
                 id: processing_fee
@@ -392,11 +396,13 @@ user_helpers2 = """
                 text: "Loan Period (Months):"
                 font_size:dp(16)
                 bold:True
+                halign:"left"
 
             MDTextField:
                 id: text_input2
                 size_hint_x: 0.91
                 multiline: False
+                halign:"left"
                 hint_text: "Enter loan period"
                 on_text: root.validate_tenure(text_input2,self.text)
                 pos_hint: {'center_x': 0.5, 'center_y': 0.5}
@@ -423,12 +429,14 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "EMI Type"
                 bold: True
+                halign:"left"
 
             Spinner:
                 id: group_id4
                 text: "Select EMI type"
                 width: dp(200)
                 multiline: False
+                halign:"left"
                 size_hint: None, None
                 pos_hint: {'center_x':0.5, 'center_y':0.5}
                 size: "180dp", "45dp"
@@ -464,12 +472,14 @@ user_helpers2 = """
                 text: "Payment Details"
                 font_size:dp(16)
                 bold:True
+                halign:"left"
 
             Button:
                 text:'View Payment Details here'
                 background_color: 0, 0, 0, 0
                 color: 0, 0.5, 1, 1
                 font_size: '15sp'
+                halign:"left"
                 size_hint: None, None
                 size: self.texture_size
                 pos_hint: {'center_x': 0.22, 'center_y': 0.5}
@@ -554,6 +564,7 @@ user_helpers2 = """
             MDLabel:
                 text: "Loan Amount"
                 bold:True
+                halign:"left"
 
             MDLabel:
                 id: loan_amount
@@ -569,6 +580,7 @@ user_helpers2 = """
             MDLabel:
                 text: "Total Interest Amount"
                 bold:True
+                halign:"left"
 
             MDLabel:
                 id: total_interest_amount
@@ -583,6 +595,7 @@ user_helpers2 = """
             MDLabel:
                 text: " Total Processing Fee Amount "
                 bold:True
+                halign:"left"
 
             MDLabel:
                 id: total_processing_fee_amount
@@ -598,6 +611,7 @@ user_helpers2 = """
             MDLabel:
                 text: "Monthly EMI"
                 bold:True
+                halign:"left"
 
             MDLabel:
                 id: monthly_emi
@@ -613,6 +627,7 @@ user_helpers2 = """
             MDLabel:
                 text: "Total Repayment Amount"
                 bold:True
+                halign:"left"
 
             MDLabel:
                 id: total
@@ -690,12 +705,13 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "Beginning Balance:"
                 bold: True
+                halign:"left"
             MDLabel:
                 id: beginning_balance_label
                 text: " Rs. 0.00"
                 font_size: dp(11)
                 size_hint_y: None
-                halign: "center"
+                halign: "left"
                 padding: dp(5)
                 height: self.texture_size[1] + dp(10) if self.text else 0  # Adjust height to fit content
                 canvas.before:
@@ -721,12 +737,13 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "Scheduled Payment:"
                 bold: True
+                halign:"left"
             MDLabel:
                 id: emi_label
                 text: "Rs. 0.00"
                 font_size: dp(11)
                 size_hint_y: None
-                halign: "center"
+                halign: "left"
                 padding: dp(5)
                 height: self.texture_size[1] + dp(10) if self.text else 0  # Adjust height to fit content
                 canvas.before:
@@ -751,12 +768,13 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "Interest Amount:"
                 bold: True
+                halign:"left"
             MDLabel:
                 id: interest_label
                 text: " Rs. 0.00"
                 font_size: dp(11)
                 size_hint_y: None
-                halign: "center"
+                halign: "left"
                 padding: dp(5)
                 height: self.texture_size[1] + dp(10) if self.text else 0  # Adjust height to fit content
                 canvas.before:
@@ -781,12 +799,13 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "Processing Amount:"
                 bold: True
+                halign:"left"
             MDLabel:
                 id: processing_fee_label
                 text: " Rs. 0.00"
                 font_size: dp(11)
                 size_hint_y: None
-                halign: "center"
+                halign: "left"
                 padding: dp(5)
                 height: self.texture_size[1] + dp(10) if self.text else 0  # Adjust height to fit content
                 canvas.before:
@@ -811,12 +830,13 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "Principal Amount:"
                 bold: True
+                halign:"left"
             MDLabel:
                 id: principal_label
                 text: " Rs. 0.00"
                 font_size: dp(11)
                 size_hint_y: None
-                halign: "center"
+                halign: "left"
                 padding: dp(5)
                 height: self.texture_size[1] + dp(10) if self.text else 0  # Adjust height to fit content
                 canvas.before:
@@ -840,12 +860,13 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "Total Payment:"
                 bold: True
+                halign:"left"
             MDLabel:
                 id: total_payment_label
                 text: " Rs. 0.00"
                 font_size: dp(11)
                 size_hint_y: None
-                halign: "center"
+                halign: "left"
                 padding: dp(5)
                 height: self.texture_size[1] + dp(10) if self.text else 0  # Adjust height to fit content
                 canvas.before:
@@ -870,12 +891,13 @@ user_helpers2 = """
                 font_size: dp(16)
                 text: "Ending Balance:"
                 bold: True
+                halign:"left"
             MDLabel:
                 id: balance_label
                 text: " Rs. 0.00"
                 font_size: dp(11)
                 size_hint_y: None
-                halign: "center"
+                halign: "left"
                 padding: dp(5)
                 height: self.texture_size[1] + dp(10) if self.text else 0  # Adjust height to fit content
                 canvas.before:
