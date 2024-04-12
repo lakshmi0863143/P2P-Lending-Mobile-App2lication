@@ -9,6 +9,7 @@ from kivy.core.window import Window
 from kivy.uix.screenmanager import Screen, SlideTransition, ScreenManager
 from kivy.utils import platform
 from kivy.clock import mainthread
+from kivymd.material_resources import dp
 from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.spinner import MDSpinner
 from borrower_extend_loan import ExtensionLoansRequest
@@ -206,7 +207,7 @@ user_helpers = """
 
                             MDLabel:
                                 text: "New Loan \\nRequests"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -232,7 +233,7 @@ user_helpers = """
 
                             MDLabel:
                                 text: "View Loans"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -258,7 +259,7 @@ user_helpers = """
 
                             MDLabel:
                                 text: "Today's Dues"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -283,7 +284,7 @@ user_helpers = """
 
                             MDLabel:
                                 text: "Application \\nTracker"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -309,7 +310,7 @@ user_helpers = """
 
                             MDLabel:
                                 text: "View Transaction \\nHistory"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -334,7 +335,7 @@ user_helpers = """
 
                             MDLabel:
                                 text: "Loan \\nForeclose"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -359,7 +360,7 @@ user_helpers = """
 
                             MDLabel:
                                 text: "Extended \\nLoan Request"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -2184,15 +2185,40 @@ class DashboardScreen(Screen):
         self.manager.current = 'DashboardScreenVLB'
 
     def go_to_transaction_history(self):
+        modal_view = ModalView(size_hint=(None, None), size=(1000, 500), background_color=[0, 0, 0, 0])
+
+        # Create MDLabel with white text color, increased font size, and bold text
+        loading_label = MDLabel(text="Loading...", halign="center", valign="bottom",
+                                theme_text_color="Custom", text_color=[1, 1, 1, 1],
+                                font_size=dp(50), bold=True)
+
+        # Set initial y-position off-screen
+        loading_label.y = -loading_label.height
+
+        modal_view.add_widget(loading_label)
+        modal_view.open()
+
+        # Perform the animation
+        self.animate_loading_text(loading_label, modal_view.height)
+
+        # Perform the actual action (e.g., fetching transaction history)
+        # You can replace the sleep with your actual logic
+        Clock.schedule_once(lambda dt: self.perform_transaction_history_action(modal_view), 2)
+
+    def perform_transaction_history_action(self, modal_view):
+        # Dismiss the modal view
+        modal_view.dismiss()
+
+        # Get the ScreenManager
         sm = self.manager
 
-        # Create a new instance of the LoginScreen
-        login_screen = TransactionBH(name='TransactionBH')
+        # Create a new instance of the TransactionBH screen
+        transaction_bh_screen = TransactionBH(name='TransactionBH')
 
-        # Add the LoginScreen to the existing ScreenManager
-        sm.add_widget(login_screen)
+        # Add the TransactionBH screen to the existing ScreenManager
+        sm.add_widget(transaction_bh_screen)
 
-        # Switch to the LoginScreen
+        # Switch to the TransactionBH screen
         sm.current = 'TransactionBH'
 
     def go_to_app_tracker(self):
@@ -2409,7 +2435,6 @@ class DashboardScreen(Screen):
         #
         # # Switch to the LoginScreen
         # sm.current = 'BorrowerDuesScreen'
-
 
     def help_module(self):
         from help_module import HelpScreen

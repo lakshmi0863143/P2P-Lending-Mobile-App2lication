@@ -205,7 +205,7 @@ user_helpers1 = """
 
                             MDLabel:
                                 text: "View Loans"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -231,7 +231,7 @@ user_helpers1 = """
 
                             MDLabel:
                                 text: "View Loan\\nRequest"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -256,7 +256,7 @@ user_helpers1 = """
 
                             MDLabel:
                                 text: "Today's Dues"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -281,7 +281,7 @@ user_helpers1 = """
 
                             MDLabel:
                                 text: "View Loan\\nExtensions"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -306,7 +306,7 @@ user_helpers1 = """
 
                             MDLabel:
                                 text: "View Loan \\nForeclosure"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -331,7 +331,7 @@ user_helpers1 = """
 
                             MDLabel:
                                 text: "View Lost \\nOpportunities"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
@@ -355,7 +355,7 @@ user_helpers1 = """
 
                             MDLabel:
                                 text: "View Transaction \\nHistory"
-                                font_size: 16
+                                font_size:dp(16)
                                 bold: True
                                 theme_text_color: "Custom"
                                 text_color: 0, 0, 0, 1
