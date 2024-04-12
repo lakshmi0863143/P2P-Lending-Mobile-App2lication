@@ -254,85 +254,85 @@ lender_view_extension = """
                                 text: "Loan ID" 
                                 size_hint_y:None
                                 bold: True
-                                halign: "center"
+                                halign: "left"
                                 height:dp(50)
                             MDLabel:
                                 id: loanid
                                 text: ""
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Borrower Name" 
                                 size_hint_y:None
                                 bold: True
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: name
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Loan Amount" 
                                 size_hint_y:None
                                 bold: True
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Extension Fee(%)" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: extension
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Extension Amount" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: extension_amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
 
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Remaining Amount" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: remaining_amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Reason For Extension" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: reason
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "New EMI" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: interest
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
 
                             MDRaisedButton:
                                 text: "Reject"
@@ -401,83 +401,83 @@ lender_view_extension = """
                                 text: "Loan ID" 
                                 size_hint_y:None
                                 bold: True
-                                halign: "center"
+                                halign: "left"
                                 height:dp(50)
                             MDLabel:
                                 id: loanid
                                 text: ""
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Borrower Name" 
                                 size_hint_y:None
                                 bold: True
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: name
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Loan Amount" 
                                 size_hint_y:None
                                 bold: True
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Extension Fee(%)" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: extension
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Extension Amount" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: extension_amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
 
                             MDLabel:
                                 text: "Remaining Amount" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: remaining_amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Reason For Extension" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: reason
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "New EMI" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: interest
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                         MDLabel:
                             text: "Your Extension Loan has been approved" 
                             bold: True
@@ -533,83 +533,83 @@ lender_view_extension = """
                                 text: "Loan ID" 
                                 size_hint_y:None
                                 bold: True
-                                halign: "center"
+                                halign: "left"
                                 height:dp(50)
                             MDLabel:
                                 id: loanid
                                 text: ""
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Borrower Name" 
                                 size_hint_y:None
                                 bold: True
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: name
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Loan Amount" 
                                 size_hint_y:None
                                 bold: True
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Extension Fee(%)" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: extension
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Extension Amount" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: extension_amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
 
                             MDLabel:
                                 text: "Remaining Amount" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: remaining_amount
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "Reason For Extension" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: reason
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 text: "New EMI" 
                                 bold: True
                                 size_hint_y:None
                                 height:dp(50)
-                                halign: "center"
+                                halign: "left"
                             MDLabel:
                                 id: interest
                                 text: "" 
-                                halign: "center"
+                                halign: "left"
                         MDLabel:
                             text: "Your Extension Loan has been rejected" 
                             bold: True
