@@ -220,7 +220,7 @@ user_helpers = """
                             on_release: root.go_to_view_loan_screen()
 
                             MDIcon:
-                                icon: 'file-document'  
+                                icon: 'bank'  
                                 halign: 'center'
                                 valign: 'middle'
                                 size_hint_x: None
