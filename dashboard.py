@@ -107,16 +107,23 @@ class DashScreen(Screen):
         email_user = []
         name_list = []
         for i in profile:
-            email_user.append(i['email_user'])
-            name_list.append(i['full_name'])
+            # Check if email_user or full_name is None
+            if i['email_user'] is not None and i['full_name'] is not None:
+                email_user.append(i['email_user'])
+                name_list.append(i['full_name'])
 
-        # Check if 'logged' is in the status list
-        if log_email in email_user:
-            log_index = email_user.index(log_email)
-            self.ids.username.text = name_list[log_index]
+        # Check if log_email is None
+        if log_email is not None:
+            # Check if 'logged' is in the status list
+            if log_email in email_user:
+                log_index = email_user.index(log_email)
+                self.ids.username.text = name_list[log_index]
+            else:
+                # Handle the case when 'logged' is not in the status list
+                self.ids.username.text = "User Not Logged In"
         else:
-            # Handle the case when 'logged' is not in the status list
-            self.ids.username.text = "User Not Logged In"
+            # Handle the case when log_email is None
+            print("No email logged.")
 
         Window.bind(on_keyboard=self.on_back_button)
 

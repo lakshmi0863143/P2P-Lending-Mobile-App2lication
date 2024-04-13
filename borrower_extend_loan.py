@@ -1,4 +1,4 @@
-
+from datetime import datetime
 import anvil.server
 from kivy.config import value
 from kivy.lang import Builder
@@ -447,7 +447,8 @@ extension_loan_request = """
                                 font_size:dp(15)
 """
 Builder.load_string(extension_loan_request)
-
+date = datetime.today()
+print(date)
 
 class ExtensionLoansRequest(Screen):
     def __init__(self, **kwargs):
@@ -625,6 +626,7 @@ class ExtensionLoansProfileScreen(Screen):
         else:
             print(f"Loan with ID '{value}' not found in loan details.")
 
+
     def show_popup(self, title, content):
         popup = Popup(title=title, content=Label(text=content), size_hint=(None, None), size=(400, 200))
         popup.open()
@@ -759,32 +761,46 @@ class ExtendLoansScreen(Screen):
             self.screen_manager.y = 0
         return True
 
+    date = datetime.today()
     def add_data(self):
         # self.root_screen = self.manager.get_screen('ExtensionLoansProfileScreen')
         loan_id = str(self.root_screen.ids.loan_id.text)
         extension_fee = float(self.root_screen.ids.extension_fee.text)
         loan_extension_months = float(self.root_screen.ids.extension_months.text)
+        loan_amount = float(self.root_screen.ids.loan_amount.text)
         extension_amount = float(self.ids.extension_amount.text)
         finial_repayment = float(self.ids.finial_repayment_amount.text)
         new_emi = float(self.ids.new_emi.text)
         reason = str(self.ids.reason.text)
-        loan_status = ''
+        borrower_name = ''
         customer_id = ''
+        email = ''
+        emi_number = ''
         data = app_tables.fin_loan_details.search(loan_id=loan_id)
         if data:
-            loan_status = data[0]['loan_updated_status']
+            borrower_name = data[0]['borrower_full_name']
             customer_id = data[0]['borrower_customer_id']
+            email = data[0]['borrower_email_id']
+        emi= app_tables.fin_emi_table.search(loan_id=loan_id)
+        if emi:
+            emi_number = emi[0]['emi_number']
         # loan_status=str(self.root_screen.ids.loan_status.text)
-        if loan_id and customer_id and extension_fee and loan_extension_months and extension_amount and finial_repayment and loan_status and new_emi and reason:
+        if loan_id and email and emi_number and loan_amount and customer_id and extension_fee and loan_extension_months and extension_amount and finial_repayment and borrower_name and new_emi and reason:
             app_tables.fin_extends_loan.add_row(loan_id=loan_id,
+                                                borrower_full_name=borrower_name,
+                                                loan_amount=loan_amount,
                                                 borrower_customer_id=customer_id,
+                                                borrower_email_id=email,
                                                 extend_fee=extension_fee,
-                                                extension_amount=extension_amount,
+                                                emi_number=emi_number,
                                                 final_repayment_amount=finial_repayment,
+                                                extension_amount=extension_amount,
                                                 new_emi=new_emi,
+                                                total_extension_months=loan_extension_months,
                                                 reason=reason,
-                                                status=loan_status,
-                                                total_extension_months=loan_extension_months)
+                                                status="under process",
+                                                extension_request_date=date
+                                                )
             sm = self.manager
             profile = ExtendLoansScreen(name='DashboardScreen')
             sm.add_widget(profile)  # Add the screen to the ScreenManager

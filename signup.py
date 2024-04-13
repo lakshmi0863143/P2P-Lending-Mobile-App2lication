@@ -1,4 +1,3 @@
-
 import re
 import bcrypt
 from anvil.tables import app_tables
@@ -355,15 +354,7 @@ class SignupScreen(Screen):
         self.ids.terms_checkbox.active = False
         self.ids.kyc_checkbox.active = False
 
-        snackbar = Snackbar(
-            text="Signup Successful!",
-            md_bg_color=[1, 1, 1, 1],
-            pos_hint={'top': 1},
-            duration=2
-        )
-
-        snackbar.open()
-        #self.share_email_with_anvil(email)
+        # self.share_email_with_anvil(email)
         # self.manager.current = 'LoginScreen'
         sm = self.manager
         lender_screen = LoginScreen(name='LoginScreen')
@@ -424,9 +415,6 @@ class SignupScreen(Screen):
         widget.helper_text_mode = "on_error"
         if isinstance(widget, MDCheckbox):
             widget.theme_text_color = 'Error'
-
-    def show_popup(self, message):
-        Snackbar(text=message, md_bg_color=[1, 1, 1, 1], text_color=[0, 0, 0, 1]).open()
 
     def show_terms_dialog(self):
         dialog = MDDialog(
