@@ -778,16 +778,17 @@ class ApprovedLoansEX(Screen):
         super().__init__(**kwargs)
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
-        data = app_tables.fin_foreclosure.search()
+        data = app_tables.fin_extends_loan.search()
         loan_id = []
         borrower_name = []
         loan_status = []
+        cus_id = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
+            cus_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
-            borrower_name.append(i['borrower_name'])
+            borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['status'])
 
         customer_id = []
@@ -833,28 +834,16 @@ class ApprovedLoansEX(Screen):
             self.ids.container11.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
-        # Handle the on_release event here
-        data = app_tables.fin_foreclosure.search()  # Fetch data here
-        loan_status = None
-        for loan in data:
-            if loan['loan_id'] == loan_id:
-                loan_status = loan['status']
-                break
 
-        if loan_status == 'approved':
-            # Open the screen for approved loans
-            sm = self.manager
-            # Create a new instance of the LoginScreen
-            disbursed = ViewProfileEX(name='ViewProfileEX')
-            # Add the LoginScreen to the existing ScreenManager
-            sm.add_widget(disbursed)
+        sm = self.manager
+        # Create a new instance of the LoginScreen
+        disbursed = ViewProfileEX(name='ViewProfileEX')
+        # Add the LoginScreen to the existing ScreenManager
+        sm.add_widget(disbursed)
 
-            # Switch to the LoginScreen
-            sm.current = 'ViewProfileEX'
-            self.manager.get_screen('ViewProfileEX').initialize_with_value(loan_id, data)
-        else:
-            # Handle other loan statuses or show an error message
-            pass
+        # Switch to the LoginScreen
+        sm.current = 'ViewProfileEX'
+        self.manager.get_screen('ViewProfileEX').initialize_with_value(loan_id)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -884,16 +873,17 @@ class ALLLoansEX(Screen):
         super().__init__(**kwargs)
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
-        data = app_tables.fin_foreclosure.search()
+        data = app_tables.fin_extends_loan.search()
         loan_id = []
         borrower_name = []
         loan_status = []
+        cus_id = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
+            cus_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
-            borrower_name.append(i['borrower_name'])
+            borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['status'])
 
         customer_id = []
@@ -940,7 +930,7 @@ class ALLLoansEX(Screen):
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
 
-        data = app_tables.fin_foreclosure.search()
+        data = app_tables.fin_extends_loan.search()
         loan_status = None
         for loan in data:
             if loan['loan_id'] == loan_id:
@@ -960,7 +950,7 @@ class ALLLoansEX(Screen):
 
             # Switch to the LoginScreen
             sm.current = 'ViewProfileEX'
-            self.manager.get_screen('ViewProfileEX').initialize_with_value(loan_id, data)
+            self.manager.get_screen('ViewProfileEX').initialize_with_value(loan_id)
 
         elif loan_status == 'under process':
             # Open the screen for pending loans
@@ -974,7 +964,7 @@ class ALLLoansEX(Screen):
 
             # Switch to the LoginScreen
             sm.current = 'ViewProfileE'
-            self.manager.get_screen('ViewProfileE').initialize_with_value(loan_id, data)
+            self.manager.get_screen('ViewProfileE').initialize_with_value(loan_id)
 
         elif loan_status == 'rejected':
             # Open the screen for pending loans
@@ -988,7 +978,7 @@ class ALLLoansEX(Screen):
 
             # Switch to the LoginScreen
             sm.current = 'ViewProfileEXE'
-            self.manager.get_screen('ViewProfileEXE').initialize_with_value(loan_id, data)
+            self.manager.get_screen('ViewProfileEXE').initialize_with_value(loan_id)
         else:
             # Handle other loan statuses or show an error message
             pass
@@ -1025,16 +1015,17 @@ class RejectedLoansEX(Screen):
         super().__init__(**kwargs)
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
-        data = app_tables.fin_foreclosure.search()
+        data = app_tables.fin_extends_loan.search()
         loan_id = []
         borrower_name = []
         loan_status = []
+        cus_id = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
+            cus_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
-            borrower_name.append(i['borrower_name'])
+            borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['status'])
 
         customer_id = []
@@ -1080,31 +1071,18 @@ class RejectedLoansEX(Screen):
             self.ids.container13.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
-        data = app_tables.fin_foreclosure.search()
-        loan_status = None
-        for loan in data:
-            if loan['loan_id'] == loan_id:
-                loan_status = loan['status']
-                break
 
-        if loan_status == 'rejected':
-            # Open the screen for approved loans
+        sm = self.manager
 
-            sm = self.manager
+        # Create a new instance of the LoginScreen
+        disbursed = ViewProfileEXE(name='ViewProfileEXE')
 
-            # Create a new instance of the LoginScreen
-            disbursed = ViewProfileEXE(name='ViewProfileEXE')
+        # Add the LoginScreen to the existing ScreenManager
+        sm.add_widget(disbursed)
 
-            # Add the LoginScreen to the existing ScreenManager
-            sm.add_widget(disbursed)
-
-            # Switch to the LoginScreen
-            sm.current = 'ViewProfileEXE'
-            self.manager.get_screen('ViewProfileEXE').initialize_with_value(loan_id, data)
-
-        else:
-            # Handle other loan statuses or show an error message
-            pass
+        # Switch to the LoginScreen
+        sm.current = 'ViewProfileEXE'
+        self.manager.get_screen('ViewProfileEXE').initialize_with_value(loan_id)
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1135,16 +1113,17 @@ class UnderProcessLoansEX(Screen):
         super().__init__(**kwargs)
         view = app_tables.fin_loan_details.search()
         profile = app_tables.fin_user_profile.search()
-        data = app_tables.fin_foreclosure.search()
+        data = app_tables.fin_extends_loan.search()
         loan_id = []
         borrower_name = []
         loan_status = []
+        cus_id = []
         s = 0
         for i in data:
             s += 1
-            # customer_id.append(i['borrower_customer_id'])
+            cus_id.append(i['borrower_customer_id'])
             loan_id.append(i['loan_id'])
-            borrower_name.append(i['borrower_name'])
+            borrower_name.append(i['borrower_full_name'])
             loan_status.append(i['status'])
 
         customer_id = []
@@ -1190,32 +1169,19 @@ class UnderProcessLoansEX(Screen):
             self.ids.container12.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
-        # Handle the on_release event here
-        data = app_tables.fin_foreclosure.search()
-        loan_status = None
-        for loan in data:
-            if loan['loan_id'] == loan_id:
-                loan_status = loan['status']
-                break
 
-        if loan_status == 'under process':
-            # Open the screen for approved loans
+        sm = self.manager
 
-            sm = self.manager
+        # Create a new instance of the LoginScreen
+        disbursed = ViewProfileE(name='ViewProfileE')
 
-            # Create a new instance of the LoginScreen
-            disbursed = ViewProfileE(name='ViewProfileE')
+        # Add the LoginScreen to the existing ScreenManager
+        sm.add_widget(disbursed)
 
-            # Add the LoginScreen to the existing ScreenManager
-            sm.add_widget(disbursed)
+        # Switch to the LoginScreen
+        sm.current = 'ViewProfileE'
+        self.manager.get_screen('ViewProfileE').initialize_with_value(loan_id)
 
-            # Switch to the LoginScreen
-            sm.current = 'ViewProfileE'
-            self.manager.get_screen('ViewProfileE').initialize_with_value(loan_id, data)
-
-        else:
-            # Handle other loan statuses or show an error message
-            pass
 
     def on_pre_enter(self):
         # Bind the back button event to the on_back_button method
@@ -1244,7 +1210,8 @@ class ViewProfileEX(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def initialize_with_value(self, value, data):
+    def initialize_with_value(self, value):
+        data = app_tables.fin_extends_loan.search()
         borrower_name = []
         loan_id = []
         loan_amount = []
@@ -1304,7 +1271,8 @@ class ViewProfileEXE(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def initialize_with_value(self, value, data):
+    def initialize_with_value(self, value):
+        data = app_tables.fin_extends_loan.search()
         borrower_name = []
         loan_id = []
         loan_amount = []
@@ -1364,7 +1332,8 @@ class ViewProfileE(Screen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-    def initialize_with_value(self, value, data):
+    def initialize_with_value(self, value):
+        data = app_tables.fin_extends_loan.search()
         borrower_name = []
         loan_id = []
         loan_amount = []
@@ -1423,7 +1392,7 @@ class ViewProfileE(Screen):
         self.manager.current = 'NewExtension'
 
     def accept_request(self):
-        data = self.get_table_data()
+        data = app_tables.fin_extends_loan.search()
         loan_id = self.ids.loanid.text
         print(loan_id)
 
@@ -1437,7 +1406,7 @@ class ViewProfileE(Screen):
             self.manager.current = 'NewExtension'
 
     def reject_request(self):
-        data = self.get_table_data()
+        data = app_tables.fin_extends_loan.search()
         loan_id = self.ids.loanid.text
         print(loan_id)
 
@@ -1449,11 +1418,6 @@ class ViewProfileE(Screen):
             index = loan_idlist.index(loan_id)
             data[index]['status'] = 'rejected'
             self.manager.current = 'NewExtension'
-
-    def get_table_data(self):
-        # Make a call to the Anvil server function
-        # Replace 'YourAnvilFunction' with the actual name of your Anvil server function
-        return anvil.server.call('get_extension_data')
 
 
 class MyScreenManager(ScreenManager):

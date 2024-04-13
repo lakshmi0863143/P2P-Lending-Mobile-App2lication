@@ -1,3 +1,4 @@
+
 from anvil.tables import app_tables
 from kivy.animation import Animation
 from kivy.clock import Clock
@@ -16,8 +17,7 @@ from kivy.uix.screenmanager import Screen, SlideTransition
 from kivymd.app import MDApp
 from datetime import datetime, timedelta, timezone
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.snackbar import Snackbar
+from kivymd.uix.button import MDFlatButton, MDRaisedButton
 
 from borrower_wallet import WalletScreen
 from lender_wallet import LenderWalletScreen
@@ -924,7 +924,7 @@ class ViewLoansProfileScreen(Screen):
             sm.add_widget(disbursed)
             sm.current = 'ViewLoansProfileScreenLR'
             self.manager.get_screen('ViewLoansProfileScreenLR').initialize_with_value(loan_id, data)
-            self.show_snackbar(f"This Loan ID {loan_id} is Approved")
+            self.show_success_dialog1(f"This Loan ID {loan_id} is Approved")
             return
         else:
             pass
@@ -948,14 +948,47 @@ class ViewLoansProfileScreen(Screen):
             sm.add_widget(disbursed)
             sm.current = 'ViewLoansProfileScreenRL'
             self.manager.get_screen('ViewLoansProfileScreenRL').initialize_with_value(loan_id, data)
-            self.show_snackbar(f"This Loan ID {loan_id} is Rejected")
+            self.show_success_dialog(f"This Loan ID {loan_id} is Rejected")
             return
         else:
             pass
 
-    def show_snackbar(self, text):
-        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
+    def show_success_dialog(self, text):
+        dialog = MDDialog(
+            text=text,
+            size_hint=(0.8, 0.3),
+            buttons=[
+                MDRaisedButton(
+                    text="OK",
+                    on_release=lambda *args: self.rejected_screen(dialog),
+                    theme_text_color="Custom",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                )
+            ]
+        )
+        dialog.open()
+    def show_success_dialog1(self, text):
+        dialog = MDDialog(
+            text=text,
+            size_hint=(0.8, 0.3),
+            buttons=[
+                MDRaisedButton(
+                    text="OK",
+                    on_release=lambda *args: self.approved_screen(dialog),
+                    theme_text_color="Custom",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                )
+            ]
+        )
+        dialog.open()
+    def approved_screen(self, dialog):
 
+        dialog.dismiss()
+        self.manager.current = 'ViewLoansProfileScreenLR'
+    def rejected_screen(self, dialog):
+
+        dialog.dismiss()
+        self.manager.current = 'ViewLoansRequest'
     def go_back(self):
         # Navigate to the previous screen with a slide transition
         self.manager.transition = SlideTransition(direction='right')
@@ -1050,9 +1083,6 @@ class ViewLoansProfileScreenLR(Screen):
         self.manager.current = 'ViewLoansRequest'
         '''
 
-    def show_snackbar(self, text):
-        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
-
     def paynow(self):
         data = app_tables.fin_loan_details.search()
         disbursed_time = datetime.now()
@@ -1122,7 +1152,7 @@ class ViewLoansProfileScreenLR(Screen):
             transaction_id = 'TA0001'
         transaction_date_time = datetime.today()
         if minutes_difference < 30 and wallet_amount[l_index] >= float(loan_amount_text):
-            self.show_snackbar(f"Amount paid successfully {loan_amount[index]} to this Loan ID {loan_id_list[index]}")
+            self.show_success_dialog(f"Amount paid successfully {loan_amount_text} to this Loan ID {loan_id_list[index]}")
             data[index]['loan_updated_status'] = 'disbursed'
             data[index]['loan_disbursed_timestamp'] = paid_time
             wallet[b_index]['wallet_amount'] += float(loan_amount_text)
@@ -1142,6 +1172,7 @@ class ViewLoansProfileScreenLR(Screen):
                                                        transaction_time_stamp=transaction_date_time,
                                                        receiver_customer_id=wallet_customer_id[l_index],
                                                        receiver_email=wallet_email[l_index])
+            anvil.server.call('loan_text', None)
             from lender_dashboard import LenderDashboard
             sm = self.manager
 
@@ -1157,7 +1188,8 @@ class ViewLoansProfileScreenLR(Screen):
 
         elif minutes_difference < 30 and wallet_amount[l_index] < float(loan_amount_text):
 
-            self.show_snackbar(f"Insufficient Balance Please Deposit {float(loan_amount_text)}")
+            self.show_success_dialog2(f"Insufficient Balance Please Deposit {float(loan_amount_text)}")
+            anvil.server.call('loan_text', loan_amount_text)
 
             sm = self.manager
             # Create a new instance of the LenderWalletScreen
@@ -1168,10 +1200,64 @@ class ViewLoansProfileScreenLR(Screen):
             sm.current = 'LenderWalletScreen'
 
         elif minutes_difference > 30:
-            self.show_snackbar(f"Time Out You Must Finish Before 30 Minutes")
+            self.show_success_dialog3(f"Time Out You Must Finish Before 30 Minutes")
             data[index]['loan_updated_status'] = 'lost opportunities'
             self.manager.current = 'ViewLoansRequest'
             return
+    def show_success_dialog(self, text):
+        dialog = MDDialog(
+            text=text,
+            size_hint=(0.8, 0.3),
+            buttons=[
+                MDRaisedButton(
+                    text="OK",
+                    on_release=lambda *args: self.open_dashboard_screen(dialog),
+                    theme_text_color="Custom",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                )
+            ]
+        )
+        dialog.open()
+    def show_success_dialog2(self, text):
+        dialog = MDDialog(
+            text=text,
+            size_hint=(0.8, 0.3),
+            buttons=[
+                MDRaisedButton(
+                    text="OK",
+                    on_release=lambda *args: self.open_dashboard_screen2(dialog),
+                    theme_text_color="Custom",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                )
+            ]
+        )
+        dialog.open()
+    def show_success_dialog3(self, text):
+        dialog = MDDialog(
+            text=text,
+            size_hint=(0.8, 0.3),
+            buttons=[
+                MDRaisedButton(
+                    text="OK",
+                    on_release=lambda *args: self.open_dashboard_screen3(dialog),
+                    theme_text_color="Custom",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                )
+            ]
+        )
+        dialog.open()
+    def open_dashboard_screen(self, dialog):
+
+        dialog.dismiss()
+        self.manager.current = 'LenderDashboard'
+    def open_dashboard_screen2(self, dialog):
+
+        dialog.dismiss()
+        self.manager.current = 'LenderWalletScreen'
+    def open_dashboard_screen3(self, dialog):
+
+        dialog.dismiss()
+        self.manager.current = 'ViewLoansRequest'
 
 
 class ViewLoansProfileScreenRL(Screen):
@@ -1246,5 +1332,4 @@ class ViewLoansProfileScreenRL(Screen):
 
 class MyScreenManager(ScreenManager):
     pass
-
 
