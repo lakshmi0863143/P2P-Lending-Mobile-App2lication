@@ -6,10 +6,10 @@ from kivy.lang import Builder
 from kivymd.app import MDApp
 from kivymd.uix.button import MDRaisedButton, MDFlatButton, MDRoundFlatButton
 from kivy.uix.screenmanager import Screen, SlideTransition, ScreenManager
-from kivymd.uix.snackbar import Snackbar
 from kivy.factory import Factory
 
 import anvil
+from kivymd.uix.dialog import MDDialog
 
 Builder.load_string(
     """
@@ -217,15 +217,33 @@ class WalletScreen(Screen):
         self.manager.add_widget(dashboard_screen)  # Add the screen to the ScreenManager
         self.manager.current = 'DashboardScreen'  # Switch to the added screen
 
-    def show_snackbar(self, text):
-        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
+    def show_success_dialog(self, text):
+        dialog = MDDialog(
+            text=text,
+            size_hint=(0.8, 0.3),
+            buttons=[
+                MDRaisedButton(
+                    text="OK",
+                    on_release=lambda *args: self.open_dashboard_screen(dialog),
+                    theme_text_color="Custom",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                )
+            ]
+        )
+        dialog.open()
+
+    def open_dashboard_screen(self, dialog):
+
+        dialog.dismiss()
+        self.refresh()
+        self.manager.current = 'WalletScreen'
 
     def submit(self):
         enter_amount = self.ids.enter_amount.text
         if self.type == None:
-            self.show_snackbar('Please Select Transaction Type')
+            self.show_success_dialog('Please Select Transaction Type')
         elif self.ids.enter_amount.text == '' and not self.ids.enter_amount.text.isdigit():
-            self.show_snackbar('Enter Valid Amount')
+            self.show_success_dialog('Enter Valid Amount')
         elif self.type == 'deposit':
             data = app_tables.fin_wallet.search()
             transaction = app_tables.fin_wallet_transactions.search()
@@ -253,7 +271,7 @@ class WalletScreen(Screen):
             if email in w_email:
                 index = w_email.index(email)
                 data[index]['wallet_amount'] = int(enter_amount) + w_amount[index]
-                self.show_snackbar(f'Amount {enter_amount} Deposited to the this wallet ID {w_id[index]}')
+                self.show_success_dialog(f'Amount {enter_amount} Deposited to the this wallet ID {w_id[index]}')
                 self.ids.enter_amount.text = ''
                 app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
                                                            customer_id=w_customer_id[index], user_email=email,
@@ -292,7 +310,7 @@ class WalletScreen(Screen):
                 index = w_email.index(email)
                 if w_amount[index] >= int(self.ids.enter_amount.text):
                     data[index]['wallet_amount'] = w_amount[index] - int(self.ids.enter_amount.text)
-                    self.show_snackbar(
+                    self.show_success_dialog(
                         f'Amount {self.ids.enter_amount.text} Withdraw from this wallet ID {w_id[index]}')
                     self.ids.enter_amount.text = ''
                     app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
@@ -301,7 +319,7 @@ class WalletScreen(Screen):
                                                                status='success', wallet_id=w_id[index],
                                                                transaction_time_stamp=transaction_date_time)
                 else:
-                    self.show_snackbar(
+                    self.show_success_dialog(
                         f'Insufficient Amount {self.ids.enter_amount.text} Please Deposit Required Money')
                     app_tables.fin_wallet_transactions.add_row(transaction_id=transaction_id,
                                                                customer_id=w_customer_id[index], user_email=email,

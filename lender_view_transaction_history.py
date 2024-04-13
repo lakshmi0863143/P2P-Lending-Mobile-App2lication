@@ -321,7 +321,7 @@ class TransactionLH(Screen):
 
     def go_back_screen(self):
         self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'DashboardScreen'
+        self.manager.current = 'LenderDashboard'
 
     def refresh(self):
         self.ids.container1.clear_widgets()
