@@ -667,7 +667,7 @@ class DashboardScreenVLB(Screen):
 
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         if key == 27:
-            self.go_back()
+            self.on_back_button_press()
             return True
         return False
 
@@ -726,9 +726,6 @@ class ViewLoansScreenVLBB(Screen):
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
-    def show_snackbar(self, text):
-        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
-
     def go_back(self):
         # Navigate to the previous screen with a slide transition
         self.manager.transition = SlideTransition(direction='right')
@@ -783,8 +780,6 @@ class ViewLoansScreenVLB(Screen):
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
-    def show_snackbar(self, text):
-        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
     def go_back(self):
         # Navigate to the previous screen with a slide transition

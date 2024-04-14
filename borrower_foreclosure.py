@@ -624,6 +624,21 @@ class LoansDetailsB(Screen):
     def go_back(self):
         self.manager.current = 'DashboardScreen'
 
+    def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        # Unbind the back button event when leaving the screen
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        # Handle the back button event
+        if key == 27:  # 27 is the keycode for the hardware back button on Android
+            self.go_back()
+            return True  # Consume the event, preventing further handling
+        return False  # Continue handling the event
+
     def refresh(self):
         self.ids.container.clear_widgets()
         self.__init__()
@@ -684,7 +699,7 @@ class ViewProfileScreenFB(Screen):
                     self.ids.foreclose_button.disabled = False
                 else:
                     self.ids.foreclose_button.disabled = True
-                    self.show_snackbar(f"This Foreclose Value need to be Eligible")
+                    #self.show_snackbar(f"This Foreclose Value need to be Eligible")
 
             minimum_months = [i['min_months'] for i in pro_details if i['product_id'] == data[index]['product_id']]
             print(minimum_months)
@@ -696,8 +711,8 @@ class ViewProfileScreenFB(Screen):
             else:
                 print("Either emi_loan or minimum_months is empty.")
 
-    def show_snackbar(self, text):
-        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
+    #def show_snackbar(self, text):
+        #Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
     def on_pre_enter(self):
         Window.bind(on_keyboard=self.on_keyboard)
@@ -710,7 +725,7 @@ class ViewProfileScreenFB(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
 
         if key == 27:
-            self.go_back()
+            self.on_back_button_press()
             return True
         return False
 
@@ -908,11 +923,11 @@ class ForecloseDetails(Screen):
                                                interest_rate=interest_rate[index],
                                                borrower_name=borrower_name1[index],
                                                loan_amount=loan_amount[index])
-        self.show_snackbar(f"This Loan ID {loan_id} has been submitted")
+        #self.show_snackbar(f"This Loan ID {loan_id} has been submitted")
         self.manager.current = 'DashboardScreen'
 
-    def show_snackbar(self, text):
-        Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
+    #def show_snackbar(self, text):
+        #Snackbar(text=text, pos_hint={'top': 1}, md_bg_color=[1, 0, 0, 1]).open()
 
 class MyScreenManager(ScreenManager):
     pass

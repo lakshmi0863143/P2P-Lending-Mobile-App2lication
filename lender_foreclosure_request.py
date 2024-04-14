@@ -956,7 +956,7 @@ class DashboardScreenLF(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.on_back_button_press()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -1125,7 +1125,7 @@ class ApprovedLoansLF(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.go_back_screen()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -1227,7 +1227,7 @@ class ClosedLoansLF(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.go_back_screen()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -1337,7 +1337,7 @@ class RejectedLoansLF(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.go_back_screen()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -1458,7 +1458,7 @@ class UnderProcessLoansLF(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.go_back_screen()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -1538,7 +1538,7 @@ class ViewAllLoansLF(Screen):
                 )
                 item.bind(
                     on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance, loan_id))
-                self.ids.container2.add_widget(item)
+                self.ids.container5.add_widget(item)
             else:
                 print("Index out of range!")
 
@@ -1610,7 +1610,7 @@ class ViewAllLoansLF(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.go_back_screen()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -1663,6 +1663,21 @@ class ViewProfileScreenLFL(Screen):
             self.ids.reason.text = str(reason_foreclose[index])
             self.ids.due_amount.text = str(total_due_amount[index])
 
+    def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        # Unbind the back button event when leaving the screen
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        # Handle the back button event
+        if key == 27:  # 27 is the keycode for the hardware back button on Android
+            self.on_back_button_press()
+            return True  # Consume the event, preventing further handling
+        return False  # Continue handling the event
+
     def on_back_button_press(self):
         self.manager.current = 'DashboardScreenLF'
 
@@ -1705,6 +1720,21 @@ class ViewProfileScreenFLF(Screen):
             self.ids.samount.text = str(outstanding_amount[index])
             self.ids.reason.text = str(reason_foreclose[index])
             self.ids.due_amount.text = str(total_due_amount[index])
+
+    def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        # Unbind the back button event when leaving the screen
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        # Handle the back button event
+        if key == 27:  # 27 is the keycode for the hardware back button on Android
+            self.on_back_button_press()
+            return True  # Consume the event, preventing further handling
+        return False  # Continue handling the event
 
     def on_back_button_press(self):
         self.manager.current = 'DashboardScreenLF'
@@ -1777,6 +1807,21 @@ class ViewProfileScreenLF(Screen):
             index = loan_idlist.index(loan_id)
             data[index]['status'] = 'rejected'
             self.manager.current = 'DashboardScreenLF'
+
+    def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        # Unbind the back button event when leaving the screen
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        # Handle the back button event
+        if key == 27:  # 27 is the keycode for the hardware back button on Android
+            self.on_back_button_press()
+            return True  # Consume the event, preventing further handling
+        return False  # Continue handling the event
 
     def on_back_button_press(self):
         self.manager.current = 'DashboardScreenLF'

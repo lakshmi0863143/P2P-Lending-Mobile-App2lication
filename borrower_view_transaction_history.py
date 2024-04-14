@@ -260,7 +260,7 @@ class TransactionBH(Screen):
 
         b = 1
         k = -1
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             if wallet_customer_id[i] in pro_customer_id:
@@ -316,7 +316,7 @@ class TransactionBH(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.go_back_screen()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -368,6 +368,22 @@ class ViewProfileScreenBTH(Screen):
             self.ids.vtamount.text = str(amount[index])
             self.ids.date_time.text = str(date_time[index])
             self.ids.status.text = str(status[index])
+
+
+    def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        # Unbind the back button event when leaving the screen
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        # Handle the back button event
+        if key == 27:  # 27 is the keycode for the hardware back button on Android
+            self.on_back_button_press()
+            return True  # Consume the event, preventing further handling
+        return False  # Continue handling the event
 
     def on_back_button_press(self):
         self.manager.transition = SlideTransition(direction='right')
