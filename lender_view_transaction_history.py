@@ -30,7 +30,7 @@ lender_view_transaction_history = '''
         MDTopAppBar:
             title: "Transaction History"
             elevation: 3
-            left_action_items: [['arrow-left', lambda x: root.go_back_screen()]]
+            left_action_items: [['arrow-left', lambda x: root.go_back()]]
             right_action_items: [['refresh', lambda x: root.refresh()]]
             md_bg_color: 0.043, 0.145, 0.278, 1
         MDScrollView:
@@ -261,7 +261,7 @@ class TransactionLH(Screen):
 
         b = 1
         k = -1
-        for i in index_list:
+        for i in reversed(index_list):
             b += 1
             k += 1
             if wallet_customer_id[i] in pro_customer_id:
@@ -319,7 +319,7 @@ class TransactionLH(Screen):
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
-    def go_back_screen(self):
+    def go_back(self):
         self.manager.transition = SlideTransition(direction='right')
         self.manager.current = 'LenderDashboard'
 
@@ -365,6 +365,21 @@ class ViewProfileScreenLTH(Screen):
             self.ids.vtamount.text = str(amount[index])
             self.ids.date_time.text = str(date_time[index])
             self.ids.status.text = str(status[index])
+
+    def on_pre_enter(self):
+        # Bind the back button event to the on_back_button method
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        # Unbind the back button event when leaving the screen
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        # Handle the back button event
+        if key == 27:  # 27 is the keycode for the hardware back button on Android
+            self.on_back_button_press()
+            return True  # Consume the event, preventing further handling
+        return False  # Continue handling the event
 
     def on_back_button_press(self):
         self.manager.transition = SlideTransition(direction='right')

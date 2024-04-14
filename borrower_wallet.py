@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from anvil.tables import app_tables
+from kivy.core.window import Window
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -216,6 +217,18 @@ class WalletScreen(Screen):
         dashboard_screen = DashboardScreen(name='DashboardScreen')  # Create an instance of the screen
         self.manager.add_widget(dashboard_screen)  # Add the screen to the ScreenManager
         self.manager.current = 'DashboardScreen'  # Switch to the added screen
+
+    def on_pre_enter(self):
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        if key == 27:
+            self.go_back()
+            return True
+        return False
 
     def show_success_dialog(self, text):
         dialog = MDDialog(

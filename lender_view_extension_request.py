@@ -336,7 +336,7 @@ lender_view_extension = """
 
                             MDRaisedButton:
                                 text: "Reject"
-                                md_bg_color: 0.031, 0.463, 0.91, 1
+                                md_bg_color: 0.043, 0.145, 0.278, 1
                                 on_release: root.reject_request()
                                 theme_text_color: 'Custom'
                                 text_color: 1, 1, 1, 1
@@ -347,7 +347,7 @@ lender_view_extension = """
                                 theme_text_color: 'Custom'
                                 on_release: root.accept_request()
                                 text_color: 1, 1, 1, 1
-                                md_bg_color: 0.031, 0.463, 0.91, 1
+                                md_bg_color: 0.043, 0.145, 0.278, 1
                                 size_hint: 1, None        
 
 
@@ -636,7 +636,7 @@ class NewExtension(Screen):
 
     def go_back(self):
         self.manager.transition = SlideTransition(direction='right')
-        self.manager.current = 'borrower_dashboard'
+        self.manager.current = 'LenderDashboard'
 
     def on_back_button_press(self):
         self.manager.current = 'LenderDashboard'

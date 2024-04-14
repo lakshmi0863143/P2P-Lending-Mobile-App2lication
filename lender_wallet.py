@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from anvil.tables import app_tables
+from kivy.core.window import Window
 from kivy.uix.button import Button
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
@@ -234,6 +235,18 @@ class LenderWalletScreen(Screen):
             self.ids.withdraw_button_grid.text_color = 1, 1, 1, 1
             self.ids.deposit_button_grid.text_color = 0, 0, 0, 1
             self.type = 'withdraw'
+
+    def on_pre_enter(self):
+        Window.bind(on_keyboard=self.on_back_button)
+
+    def on_pre_leave(self):
+        Window.unbind(on_keyboard=self.on_back_button)
+
+    def on_back_button(self, instance, key, scancode, codepoint, modifier):
+        if key == 27:
+            self.go_back()
+            return True
+        return False
 
     def go_back(self):
         self.manager.transition = SlideTransition(direction='right')
