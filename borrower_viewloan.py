@@ -722,7 +722,7 @@ class ViewLoansScreenVLBB(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.on_back_button_press()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 
@@ -776,7 +776,7 @@ class ViewLoansScreenVLB(Screen):
     def on_back_button(self, instance, key, scancode, codepoint, modifier):
         # Handle the back button event
         if key == 27:  # 27 is the keycode for the hardware back button on Android
-            self.go_back()
+            self.on_back_button_press()
             return True  # Consume the event, preventing further handling
         return False  # Continue handling the event
 

@@ -1549,7 +1549,7 @@ class ViewAllLoansLF(Screen):
         data = app_tables.fin_foreclosure.search()
         loan_status = None
         for loan in data:
-            if loan['loan_id'] == value:
+            if loan['loan_id'] == loan_id:
                 loan_status = loan['status']
                 break
 
