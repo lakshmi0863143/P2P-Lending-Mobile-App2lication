@@ -813,25 +813,30 @@ class ApprovedLoansEX(Screen):
         for i in reversed(index_list):
             b += 1
             k += 1
-            number = profile_customer_id.index(customer_id[i])
-            item = ThreeLineAvatarIconListItem(
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
 
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
-                                                                                               loan_id))  # Corrected the binding
-            self.ids.container11.add_widget(item)
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
+                                                                                                   loan_id))  # Corrected the binding
+                self.ids.container11.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
 
@@ -907,25 +912,30 @@ class ALLLoansEX(Screen):
         for i in reversed(index_list):
             b += 1
             k += 1
-            number = profile_customer_id.index(customer_id[i])
-            item = ThreeLineAvatarIconListItem(
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
 
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
-                                                                                               loan_id))  # Corrected the binding
-            self.ids.container14.add_widget(item)
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
+                                                                                                   loan_id))  # Corrected the binding
+                self.ids.container14.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
         # Handle the on_release event here
@@ -1050,25 +1060,30 @@ class RejectedLoansEX(Screen):
         for i in reversed(index_list):
             b += 1
             k += 1
-            number = profile_customer_id.index(customer_id[i])
-            item = ThreeLineAvatarIconListItem(
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
 
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
-                                                                                               loan_id))  # Corrected the binding
-            self.ids.container13.add_widget(item)
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
+                                                                                                   loan_id))  # Corrected the binding
+                self.ids.container13.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
 
@@ -1148,25 +1163,30 @@ class UnderProcessLoansEX(Screen):
         for i in reversed(index_list):
             b += 1
             k += 1
-            number = profile_customer_id.index(customer_id[i])
-            item = ThreeLineAvatarIconListItem(
+            if i < len(customer_id):
+                print(customer_id[i])
+                if customer_id[i] in profile_customer_id:
+                    number = profile_customer_id.index(customer_id[i])
+                else:
+                    number = 0
+                item = ThreeLineAvatarIconListItem(
 
-                IconLeftWidget(
-                    icon="card-account-details-outline"
-                ),
-                text=f"Borrower Name : {borrower_name[i]}",
-                secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
-                tertiary_text=f"Product Name : {product_name[i]}",
-                text_color=(0, 0, 0, 1),  # Black color
-                theme_text_color='Custom',
-                secondary_text_color=(0, 0, 0, 1),
-                secondary_theme_text_color='Custom',
-                tertiary_text_color=(0, 0, 0, 1),
-                tertiary_theme_text_color='Custom'
-            )
-            item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
-                                                                                               loan_id))  # Corrected the binding
-            self.ids.container12.add_widget(item)
+                    IconLeftWidget(
+                        icon="card-account-details-outline"
+                    ),
+                    text=f"Borrower Name : {borrower_name[i]}",
+                    secondary_text=f"Borrower Mobile Number : {profile_mobile_number[number]}",
+                    tertiary_text=f"Product Name : {product_name[i]}",
+                    text_color=(0, 0, 0, 1),  # Black color
+                    theme_text_color='Custom',
+                    secondary_text_color=(0, 0, 0, 1),
+                    secondary_theme_text_color='Custom',
+                    tertiary_text_color=(0, 0, 0, 1),
+                    tertiary_theme_text_color='Custom'
+                )
+                item.bind(on_release=lambda instance, loan_id=loan_id[i]: self.icon_button_clicked(instance,
+                                                                                                   loan_id))  # Corrected the binding
+                self.ids.container12.add_widget(item)
 
     def icon_button_clicked(self, instance, loan_id):
 
@@ -1395,7 +1415,6 @@ class ViewProfileE(Screen):
         data = app_tables.fin_extends_loan.search()
         loan_id = self.ids.loanid.text
         print(loan_id)
-
         loan_idlist = []
         for i in data:
             loan_idlist.append(i['loan_id'])
@@ -1409,7 +1428,6 @@ class ViewProfileE(Screen):
         data = app_tables.fin_extends_loan.search()
         loan_id = self.ids.loanid.text
         print(loan_id)
-
         loan_idlist = []
         for i in data:
             loan_idlist.append(i['loan_id'])
