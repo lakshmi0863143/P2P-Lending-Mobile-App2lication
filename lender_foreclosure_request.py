@@ -1,6 +1,7 @@
 import anvil
 from anvil.tables import app_tables
 from kivy.core.window import Window
+from kivy.metrics import dp
 from kivy.uix.filechooser import platform
 from kivy.uix.screenmanager import Screen, ScreenManager
 import anvil.server
@@ -8,6 +9,8 @@ from kivy.lang import Builder
 import anvil.server
 from kivy.uix.screenmanager import Screen, SlideTransition
 from kivymd.app import MDApp
+from kivymd.uix.button import MDRectangleFlatButton
+from kivymd.uix.dialog import MDDialog
 from kivymd.uix.list import ThreeLineAvatarIconListItem, IconLeftWidget
 
 if platform == 'android':
@@ -458,9 +461,11 @@ lender_foreclouser = '''
                             spacing: 10
 
                             CheckBox:
+                                id: check
                                 size_hint: (None, None)
                                 width: 50
                                 bold: True
+                                on_active: root.checkbox_callback(self, self.active)
                                 color: (195/255,110/255,108/255,1)
 
                             MDLabel:
@@ -1050,6 +1055,7 @@ class ApprovedLoansLF(Screen):
         c = -1
         customer_id = []
         product_name = []
+
         for i in view:
             customer_id.append(i['borrower_customer_id'])
             product_name.append(i['product_name'])
@@ -1742,6 +1748,14 @@ class ViewProfileScreenFLF(Screen):
 
 
 class ViewProfileScreenLF(Screen):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.check = None
+    def checkbox_callback(self, checkbox, value):
+        if value:
+            self.check = True
+        else:
+            self.check = False
     def initialize_with_value(self, value, data):
         data = app_tables.fin_foreclosure.search()
         loan_id = []
@@ -1781,18 +1795,43 @@ class ViewProfileScreenLF(Screen):
             self.ids.due_amount.text = str(total_due_amount[index])
 
     def approved_click(self):
+        if self.check != True:
+            self.show_validation_error('You need to select Terms and Conditions')
+            return
         data = app_tables.fin_foreclosure.search()
+        loan = app_tables.fin_loan_details.search()
         loan_id = self.ids.loan1.text
         print(loan_id)
-
+        loan_list_id = []
         loan_idlist = []
         for i in data:
             loan_idlist.append(i['loan_id'])
+        for i in loan:
+            loan_list_id.append(i['loan_id'])
         print(loan_idlist)
         if loan_id in loan_idlist:
             index = loan_idlist.index(loan_id)
             data[index]['status'] = 'approved'
             self.manager.current = 'DashboardScreenLF'
+        if loan_id in loan_list_id:
+            index1 = loan_list_id.index(loan_id)
+            loan[index1]['loan_updated_status'] = 'foreclosure'
+
+    def show_validation_error(self, error_message):
+        dialog = MDDialog(
+            title="Validation Error",
+            text=error_message,
+            size_hint=(0.8, None),
+            height=dp(200),
+            buttons=[
+                MDRectangleFlatButton(
+                    text="OK",
+                    text_color=(0.043, 0.145, 0.278, 1),
+                    on_release=lambda x: dialog.dismiss()
+                )
+            ]
+        )
+        dialog.open()
 
     def rejected_click(self):
         data = app_tables.fin_foreclosure.search()
